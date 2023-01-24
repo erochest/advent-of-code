@@ -1,0 +1,13 @@
+
+: test-(day{{ day }}a) s" f/day{{ day }}.txt" (day{{ day }}a) assert( 0<> ) ;
+: test-(day{{ day }}a)-data s" d/day{{ day }}.txt" (day{{ day }}a) assert( 0<> ) ;
+
+: test-(day{{ day }}b) s" f/day{{ day }}.txt" (day{{ day }}b) assert( 0<> ) ;
+: test-(day{{ day }}b)-data s" d/day{{ day }}.txt" (day{{ day }}b) assert( 0<> ) ;
+
+: test-all
+    test-(day{{ day }}a)
+    test-(day{{ day }}a)-data
+    test-(day{{ day }}b)
+    test-(day{{ day }}b)-data
+    ;
