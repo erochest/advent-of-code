@@ -1,0 +1,7 @@
+
+day{{ day }}:
+	gforth s/day{{ day }}.fth t/test-day{{ day }}.fth -e '$(TEST_WORD)' -e bye
+	gforth s/day{{ day }}.fth -e day{{ day }}a -e bye
+	gforth s/day{{ day }}.fth -e day{{ day }}b -e bye
+
+.PHONY: day{{ day }}

@@ -1,0 +1,17 @@
+s" files.fth" included
+s" debug.fth" included
+s" stack.fth" included
+
+: (day{{ day }}a) ( a u -- n )
+    over-lines
+        \ TODO
+    done-lines ;
+
+: day{{ day }}a ( -- ) s" d/day{{ day }}.txt" (day{{ day }}a) . cr ;
+
+: (day{{ day }}b) ( a u -- n )
+    over-lines
+        \ TODO
+    done-lines ;
+
+: day{{ day }}b ( -- ) s" d/day{{ day }}.txt" (day{{ day }}b) . cr ;
