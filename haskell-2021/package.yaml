@@ -1,0 +1,141 @@
+author: Eric Rochester
+copyright: '2021'
+dependencies:
+- base >= 4.7 && < 5
+- attoparsec
+- bytestring
+- containers
+- parallel
+- vector
+description: Please see the README on GitHub at <https://github.com/erochest/day2#readme>
+executables:
+  day1-exe:
+    dependencies:
+    - Advent2021
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: app/day1
+  day2-exe:
+    dependencies:
+    - Advent2021
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: app/day2
+  day3-exe:
+    dependencies:
+    - Advent2021
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: app/day3
+  day4-exe:
+    dependencies:
+    - Advent2021
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: app/day4
+  day5-exe:
+    dependencies:
+    - Advent2021
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: app/day5
+  day6-exe:
+    dependencies: &id001
+    - Advent2021
+    ghc-options: &id002
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: app/day6
+  day7-exe:
+    dependencies: *id001
+    ghc-options: *id002
+    main: Main.hs
+    source-dirs: app/day7
+extra-source-files:
+- README.md
+- ChangeLog.md
+github: erochest/advent-2021
+library:
+  source-dirs: src
+license: BSD3
+maintainer: erochest@gmail.com
+name: Advent2021
+tests:
+  day2-test:
+    dependencies:
+    - Advent2021
+    - tasty
+    - tasty-hunit
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Spec.hs
+    source-dirs: test/day2
+  day3-test:
+    dependencies:
+    - Advent2021
+    - tasty
+    - tasty-hunit
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Spec.hs
+    source-dirs: test/day3
+  day4-test:
+    dependencies:
+    - Advent2021
+    - tasty
+    - tasty-hunit
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Spec.hs
+    source-dirs: test/day4
+  day5-test:
+    dependencies:
+    - Advent2021
+    - tasty
+    - tasty-hunit
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Spec.hs
+    source-dirs: test/day5
+  day6-test:
+    dependencies: &id003
+    - Advent2021
+    - tasty
+    - tasty-hunit
+    ghc-options: &id004
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Spec.hs
+    source-dirs: test/day6
+  day7-test:
+    dependencies: *id003
+    ghc-options: *id004
+    main: Spec.hs
+    source-dirs: test/day7
+version: 0.1.0.0
