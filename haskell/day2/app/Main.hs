@@ -3,11 +3,11 @@
 module Main where
 
 import           Control.Arrow
-import qualified Data.ByteString.Lazy.Builder as B
-import qualified Data.ByteString.Lazy.Char8   as BS
+import qualified Data.ByteString.Builder    as B
+import qualified Data.ByteString.Lazy.Char8 as BS
 import           Data.Foldable
 import           Data.Hashable
-import qualified Data.HashMap.Strict          as M
+import qualified Data.HashMap.Strict        as M
 import           Data.Maybe
 import           Data.Monoid
 
