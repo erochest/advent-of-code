@@ -1,2 +1,2 @@
 run:
-	stack run < data/day4
+	stack run < ../../data/2018/day4
