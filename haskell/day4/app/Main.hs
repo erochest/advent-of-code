@@ -3,7 +3,7 @@
 module Main where
 
 import qualified Advent
-import           Attoparsec.Time.ByteString
+import           Attoparsec.Time.ByteString       hiding (second)
 import           Control.Arrow
 import           Data.Attoparsec.ByteString.Char8
 import qualified Data.ByteString.Builder          as B
