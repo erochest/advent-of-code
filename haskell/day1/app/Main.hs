@@ -1,10 +1,10 @@
 module Main where
 
-import qualified Data.ByteString.Lazy.Builder as B
-import qualified Data.ByteString.Lazy.Char8   as BS
+import qualified Data.ByteString.Builder    as B
+import qualified Data.ByteString.Lazy.Char8 as BS
 import           Data.Foldable
-import qualified Data.HashSet                 as S
-import qualified Data.List                    as L
+import qualified Data.HashSet               as S
+import qualified Data.List                  as L
 import           Data.Maybe
 import           Data.Traversable
 
