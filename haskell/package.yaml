@@ -1,4 +1,4 @@
-name:                day1
+name:                advent-of-code
 version:             0.1.0.0
 github:              "erochest/advent-of-code"
 license:             BSD3
@@ -26,9 +26,9 @@ dependencies:
 #   source-dirs: src
 
 executables:
-  advent-exe:
+  advent2018_01-exe:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:         app/advent2018_01
     ghc-options:
     - -threaded
     - -rtsopts
@@ -37,6 +37,17 @@ executables:
     # - day1
     - bytestring
     - unordered-containers
+  advent2018_02-exe:
+    main:                Main.hs
+    source-dirs:         app/advent2018_02
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - bytestring
+    - unordered-containers
+    - hashable
 
 # tests:
 #   day1-test:
