@@ -1,6 +1,6 @@
 name:                day1
 version:             0.1.0.0
-github:              "erochest/day1"
+github:              "erochest/advent-of-code"
 license:             BSD3
 author:              "Eric Rochester"
 maintainer:          "erochest@gmail.com"
@@ -26,7 +26,7 @@ dependencies:
 #   source-dirs: src
 
 executables:
-  day1-exe:
+  advent-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
