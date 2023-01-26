@@ -23,8 +23,8 @@ dependencies:
 - base >= 4.7 && < 5
 - bytestring
 
-# library:
-#   source-dirs: src
+library:
+  source-dirs: src
 
 executables:
   advent2018-01:
@@ -58,6 +58,32 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - attoparsec
+    - bytestring
+    - unordered-containers
+  advent2018-04:
+    main:                Main.hs
+    source-dirs:         app/advent2018_04
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - advent-of-code
+    - attoparsec
+    - attoparsec-time
+    - bytestring
+    - hashable
+    - time
+    - unordered-containers
+  advent2018-05:
+    main:                Main.hs
+    source-dirs:         app/advent2018_05
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - advent-of-code
     - bytestring
     - unordered-containers
 
