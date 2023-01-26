@@ -21,12 +21,13 @@ description:         Please see the README on GitHub at <https://github.com/eroc
 
 dependencies:
 - base >= 4.7 && < 5
+- bytestring
 
 # library:
 #   source-dirs: src
 
 executables:
-  advent2018_01-exe:
+  advent2018-01:
     main:                Main.hs
     source-dirs:         app/advent2018_01
     ghc-options:
@@ -37,7 +38,7 @@ executables:
     # - day1
     - bytestring
     - unordered-containers
-  advent2018_02-exe:
+  advent2018-02:
     main:                Main.hs
     source-dirs:         app/advent2018_02
     ghc-options:
@@ -48,6 +49,17 @@ executables:
     - bytestring
     - unordered-containers
     - hashable
+  advent2018-03:
+    main:                Main.hs
+    source-dirs:         app/advent2018_03
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - attoparsec
+    - bytestring
+    - unordered-containers
 
 # tests:
 #   day1-test:
