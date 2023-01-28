@@ -47,9 +47,9 @@ strings:
 .PHONY: files paragraphs bytes array queue-set strings
 
 day06:
-	gforth s/day06.fth t/test-day06.fth -e '$(TEST_WORD)' -e bye
-	gforth s/day06.fth -e day06a -e bye
-	gforth s/day06.fth -e day06b -e bye
+	gforth s/2020/day06.fth t/2020/test-day06.fth -e '$(TEST_WORD)' -e bye
+	gforth s/2020/day06.fth -e parta -e bye
+	gforth s/2020/day06.fth -e partb -e bye
 
 .PHONY: day06
 
