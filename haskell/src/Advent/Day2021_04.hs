@@ -3,7 +3,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Advent.Day4
+module Advent.Day2021_04
   ( partOne
   , partTwo
   , BingoGame(..)

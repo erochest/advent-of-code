@@ -34,7 +34,7 @@ fixture = [ BCL [bc' 0, bc' 0, bc' 1, bc' 0, bc' 0]
           ]
 
 suite :: TestTree
-suite = testGroup "day3"
+suite = testGroup "2021, day 3"
     [ testGroup "partOne"
       [ testCase "produces the correct response on the fixture data" $ do
         198 @=? partOne fixture
