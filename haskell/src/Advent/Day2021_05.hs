@@ -6,7 +6,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TupleSections #-}
 
-module Advent.Day5
+module Advent.Day2021_05
   ( partOne
   , partTwo
   , mapDimension
