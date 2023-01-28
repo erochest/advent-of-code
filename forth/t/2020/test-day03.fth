@@ -1,5 +1,5 @@
 
-: fixture ( -- map ) s" f/day03.txt" read-map ;
+: fixture ( -- map ) s" ../sample/2020/day03.txt" read-map ;
 
 : test-read-pattern
     s" ...." read-pattern assert( 0= )
@@ -41,29 +41,29 @@
     \ s" test-count-trees" debug
     ;
 
-: test-day03a
-    1 3 s" f/day03.txt" day03a
+: test-parta
+    1 3 s" ../sample/2020/day03.txt" parta
     assert( 7 = )
-    \ s" test-day03a" debug
+    \ s" test-parta" debug
     ;
 
-: test-day03a-prod
-    1 3 s" d/day03.txt" day03a
+: test-parta-prod
+    1 3 s" ../data/2020/day03.txt" parta
     assert( 164 = )
 ;
 
-: test-day03b
-    1 1 s" f/day03.txt" day03a assert( 2 = )
-    1 3 s" f/day03.txt" day03a assert( 7 = )
-    1 5 s" f/day03.txt" day03a assert( 3 = )
-    1 7 s" f/day03.txt" day03a assert( 4 = )
-    2 1 s" f/day03.txt" day03a assert( 2 = )
-    slopes slope-count @ s" f/day03.txt" (day03b)
+: test-partb
+    1 1 s" ../sample/2020/day03.txt" parta assert( 2 = )
+    1 3 s" ../sample/2020/day03.txt" parta assert( 7 = )
+    1 5 s" ../sample/2020/day03.txt" parta assert( 3 = )
+    1 7 s" ../sample/2020/day03.txt" parta assert( 4 = )
+    2 1 s" ../sample/2020/day03.txt" parta assert( 2 = )
+    slopes slope-count @ s" ../sample/2020/day03.txt" (partb)
     assert( 336 = )
     ;
 
-: test-day03b-prod
-    slopes slope-count @ s" d/day03.txt" (day03b)
+: test-partb-prod
+    slopes slope-count @ s" ../data/2020/day03.txt" (partb)
     dup assert( 7397677560 < )
     assert( 5007658656 = )
     ;
@@ -72,7 +72,7 @@ test-read-pattern
 test-read-map
 test-get-tree
 test-count-trees
-test-day03a
-test-day03a-prod
-test-day03b
-test-day03b-prod
+test-parta
+test-parta-prod
+test-partb
+test-partb-prod

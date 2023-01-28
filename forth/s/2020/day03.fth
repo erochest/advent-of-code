@@ -1,8 +1,8 @@
 
-s" files.fth" included
-s" debug.fth" included
-s" stack.fth" included
-s" bytes.fth" included
+s" ../files.fth" included
+s" ../debug.fth" included
+s" ../stack.fth" included
+s" ../bytes.fth" included
 
 struct
     cell% field map-data
@@ -84,7 +84,7 @@ end-struct map%
     until ( c m mh rise run )
     2drop 2drop ( c ) ;
 
-: day03a ( rise run a n -- n )
+: parta ( rise run a n -- n )
     read-map ( rise run map-a )
     -rot ( map-a rise run )
     count-trees ( n )
@@ -95,7 +95,7 @@ create slopes 1 , 1 , 3 , 1 , 5 , 1 , 7 , 1 , 1 , 2 ,
 variable slope-count
 5 slope-count !
 
-: (day03b) ( slope-addr slope-count a n -- n )
+: (partb) ( slope-addr slope-count a n -- n )
     read-map 1 swap 2swap ( c m sa sc )
     2* cells over + swap u+do ( c m )
         dup ( c m m )
@@ -105,7 +105,7 @@ variable slope-count
     2 cells +loop ( c m )
     drop ( c ) ;
 
-: day03b ( -- )
-    slopes slope-count @ s" d/day03.txt" (day03b) .  ;
+: partb ( -- )
+    slopes slope-count @ s" d/day03.txt" (partb) .  ;
 
 \ 7397677560 is TOO HIGH
