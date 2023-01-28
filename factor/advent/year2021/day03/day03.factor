@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays bit-arrays bit-vectors io io.encodings.utf8 io.files kernel locals math math.bitwise
 math.order math.parser sequences ;
-IN: advent2021.day03
+IN: advent.year2021.day03
 
 : read-data ( path -- array ) utf8 file-lines [ bin> ] map ;
 : left-bit ( seq -- n ) 0 [ max ] reduce next-power-of-2 -1 shift ;
@@ -28,7 +28,7 @@ IN: advent2021.day03
     2drop
 ;
 
-: day03a ( path -- checksum )
+: parta ( path -- checksum )
     read-data gamma-epsilon [ bit-vector>integer ] bi@ * ;
 
 : make-filter-word ( mask ? -- callable )
@@ -49,5 +49,5 @@ IN: advent2021.day03
 : oxygen-rating ( seq -- n ) [ >= ] filter-by-op ;
 : co2-scrubber ( seq -- n ) [ < ] filter-by-op ;
 
-: day03b ( path -- checksum )
+: partb ( path -- checksum )
     read-data [ oxygen-rating ] [ co2-scrubber ] bi * ;

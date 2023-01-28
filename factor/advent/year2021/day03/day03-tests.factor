@@ -1,10 +1,9 @@
 ! Copyright (C) 2022 Your name.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: tools.test advent2021.day03 bit-vectors kernel ;
-IN: advent2021.day03.tests
+USING: tools.test advent.io advent.year2021.day03 bit-vectors kernel ;
+IN: advent.year2021.day03.tests
 
-{ { 4 30 22 23 21 15 7 28 16 25 2 10 } }
-[ "vocab:advent2021/day03/example.txt" read-data ] unit-test
+{ { 4 30 22 23 21 15 7 28 16 25 2 10 } } [ 2021 3 fixture read-data ] unit-test
 
 { 3 4 1 2 } [ 1 2 3 4 2swap ] unit-test
 
@@ -26,11 +25,11 @@ unit-test
 
 { 22 } [ ?V{ f t t f t } bit-vector>integer ] unit-test
 
-{ 198 } [ "vocab:advent2021/day03/example.txt" day03a ] unit-test
-{ 4191876 } [ "vocab:advent2021/day03/data.txt" day03a ] unit-test
+{ 198 } [ 2021 3 fixture parta ] unit-test
+{ 4191876 } [ 2021 3 data-file parta ] unit-test
 
 { 23 } [ { 4 30 22 23 21 15 7 28 16 25 2 10 } oxygen-rating ] unit-test
 { 10 } [ { 4 30 22 23 21 15 7 28 16 25 2 10 } co2-scrubber ] unit-test 
 
-{ 230 } [ "vocab:advent2021/day03/example.txt" day03b ] unit-test
-{ 3414905 } [ "vocab:advent2021/day03/data.txt" day03b ] unit-test
+{ 230 } [ 2021 3 fixture partb ] unit-test
+{ 3414905 } [ 2021 3 data-file partb ] unit-test
