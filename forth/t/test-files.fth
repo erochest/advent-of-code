@@ -1,11 +1,11 @@
 
 : test-open-input
-  s" f/day01.txt" open-input
+  s" ../sample/2020/day01.txt" open-input
   assert( fd-in 0<> )
   close-input ;
 
 : test-read-input-line
-  s" f/day01.txt" open-input
+  s" ../sample/2020/day01.txt" open-input
   read-input-line
   assert( 0<> )
   assert( 4 = )
@@ -31,7 +31,7 @@
 
 : dump-file
   s" dump-file" debug
-  s" f/day01.txt" 2dup debug over-lines
+  s" ../sample/2020/day01.txt" 2dup debug over-lines
     s" over-lines" debug
     ." >>>" type cr
     s" type" debug
