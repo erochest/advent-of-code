@@ -49,8 +49,8 @@
     \ s" find-seat" debug
     ;
 
-: test-(day05a) s" f/day05.txt" (day05a) assert( 820 = ) ;
-: test-(day05a)-data s" d/day05.txt" (day05a) assert( 880 = ) ;
+: test-(parta) s" ../sample/2020/day05.txt" (parta) assert( 820 = ) ;
+: test-(parta)-data s" ../data/2020/day05.txt" (parta) assert( 880 = ) ;
 
 : test-is-front?
     0 assert( is-front? )
@@ -73,8 +73,8 @@
     test-focus-column
     test-find-column-row
     test-find-seat
-    test-(day05a)
-    test-(day05a)-data
+    test-(parta)
+    test-(parta)-data
     test-is-front?
     test-is-back?
     ;

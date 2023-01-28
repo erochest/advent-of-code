@@ -21,9 +21,9 @@ day04:
 	gforth s/2020/day04.fth -e partb -e bye
 
 day05:
-	gforth s/day05.fth t/test-day05.fth -e '$(TEST_WORD)' -e bye
-	gforth s/day05.fth -e day05a -e bye
-	gforth s/day05.fth -e day05b -e bye
+	gforth s/2020/day05.fth t/2020/test-day05.fth -e '$(TEST_WORD)' -e bye
+	gforth s/2020/day05.fth -e parta -e bye
+	gforth s/2020/day05.fth -e partb -e bye
 
 files:
 	gforth s/debug.fth s/files.fth t/test-files.fth -e '$(TEST_WORD)' -e bye
