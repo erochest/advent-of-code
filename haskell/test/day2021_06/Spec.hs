@@ -8,13 +8,13 @@ import Test.Tasty
 import Test.Tasty.HUnit
 
 import Advent
-import Advent.Day6
+import Advent.Day2021_06
 
 import qualified Data.List as L
 import Debug.Trace
 import Test.Tasty (testGroup)
 import Test.Tasty.HUnit (testCase)
-import Advent.Day6 (LanternFishSchool(LanternFishSchool, getSchool), lanternFishSchoolDay, newLanternFishSchool)
+import Advent.Day2021_06 (LanternFishSchool(LanternFishSchool, getSchool), lanternFishSchoolDay, newLanternFishSchool)
 
 main :: IO ()
 main = defaultMain suite
@@ -24,7 +24,7 @@ fixture = LanternFishSchool [0, 1, 1, 2, 1, 0, 0, 0, 0]
 -- [3,4,3,1,2]
 
 suite :: TestTree
-suite = testGroup "day 6"
+suite = testGroup "2021, day 6"
   [ testGroup "part 1"
     [ testGroup "partOne"
       [ testCase "calculates the checksum for the fixture" $
