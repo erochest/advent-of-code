@@ -54,8 +54,8 @@ day06:
 .PHONY: day06
 
 day07:
-	gforth s/day07.fth t/test-day07.fth -e '$(TEST_WORD)' -e bye
-	gforth s/day07.fth -e day07a -e bye
-	gforth s/day07.fth -e day07b -e bye
+	gforth s/2020/day07.fth t/2020/test-day07.fth -e '$(TEST_WORD)' -e bye
+	gforth s/2020/day07.fth -e parta -e bye
+	gforth s/2020/day07.fth -e partb -e bye
 
 .PHONY: day07
