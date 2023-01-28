@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "data"
+		},
+		{
+			"path": "haskell-2021"
 		}
 	],
 	"settings": {}
