@@ -1,11 +1,11 @@
 
 : test-open-input
-  s" f/day01.txt" open-input
+  s" ../sample/2020/day01.txt" open-input
   assert( fd-in 0<> )
   close-input ;
 
 : test-read-input-line
-  s" f/day01.txt" open-input
+  s" ../sample/2020/day01.txt" open-input
   read-input-line
   assert( 0<> )
   assert( 4 = )
@@ -24,7 +24,7 @@
   ;
 
 : test-line-buffer>n
-  s" f/day01.txt" open-input
+  s" ../sample/2020/day01.txt" open-input
   read-input-line
   close-input
   drop
@@ -58,7 +58,7 @@
   ;
 
 : test-read-input 
-  s" f/day01.txt" read-input
+  s" ../sample/2020/day01.txt" read-input
   assert( 6 = )
   dup assert( @ 1721 = )
   dup assert( 1 cells + @ 979 = )
@@ -80,7 +80,7 @@ create pair-totalling-fixture 4 , 2 , 6 , 20 ,
   ;
 
 : test-find-triplet-totalling
-  s" f/day01.txt" read-input
+  s" ../sample/2020/day01.txt" read-input
   2020 find-triplet-totalling
   assert( dup dup 979 = rot 366 = rot 675 = or or )
   assert( dup dup 979 = rot 366 = rot 675 = or or )

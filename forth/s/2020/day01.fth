@@ -1,5 +1,5 @@
 
-s" files.fth" included
+s" ../files.fth" included
 
 : over-addr ( offset addr c -- offset addr c offset addr )
   \ duplicate an address and offset or count over another number on top of the stack.
@@ -77,13 +77,13 @@ s" files.fth" included
   1 cells +loop
   ;
 
-: day01a ( addr n -- n )
+: parta ( addr n -- n )
   read-input
   2020 find-pair-totalling
   *
   ;
   
-: day01b ( addr n --- n )
+: partb ( addr n --- n )
   read-input
   2020 find-triplet-totalling
   * *
