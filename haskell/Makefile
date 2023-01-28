@@ -14,6 +14,11 @@ advent2018-04:
 advent2018-05:
 	stack run advent2018-05 < ../data/2018/day5
 
-all: advent2018-01 advent2018-02 advent2018-03 advent2018-04 advent2018-05
+advent2021-01:
+	stack run advent2021-01< ../data/2021/day1.data
 
-.PHONY: all
+2018: advent2018-01 advent2018-02 advent2018-03 advent2018-04 advent2018-05
+
+2021: advent2021-01
+
+.PHONY: 2018 2021
