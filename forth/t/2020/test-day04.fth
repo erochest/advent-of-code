@@ -1,5 +1,5 @@
 
-: fixture s" f/day04.txt" open-input ;
+: fixture s" ../sample/2020/day04.txt" open-input ;
 
 : test-skip-space
     s" a   something" 1 /string
@@ -93,13 +93,13 @@
     \ s" test-passport-is-valid?" debug
     ;
 
-: test-(day04a)
-    s" f/day04.txt" (day04a)
+: test-(parta)
+    s" ../sample/2020/day04.txt" (parta)
     assert( 2 = )
-    \ s" test-(day04a)" debug
+    \ s" test-(parta)" debug
     ;
 
-: test-(day04a)-data s" d/day04.txt" (day04a) assert( 247 = ) ;
+: test-(parta)-data s" ../data/2020/day04.txt" (parta) assert( 247 = ) ;
 
 : test-valid-birth-year?
     2002 assert( valid-birth-year? )
@@ -177,16 +177,16 @@
     \ s" test-passport-is-valid-b?" debug
     ;
 
-: test-(day04b) s" f/day04b.txt" (day04b) assert( 4 = ) ;
+: test-(partb) s" ../sample/2020/day04b.txt" (partb) assert( 4 = ) ;
 
-: test-(day04b)-data s" d/day04.txt" (day04b) assert( 145 = ) ;
+: test-(partb)-data s" ../data/2020/day04.txt" (partb) assert( 145 = ) ;
 
 : test-all
     test-set-passport-field
     test-parse-passport
     test-passport-is-valid?
-    test-(day04a)
-    test-(day04a)-data
+    test-(parta)
+    test-(parta)-data
     test-valid-birth-year?
     test-valid-issue-year?
     test-valid-expiration-year?
@@ -195,6 +195,6 @@
     test-valid-eye-color?
     test-valid-id?
     test-passport-is-valid-b?
-    test-(day04b)
-    test-(day04b)-data
+    test-(partb)
+    test-(partb)-data
     ;

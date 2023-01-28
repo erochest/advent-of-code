@@ -16,9 +16,9 @@ day03:
 	gforth s/2020/day03.fth t/2020/test-day03.fth -e bye
 
 day04:
-	gforth s/day04.fth t/test-day04.fth -e '$(TEST_WORD)' -e bye
-	gforth s/day04.fth -e day04a -e bye
-	gforth s/day04.fth -e day04b -e bye
+	gforth s/2020/day04.fth t/2020/test-day04.fth -e '$(TEST_WORD)' -e bye
+	gforth s/2020/day04.fth -e parta -e bye
+	gforth s/2020/day04.fth -e partb -e bye
 
 day05:
 	gforth s/day05.fth t/test-day05.fth -e '$(TEST_WORD)' -e bye
