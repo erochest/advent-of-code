@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "forth"
+		},
+		{
+			"path": "factor"
 		}
 	],
 	"settings": {}
