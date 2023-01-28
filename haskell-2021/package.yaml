@@ -9,15 +9,6 @@ dependencies:
 - vector
 description: Please see the README on GitHub at <https://github.com/erochest/day2#readme>
 executables:
-  day5-exe:
-    dependencies:
-    - Advent2021
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    main: Main.hs
-    source-dirs: app/day5
   day6-exe:
     dependencies: &id001
     - Advent2021
@@ -42,17 +33,6 @@ license: BSD3
 maintainer: erochest@gmail.com
 name: Advent2021
 tests:
-  day5-test:
-    dependencies:
-    - Advent2021
-    - tasty
-    - tasty-hunit
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    main: Spec.hs
-    source-dirs: test/day5
   day6-test:
     dependencies: &id003
     - Advent2021

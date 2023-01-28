@@ -11,7 +11,7 @@ import Test.Tasty
 import Test.Tasty.HUnit
 
 import Advent
-import Advent.Day5
+import Advent.Day2021_05
 
 import Debug.Trace
 
@@ -38,7 +38,7 @@ crookedFixture :: [CrookedSegment]
 crookedFixture = map CS fixture
 
 suite :: TestTree
-suite = testGroup "day 5"
+suite = testGroup "2021, day 5"
     [ testGroup "part 1"
       [ testGroup "partOne"
         [ testCase "finds the answer" $
