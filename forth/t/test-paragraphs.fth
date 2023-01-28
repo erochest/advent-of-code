@@ -1,4 +1,4 @@
-: fixture s" f/day04.txt" open-input ;
+: fixture s" ../sample/2020/day04.txt" open-input ;
 
 : test-is-end-of-paragraph?
     \ empty line (end of paragraph)
