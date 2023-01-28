@@ -6,8 +6,8 @@ import Test.Tasty
 import Test.Tasty.HUnit
 
 import Advent
-import Advent.Day7
-import Advent.Day7 (findFuelCosts, Crab (Crab))
+import Advent.Day2021_07
+import Advent.Day2021_07 (findFuelCosts, Crab (Crab))
 
 main :: IO ()
 main = defaultMain suite
@@ -16,7 +16,7 @@ fixture :: [Crab]
 fixture = map Crab [16,1,2,0,4,2,7,1,2,14]
 
 suite :: TestTree
-suite = testGroup "day 7"
+suite = testGroup "2021, day 7"
   [ testGroup "part 1"
     [ testGroup "partOne"
       [ testCase "calculates the checksum for the fixture" $

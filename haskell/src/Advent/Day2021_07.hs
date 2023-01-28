@@ -6,7 +6,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TupleSections #-}
 
-module Advent.Day7
+module Advent.Day2021_07
   ( partOne
   , partTwo
   , Crab(..)

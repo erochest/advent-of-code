@@ -23,10 +23,4 @@ library:
 license: BSD3
 maintainer: erochest@gmail.com
 name: Advent2021
-tests:
-  day7-test:
-    dependencies: *id003
-    ghc-options: *id004
-    main: Spec.hs
-    source-dirs: test/day7
 version: 0.1.0.0
