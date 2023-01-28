@@ -200,3 +200,8 @@ tests:
     - -with-rtsopts=-N
     main: Spec.hs
     source-dirs: test/day2021_06
+  advent2021_07-test:
+    dependencies: *id003
+    ghc-options: *id004
+    main: Spec.hs
+    source-dirs: test/day2021_07

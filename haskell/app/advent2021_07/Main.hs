@@ -1,7 +1,7 @@
 module Main where
 
 import Advent
-import Advent.Day7
+import Advent.Day2021_07
 
 main :: IO ()
 main = Advent.interactFile partOne
