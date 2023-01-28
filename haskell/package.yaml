@@ -21,6 +21,7 @@ description:         Please see the README on GitHub at <https://github.com/eroc
 
 dependencies:
 - base >= 4.7 && < 5
+- attoparsec
 - bytestring
 
 library:
@@ -95,14 +96,25 @@ executables:
     - -with-rtsopts=-N
     main: Main.hs
     source-dirs: app/advent2021_01
+  advent2021-02:
+    dependencies:
+    - advent-of-code
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: app/advent2021_02
 
-# tests:
-#   day1-test:
-#     main:                Spec.hs
-#     source-dirs:         test
-#     ghc-options:
-#     - -threaded
-#     - -rtsopts
-#     - -with-rtsopts=-N
-    # dependencies:
-    # - day1
+tests:
+  day2021_02-test:
+    main: Spec.hs
+    source-dirs: test/day2021_02
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - advent-of-code
+    - tasty
+    - tasty-hunit

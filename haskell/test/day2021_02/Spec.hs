@@ -8,13 +8,13 @@ import Test.Tasty.HUnit
 import Data.Attoparsec.ByteString.Char8 (parseOnly)
 
 import Advent
-import Advent.Day2
+import Advent.Day2021_02
 
 main :: IO ()
 main = defaultMain suite
 
 suite :: TestTree
-suite = testGroup "day2"
+suite = testGroup "2021, day2"
     [ testGroup "movement"
       [ testCase "parses directions" $ do
         Right (Movement Forward 2) @=? parseOnly movement "forward 2"

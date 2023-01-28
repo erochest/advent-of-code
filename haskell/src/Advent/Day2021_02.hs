@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Advent.Day2
+module Advent.Day2021_02
     ( Direction(..)
     , Movement(..)
     , Sub(..)
