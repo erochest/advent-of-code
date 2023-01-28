@@ -1,7 +1,7 @@
 ! Copyright (C) 2022 Your name.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: advent2021.day02 kernel sequences tools.test ;
-IN: advent2021.day02.tests
+USING: advent.year2021.day02 kernel sequences tools.test advent.io ;
+IN: advent.year2021.day02.tests
 
 { 5 0 } [ <position> 5 forward dump-position ] unit-test
 { 0 8 } [ <position> 8 down dump-position ] unit-test
@@ -23,8 +23,8 @@ IN: advent2021.day02.tests
 ]
 unit-test
 
-{ 150 } [ "vocab:advent2021/day02/example.txt" day02a ] unit-test
-{ 1727835 } [ "vocab:advent2021/day02/data.txt" day02a ] unit-test
+{ 150 } [ 2021 2 fixture parta ] unit-test
+{ 1727835 } [ 2021 2 data-file parta ] unit-test
 
 { { 3 4 5 } } [ 3 4 5 submarine boa submarine->array ] unit-test
 
@@ -36,5 +36,5 @@ unit-test
 { 0 } [ { 0 1 2 3 } product ] unit-test
 { 6 } [ { 1 2 3 } product ] unit-test
 
-{ 900 } [ "vocab:advent2021/day02/example.txt" day02b ] unit-test
-{ 1544000595 } [ "vocab:advent2021/day02/data.txt" day02b ] unit-test
+{ 900 } [ 2021 2 fixture partb ] unit-test
+{ 1544000595 } [ 2021 2 data-file partb ] unit-test
