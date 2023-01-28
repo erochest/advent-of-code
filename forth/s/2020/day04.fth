@@ -1,8 +1,8 @@
-s" files.fth" included
-s" debug.fth" included
-s" stack.fth" included
-s" paragraphs.fth" included
-s" strings.fth" included
+s" ../files.fth" included
+s" ../debug.fth" included
+s" ../stack.fth" included
+s" ../paragraphs.fth" included
+s" ../strings.fth" included
 
 struct
     cell% field passport-birth-year
@@ -60,7 +60,7 @@ end-struct passport%
     nip
     ;
 
-: (day04a) ( a n -- n )
+: (parta) ( a n -- n )
     open-input ( )
     0 ( c )
     begin ( c )
@@ -75,7 +75,7 @@ end-struct passport%
     drop ( c )
     ;
 
-: day04a ( -- ) s" d/day04.txt" (day04a) . cr ;
+: parta ( -- ) s" ../data/2020/day04.txt" (parta) . cr ;
 
 : between ( a b c -- f )
     \ Returns true if a >= b and a <= c.
@@ -136,7 +136,7 @@ end-struct passport%
     nip
     ;
 
-: (day04b) ( a n -- n )
+: (partb) ( a n -- n )
     open-input ( )
     0 ( c )
     begin ( c )
@@ -151,4 +151,4 @@ end-struct passport%
     drop ( c )
     ;
 
-: day04b ( -- ) s" d/day04.txt" (day04b) . cr ;
+: partb ( -- ) s" ../data/2020/day04.txt" (partb) . cr ;
