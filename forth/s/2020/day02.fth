@@ -1,7 +1,7 @@
 
-s" files.fth" included
-s" debug.fth" included
-s" stack.fth" included
+s" ../files.fth" included
+s" ../debug.fth" included
+s" ../stack.fth" included
 
 \ 
 \ Some words defining the password-info structure.
@@ -65,7 +65,7 @@ end-struct password-policy%
   -rot count-below-high?
   and ;
 
-: day02a ( addr n -- n )
+: parta ( addr n -- n )
   \ Read the input and return how many passwords are valid according to their policies?
   open-input
   0 begin           ( n )
@@ -92,7 +92,7 @@ end-struct password-policy%
   then
   ;
 
-: day02a-debug ( addr n -- )
+: parta-debug ( addr n -- )
   s" t/day02a.txt" open-output
   open-input
   begin           ( n )
@@ -128,7 +128,7 @@ end-struct password-policy%
   xor
   ;
 
-: day02b ( addr n -- n )
+: partb ( addr n -- n )
   \ Read the input and return how many passwords are valid according to their policies?
   open-input
   0 begin           ( n )
