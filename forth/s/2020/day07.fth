@@ -1,9 +1,9 @@
-s" files.fth" included
-s" debug.fth" included
-\ s" array.fth" included \ included in queue-set.fth
-s" stack.fth" included
-s" queue-set.fth" included
-s" strings.fth" included
+s" ../files.fth" included
+s" ../debug.fth" included
+\ s" ../array.fth" included \ included in queue-set.fth
+s" ../stack.fth" included
+s" ../queue-set.fth" included
+s" ../strings.fth" included
 
 : no 0 ;
 : bright [ 1 0 lshift ] literal ;
@@ -344,7 +344,7 @@ s" : all-can-contain? ( rule-list rule-count inner-bag -- queue-set )" debug
   \ buffer-capacity -1 * cells allot
   clean-up ;
 
-: (day07a) ( bag a u -- n )
+: (parta) ( bag a u -- n )
   over-lines
     \ 2dup ." parsing: " type cr
     parse-rule drop
@@ -354,12 +354,12 @@ s" : all-can-contain? ( rule-list rule-count inner-bag -- queue-set )" debug
   all-can-contain?
   queue-set-2size 1- ;
 
-: day07a ( -- ) shiny gold bag s" d/day07.txt" (day07a) . cr ;
+: parta ( -- ) shiny gold bag s" d/day07.txt" (parta) . cr ;
 
-: (day07b) ( bag a u -- n )
+: (partb) ( bag a u -- n )
   over-lines
     parse-rule drop
   done-lines
   #bags-contained ;
 
-: day07b ( -- ) s" d/day07.txt" (day07b) . cr ;
+: partb ( -- ) s" d/day07.txt" (partb) . cr ;

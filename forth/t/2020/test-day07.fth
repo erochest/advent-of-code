@@ -153,24 +153,24 @@ s" : test-all-can-contain?" debug
 
 : test-#bags-contained
   rules-reset
-  s" f/day07.txt" over-lines
+  s" ../sample/2020/day07.txt" over-lines
     parse-rule drop
   done-lines
   shiny gold bag #bags-contained
   s" shiny gold bag #bags-contained" debug
   assert( 32 = ) ;
 
-: test-(day07a)
+: test-(parta)
   rules-reset
-  shiny gold bag s" f/day07.txt" (day07a)
+  shiny gold bag s" ../sample/2020/day07.txt" (parta)
   assert( 4 = ) ;
-: test-(day07a)-data
+: test-(parta)-data
   rules-reset
-  shiny gold bag s" d/day07.txt" (day07a)
+  shiny gold bag s" ../data/2020/day07.txt" (parta)
   assert( 124 = ) ;
 
-: test-(day07b) shiny gold bag s" f/day07b.txt" (day07b) assert( 126 = ) ;
-: test-(day07b)-data shiny gold bag s" d/day07.txt" (day07b) assert( 0<> ) ;
+: test-(partb) shiny gold bag s" ../sample/2020/day07b.txt" (partb) assert( 126 = ) ;
+: test-(partb)-data shiny gold bag s" ../data/2020/day07.txt" (partb) assert( 0<> ) ;
 
 : test-all
     test-bag
@@ -187,9 +187,9 @@ s" : test-all-can-contain?" debug
     test-find-modifiers
     test-find-colors
     test-#bags-contained
-    test-(day07a)
-    test-(day07a)-data
-    test-(day07b)
-    \ test-(day07b)-data
+    test-(parta)
+    test-(parta)-data
+    test-(partb)
+    \ test-(partb)-data
     s" test-all" debug
     ;
