@@ -10,7 +10,7 @@ day01:
 	gforth s/2020/day01.fth t/2020/test-day01.fth -e bye
 
 day02:
-	gforth s/day02.fth t/test-day02.fth -e bye
+	gforth s/2020/day02.fth t/2020/test-day02.fth -e bye
 
 day03:
 	gforth s/day03.fth t/test-day03.fth -e bye

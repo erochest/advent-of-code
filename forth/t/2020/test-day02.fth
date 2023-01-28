@@ -44,8 +44,8 @@
   \ s" test-is-valid?" debug
   ;
 
-: test-day02a
-  s" f/day02.txt" day02a
+: test-parta
+  s" ../sample/2020/day02.txt" parta
   assert( 2 = )
   \ s" test-day02a" debug
   ;
@@ -94,8 +94,8 @@
   s" 2-9 c: cbccccccc" >password-policy assert( is-valid-b? )
   ;
 
-: test-day02b
-  s" f/day02.txt" day02b
+: test-partb
+  s" ../sample/2020/day02.txt" partb
   assert( 1 = )
   \ s" test-day02a" debug
   ;
@@ -106,7 +106,7 @@ test->password-policy
 test-third
 test-count-char
 test-is-valid-a?
-test-day02a
+test-parta
 test-ad-hoc
 
 test-char[]
@@ -114,4 +114,4 @@ test-policy-low-char
 test-policy-high-char
 test-is-policy-char?
 test-is-valid-b?
-test-day02b
+test-partb
