@@ -1,7 +1,7 @@
 
-day{{ day }}:
-	gforth s/day{{ day }}.fth t/test-day{{ day }}.fth -e '$(TEST_WORD)' -e bye
-	gforth s/day{{ day }}.fth -e day{{ day }}a -e bye
-	gforth s/day{{ day }}.fth -e day{{ day }}b -e bye
+day{{ year }}_{{ day }}:
+	gforth s/{{ year }}/day{{ day }}.fth t/{{ year }}/test-day{{ day }}.fth -e '$(TEST_WORD)' -e bye
+	gforth s/{{ year }}/day{{ day }}.fth -e parta -e bye
+	gforth s/{{ year }}/day{{ day }}.fth -e partb -e bye
 
-.PHONY: day{{ day }}
+.PHONY: day{{ year }}_{{ day }}
