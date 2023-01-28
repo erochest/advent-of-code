@@ -3,7 +3,7 @@
 USING: accessors assocs arrays io io.encodings.utf8 io.files kernel hashtables
 locals math math.parser prettyprint sequences sequences.generalizations 
 splitting combinators.short-circuit ;
-IN: advent2021.day04
+IN: advent.year2021.day04
 
 :: inc-nth ( n seq -- ) n seq nth 1 + n seq set-nth ;
 : cursor-next-row ( pair -- ) 0 over inc-nth -1 1 rot set-nth ;
@@ -102,7 +102,7 @@ TUPLE: bingo-game boards moves-left last-move winning ;
 : score-board ( last-number bingo-board -- score )
     get-unmarked-numbers sum * ;
 
-: day04a ( path -- checksum )
+: parta ( path -- checksum )
     read04a
     dup play-to-win
        [ last-move>> ]
@@ -114,7 +114,7 @@ TUPLE: bingo-game boards moves-left last-move winning ;
     [ dup boards>> empty? not ] [
         dup make-game-move
     ] while drop ;
-: day04b ( path -- checksum )
+: partb ( path -- checksum )
     read04a
     dup play-to-lose
         [ last-move>> ]
