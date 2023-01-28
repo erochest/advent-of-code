@@ -13,7 +13,7 @@ day02:
 	gforth s/2020/day02.fth t/2020/test-day02.fth -e bye
 
 day03:
-	gforth s/day03.fth t/test-day03.fth -e bye
+	gforth s/2020/day03.fth t/2020/test-day03.fth -e bye
 
 day04:
 	gforth s/day04.fth t/test-day04.fth -e '$(TEST_WORD)' -e bye
