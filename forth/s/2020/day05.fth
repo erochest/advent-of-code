@@ -1,6 +1,6 @@
-s" files.fth" included
-s" debug.fth" included
-s" stack.fth" included
+s" ../files.fth" included
+s" ../debug.fth" included
+s" ../stack.fth" included
 
 0 7 2constant column-bounds
 0 127 2constant row-bounds
@@ -41,7 +41,7 @@ s" stack.fth" included
 
 : find-seat ( column row -- seat ) row-width * + ;
 
-: (day05a) ( a u -- n )
+: (parta) ( a u -- n )
     open-input
     -1 begin
         read-input-line while
@@ -54,7 +54,7 @@ s" stack.fth" included
     close-input
     ;
 
-: day05a ( -- ) s" d/day05.txt" (day05a) . cr ;
+: parta ( -- ) s" ../data/2020/day05.txt" (parta) . cr ;
 
 \ This is an array of singles, but maybe it should be byte arrays.
 column-bounds nip row-bounds nip find-seat 1+ constant seat-set-bounds
@@ -72,7 +72,7 @@ seat-set seat-set-bounds erase
 : is-back? ( row -- f ) row-bounds nip = ;
 
 : read-seats ( -- )
-    s" d/day05.txt" open-input
+    s" data/2020/day05.txt" open-input
     cr ." code, row, column, seat "
     begin
         read-input-line while
@@ -106,7 +106,7 @@ seat-set seat-set-bounds erase
     swap 1- seat-addr @
     and ;
 
-: (day05b) ( a u -- row column )
+: (partb) ( a u -- row column )
     read-seat-set
     row-bounds 1+ swap u+do
         column-bounds 1+ swap u+do
@@ -121,8 +121,8 @@ seat-set seat-set-bounds erase
     0 0 0
     ;
 
-: day05b ( -- )
-    s" d/day05.txt" (day05b)
+: partb ( -- )
+    s" ../data/2020/day05.txt" (partb)
     ." seat: " .
     ." row: " .
     ." column: " .
