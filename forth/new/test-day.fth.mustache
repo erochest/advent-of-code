@@ -1,13 +1,13 @@
 
-: test-(day{{ day }}a) s" f/day{{ day }}.txt" (day{{ day }}a) assert( 0<> ) ;
-: test-(day{{ day }}a)-data s" d/day{{ day }}.txt" (day{{ day }}a) assert( 0<> ) ;
+: test-(parta) s" ../sample/{{ year }}/day{{ day }}.txt" (parta) assert( 0<> ) ;
+: test-(parta)-data s" ../data/{{ year }}/day{{ day }}.txt" (parta) assert( 0<> ) ;
 
-: test-(day{{ day }}b) s" f/day{{ day }}.txt" (day{{ day }}b) assert( 0<> ) ;
-: test-(day{{ day }}b)-data s" d/day{{ day }}.txt" (day{{ day }}b) assert( 0<> ) ;
+: test-(partb) s" ../sample/{{ year }}/day{{ day }}.txt" (partb) assert( 0<> ) ;
+: test-(partb)-data s" ../data/{{ year }}/day{{ day }}.txt" (partb) assert( 0<> ) ;
 
 : test-all
-    test-(day{{ day }}a)
-    test-(day{{ day }}a)-data
-    test-(day{{ day }}b)
-    test-(day{{ day }}b)-data
+    test-(parta)
+    test-(parta)-data
+    test-(partb)
+    test-(partb)-data
     ;

@@ -1,17 +1,17 @@
-s" files.fth" included
-s" debug.fth" included
-s" stack.fth" included
+s" ../files.fth" included
+s" ../debug.fth" included
+s" ../stack.fth" included
 
-: (day{{ day }}a) ( a u -- n )
+: (parta) ( a u -- n )
     over-lines
         \ TODO
     done-lines ;
 
-: day{{ day }}a ( -- ) s" d/day{{ day }}.txt" (day{{ day }}a) . cr ;
+: parta ( -- ) s" ../data/{{ year }}/day{{ day }}.txt" (parta) . cr ;
 
-: (day{{ day }}b) ( a u -- n )
+: (partb) ( a u -- n )
     over-lines
         \ TODO
     done-lines ;
 
-: day{{ day }}b ( -- ) s" d/day{{ day }}.txt" (day{{ day }}b) . cr ;
+: partb ( -- ) s" ../data/{{ year }}/day{{ day }}.txt" (partb) . cr ;
