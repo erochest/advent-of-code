@@ -134,6 +134,15 @@ executables:
     - -with-rtsopts=-N
     main: Main.hs
     source-dirs: app/advent2021_05
+  advent2021-06:
+    dependencies: &id001
+    - advent-of-code
+    ghc-options: &id002
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: app/advent2021_06
 
 tests:
   day2021_02-test:
@@ -180,3 +189,14 @@ tests:
     - -with-rtsopts=-N
     main: Spec.hs
     source-dirs: test/day2021_05
+  advent2021_06-test:
+    dependencies: &id003
+    - advent-of-code
+    - tasty
+    - tasty-hunit
+    ghc-options: &id004
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    main: Spec.hs
+    source-dirs: test/day2021_06

@@ -6,7 +6,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TupleSections #-}
 
-module Advent.Day6
+module Advent.Day2021_06
   ( partOne
   , partTwo
   , LanternFishSchool(..)

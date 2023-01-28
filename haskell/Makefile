@@ -32,8 +32,11 @@ advent2021-04:
 advent2021-05:
 	stack run advent2021-05 < ../data/2021/day5.data
 
+advent2021-06:
+	stack run advent2021-06 < ../data/2021/day6.data
+
 2018: advent2018-01 advent2018-02 advent2018-03 advent2018-04 advent2018-05
 
-2021: advent2021-01 advent2021-02 advent2021-03 advent2021-04 advent2021-05
+2021: advent2021-01 advent2021-02 advent2021-03 advent2021-04 advent2021-05 advent2021-06
 
 .PHONY: test 2018 2021
