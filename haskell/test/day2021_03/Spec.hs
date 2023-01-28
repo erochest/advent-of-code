@@ -7,7 +7,7 @@ import Test.Tasty
 import Test.Tasty.HUnit
 
 import Advent
-import Advent.Day3
+import Advent.Day2021_03
 
 main :: IO ()
 main = defaultMain suite

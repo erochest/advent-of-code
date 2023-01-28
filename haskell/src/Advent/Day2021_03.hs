@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
 
-module Advent.Day3 
+module Advent.Day2021_03 
   ( partOne
   , partTwo
   , epsilon
