@@ -1,8 +1,8 @@
-s" files.fth" included
-s" debug.fth" included
-s" stack.fth" included
-s" bytes.fth" included
-s" paragraphs.fth" included
+s" ../files.fth" included
+s" ../debug.fth" included
+s" ../stack.fth" included
+s" ../bytes.fth" included
+s" ../paragraphs.fth" included
 
 27 0 2constant declaration-bounds
 
@@ -27,7 +27,7 @@ s" paragraphs.fth" included
     loop  
     ;
 
-: (day06a) ( a u -- n )
+: (parta) ( a u -- n )
     open-input
     0 begin
         read-paragraph dup 0<> while
@@ -39,9 +39,9 @@ s" paragraphs.fth" included
     close-input
     ;
 
-: day06a ( -- ) s" d/day06.txt" (day06a) . cr ;
+: parta ( -- ) s" ../data/2020/day06.txt" (parta) . cr ;
 
-: (day06b) ( a u -- n )
+: (partb) ( a u -- n )
     open-input
     0 -1 begin ( total group )
         read-input-line while ( total group-byes line-len )
@@ -53,4 +53,4 @@ s" paragraphs.fth" included
     count-declarations + \ process any last item
     ;
 
-: day06b ( -- ) s" d/day06.txt" (day06b) . cr ;
+: partb ( -- ) s" ../data/2020/day06.txt" (partb) . cr ;
