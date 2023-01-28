@@ -11,7 +11,7 @@ import Test.Tasty
 import Test.Tasty.HUnit
 
 import Advent
-import Advent.Day4
+import Advent.Day2021_04
 
 main :: IO ()
 main = defaultMain suite
@@ -43,7 +43,7 @@ fixture
   }
 
 suite :: TestTree
-suite = testGroup "day 4"
+suite = testGroup "2021, day 4"
     [ testGroup "part 1"
       [ testGroup "partOne"
         [ testCase "finds the winning board's checksum" $
