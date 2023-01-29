@@ -150,10 +150,10 @@ def run_b(monkey_data: TextIO) -> int:
 
 
 def main():
-    with open('./src/main/resources/data/day11.txt') as f:
+    with open('../data/2022/day11.txt') as f:
         print(run_a(f))
         # 120384
-    with open('./src/main/resources/data/day11.txt') as f:
+    with open('../data/2022/day11.txt') as f:
         print(run_b(f))
         # 32059801242
 
