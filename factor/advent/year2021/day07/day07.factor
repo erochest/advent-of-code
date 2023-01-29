@@ -1,8 +1,8 @@
 ! Copyright (C) 2022 Eric Rochester.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: advent2021.io arrays kernel locals math math.ranges
+USING: advent.io arrays kernel locals math math.ranges
 sequences ;
-IN: advent2021.day07
+IN: advent.year2021.day07
 
 : domain ( seq -- seq ) [ infimum ] [ supremum ] bi [a,b] ;
 : calculate-between-all ( positions pos distance-func -- fuel )
@@ -17,8 +17,8 @@ IN: advent2021.day07
     infimum ; inline
 
 : fuel ( from to -- fuel ) - abs ;
-: day07a ( path -- n ) [ fuel ] day07 ;
+: parta ( path -- n ) [ fuel ] day07 ;
 
 : sigma ( n -- n ) [1,b] sum ;
 : crab-fuel ( from to -- fuel ) - abs sigma ;
-: day07b ( path -- n ) [ crab-fuel ] day07 ;
+: partb ( path -- n ) [ crab-fuel ] day07 ;

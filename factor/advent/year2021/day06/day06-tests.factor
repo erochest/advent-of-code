@@ -1,7 +1,7 @@
 ! Copyright (C) 2022 Eric Rochester.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: advent2021.day06 sorting tools.test ;
-IN: advent2021.day06.tests
+USING: advent.io advent.year2021.day06 sorting tools.test ;
+IN: advent.year2021.day06.tests
 
 { { 0 1 1 2 1 0 0 0 0 } } [ { 3 4 3 1 2 } >school ] unit-test
 
@@ -17,14 +17,14 @@ unit-test
 { 5934 } [ V{ 3 4 3 1 2 } >school 80 school-term checksum ]
 unit-test
 
-{ 5934 } [ "vocab:advent2021/day06/example.txt" day06a ]
+{ 5934 } [ 2021 6 fixture parta ]
 unit-test
-{ 389726 } [ "vocab:advent2021/day06/data.txt" day06a ]
+{ 389726 } [ 2021 6 data-file parta ]
 unit-test
 
 { 26984457539 }
-[ "vocab:advent2021/day06/example.txt" day06b ]
+[ 2021 6 fixture partb ]
 unit-test
 { 1743335992042 }
-[ "vocab:advent2021/day06/data.txt" day06b ]
+[ 2021 6 data-file partb ]
 unit-test

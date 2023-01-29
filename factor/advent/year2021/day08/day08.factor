@@ -1,11 +1,11 @@
 ! Copyright (C) 2022 Eric Rochester.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs advent2021.io bit-arrays
+USING: accessors arrays assocs advent.io bit-arrays
 fry hashtables kernel locals math math.bits math.bitwise
 math.combinatorics math.functions math.parser math.ranges
 namespaces sequences sequences.extras sorting splitting
 vectors ;
-IN: advent2021.day08
+IN: advent.year2021.day08
 
 TUPLE: signal-output input-patterns output-values ;
 C: <signal-output> signal-output
@@ -57,7 +57,7 @@ signal-pattern-index set-global
     signal-pattern-index get-global swap
     [ bit-count over at length 1 = ] count
     nip ;
-: day08a ( path -- n )
+: parta ( path -- n )
     read-patterns
     [ output-values>> count-unique-patterns ] map
     sum ;
@@ -95,7 +95,7 @@ signal-pattern-index set-global
     swap output-values>> identify-patterns
     join>number ;
 
-: day08b ( path -- n )
+: partb ( path -- n )
     read-patterns
     "abcdefg" <permutations> [ all-patterns ] map
     swap [ over solve-output ] map

@@ -1,8 +1,8 @@
 ! Copyright (C) 2022 Eric Rochester.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: advent2021.day08 kernel math.combinatorics sequences
+USING: advent.io advent.year2021.day08 kernel math.combinatorics sequences
 tools.test ;
-IN: advent2021.day08.tests
+IN: advent.year2021.day08.tests
 
 { T{
     signal-output
@@ -31,7 +31,7 @@ IN: advent2021.day08.tests
 ] unit-test
 
 { 10 }
-[ "vocab:advent2021/day08/example.txt" read-patterns length ]
+[ 2021 8 fixture read-patterns length ]
 unit-test
 { T{
     signal-output
@@ -42,14 +42,14 @@ unit-test
     }
     { 0b1111111 0b0111110 0b1111110 0b1010110 }
 } }
-[ "vocab:advent2021/day08/example.txt" read-patterns first ]
+[ 2021 8 fixture read-patterns first ]
 unit-test
 
 { 2 }
 [ { 0b1111111 0b0111110 0b1111110 0b1010110 } count-unique-patterns ]
 unit-test
-{ 26 } [ "vocab:advent2021/day08/example.txt" day08a ] unit-test
-{ 512 } [ "vocab:advent2021/day08/data.txt" day08a ] unit-test
+{ 26 } [ 2021 8 fixture parta ] unit-test
+{ 512 } [ 2021 8 data-file parta ] unit-test
 
 { V{ 0 1 2 4 5 6 } } [ 0b1110111 bits ] unit-test
 { V{ 2 5 } } [ 0b0100100 bits ] unit-test
@@ -108,5 +108,5 @@ unit-test
     solve-output
 ] unit-test
 
-{ 61229 } [ "vocab:advent2021/day08/example.txt" day08b ] unit-test
-{ 1091165 } [ "vocab:advent2021/day08/data.txt" day08b ] unit-test
+{ 61229 } [ 2021 8 fixture partb ] unit-test
+{ 1091165 } [ 2021 8 data-file partb ] unit-test

@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators hashtables
 io.encodings.utf8 io.files kernel math math.parser math.ranges
 namespaces sequences splitting
 io prettyprint ;
-IN: advent2021.day05
+IN: advent.year2021.day05
 
 SYMBOL: diagonals
 f diagonals set
@@ -95,7 +95,7 @@ M: segment set-nth ( elt n segment -- ) immutable ;
     swap [ over inc-at ] each drop ;
 : segment-frequencies ( segment-seq -- hash-table )
     H{ } clone swap [ over frequencies ] each ;
-: day05a ( path -- checksum )
+: parta ( path -- checksum )
     read05
     segment-frequencies
     >alist [ second 2 >= ] filter length ;
@@ -103,4 +103,4 @@ M: segment set-nth ( elt n segment -- ) immutable ;
 : with-diagonals ( quot -- )
     diagonals swap with-variable-on ; inline
 
-: day05b ( path -- checksum ) [ day05a ] with-diagonals ;
+: partb ( path -- checksum ) [ parta ] with-diagonals ;
