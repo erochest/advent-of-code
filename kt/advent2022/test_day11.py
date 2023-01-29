@@ -3,14 +3,14 @@ from advent2022 import day11
 
 
 def test_run_a():
-    input_file = './src/test/resources/examples/day11.txt'
+    input_file = '../sample/2022/day11.txt'
     with open(input_file) as f:
         output = day11.run_a(f)
     assert(10605 == output)
 
 
 def test_run_b():
-    input_file = './src/test/resources/examples/day11.txt'
+    input_file = '../sample/2022/day11.txt'
     with open(input_file) as f:
         output = day11.run_b(f)
     assert(2713310158 == output)
