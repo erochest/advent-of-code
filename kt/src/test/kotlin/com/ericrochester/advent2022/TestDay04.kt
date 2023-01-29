@@ -1,11 +1,12 @@
 package com.ericrochester.advent2022
 
+import java.io.File
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 class TestDay04 {
-    private val inputData = javaClass.getResource("/examples/day04.txt")?.readText() ?: ""
+    private val inputData = File("../sample/2022/day04.txt").readText(Charsets.UTF_8)
     private val day04 = Day04()
 
     @Test
