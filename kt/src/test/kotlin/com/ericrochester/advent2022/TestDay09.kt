@@ -17,7 +17,7 @@ class TestDay09 {
 
     @Test
     fun testDay09RunB() {
-        val inputDataB = javaClass.getResource("/examples/day09b.txt")?.readText() ?: ""
+        val inputDataB = File("../sample/2022/day09b.txt").readText(Charsets.UTF_8)
         val output = day.runB(inputDataB)
         assertEquals(36, output)
     }
