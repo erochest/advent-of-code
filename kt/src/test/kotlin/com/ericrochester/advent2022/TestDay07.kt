@@ -1,12 +1,13 @@
 package com.ericrochester.advent2022
 
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 class TestDay07 {
-    private val inputData = javaClass.getResource("/examples/day07.txt")?.readText() ?: ""
+    private val inputData = File("../sample/2022/day07.txt").readText(Charsets.UTF_8)
     private val day = Day07()
 
      @Test
@@ -57,6 +58,7 @@ class TestDay07 {
         builder.exec("$ cd a")
         builder.exec("$ cd /")
         builder.exec("$ cd a")
+        println(">>> " + builder.current.children.values.toString())
         assertContains(builder.current.children.values, Directory("a", builder.tree))
         assertEquals(1, builder.tree.children.size)
     }

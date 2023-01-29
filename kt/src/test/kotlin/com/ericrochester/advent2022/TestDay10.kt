@@ -1,11 +1,12 @@
 package com.ericrochester.advent2022
 
+import java.io.File
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TestDay10 {
-    private val inputData = javaClass.getResource("/examples/day10.txt")?.readText() ?: ""
+    private val inputData = File("../sample/2022/day10.txt").readText(Charsets.UTF_8)
     private val day = Day10()
 
     @Test fun testDay10RunA() {
