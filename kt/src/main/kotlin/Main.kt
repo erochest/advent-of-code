@@ -1,24 +1,27 @@
-import com.ericrochester.advent2022.Day01
+import java.io.File
 import com.ericrochester.advent2022.DayRuns
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.types.int
 
 class Advent2022: CliktCommand() {
     val test by option("--test", "-t").flag()
+    val year by option("--year", "-y").int().default(2022)
     val day by option("--day", "-d")
 
     override fun run() {
         val dayNumber = day?.substring(0, 2)?.toInt() ?: 1
 
         val resourceName = if (test) {
-            "/examples/day%02d.txt".format(dayNumber)
+            "../sample/%04d/day%02d.txt".format(year, dayNumber)
         } else {
-            "/data/day%02d.txt".format(dayNumber)
+            "../data/%04d/day%02d.txt".format(year, dayNumber)
         }
 
-        val inputData =  ResourceReader.readResource(resourceName)
-        val className = "com.ericrochester.advent2022.Day%02d".format(dayNumber)
+        val inputData =  File(resourceName).readText(Charsets.UTF_8)
+        val className = "com.ericrochester.advent%04d.Day%02d".format(year, dayNumber)
         val cls = Class.forName(className)
         val dayInstance = cls.getDeclaredConstructor().newInstance() as DayRuns<*, *>
         val output = if (day?.endsWith('a', true) != false) {
