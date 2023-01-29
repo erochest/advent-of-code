@@ -1,10 +1,10 @@
 ! Copyright (C) 2022 Eric Rochester.
 ! See http://factorcode.org/license.txt for BSD license.
 
-USING: advent2021.io arrays assocs hashtables io.encodings.utf8
+USING: advent.io arrays assocs hashtables io.encodings.utf8
 io.files kernel math math.parser math.ranges prettyprint
 sequences splitting vectors ;
-IN: advent2021.day06
+IN: advent.year2021.day06
 
 : inc ( n seq -- ) [ nth 1 + ] 2keep set-nth ;
 : inc-by ( offset n seq -- ) [ nth + ] 2keep set-nth ;
@@ -22,5 +22,5 @@ IN: advent2021.day06
 : checksum ( school -- n ) sum ;
 : run-for ( period path -- n )
     read>numbers >school swap school-term checksum ;
-: day06a ( path -- n ) 80 swap run-for ;
-: day06b ( path -- n ) 256 swap run-for ;
+: parta ( path -- n ) 80 swap run-for ;
+: partb ( path -- n ) 256 swap run-for ;
