@@ -13,18 +13,19 @@ IN: advent.io
 : read>numbers ( path -- seq )
     (read-file-contents) split-fields seq>numbers ;
 
+: advent-subdirectory ( subdir-name -- path )
+    "advent" find-vocab-root parent-directory 
+    prepend-path ;
+
 : fixture-basename ( day -- basename )
     "day%02d.fixture" sprintf ;
 : fixture ( year day -- path )
-    "advent" find-vocab-root parent-directory
-    "sample" append-path
-    rot number>string append-path
-    swap fixture-basename append-path ;
-
+    [ number>string ] [ fixture-basename ] bi*
+    "sample" advent-subdirectory
+    prepend-path prepend-path ;
 : data-basename ( day -- basename )
-    number>string "day" swap append ".data" append ;
+    "day%02.data" sprintf ;
 : data-file ( year day -- path )
-    "advent" find-vocab-root parent-directory
-    "data" append-path
-    rot number>string append-path
-    swap data-basename append-path ;
+    [ number>string ] [ data-basename ] bi*
+    "data" advent-subdirectory
+    prepend-path prepend-path ;
