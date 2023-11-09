@@ -1,7 +1,7 @@
 ! Copyright (C) 2022 Eric Rochester.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: io.encodings.utf8 io.files kernel math.parser sequences
-splitting vocabs.loader io.pathnames ;
+USING: formatting io.encodings.utf8 io.files kernel math.parser 
+       sequences splitting vocabs.loader io.pathnames ;
 IN: advent.io
 
 : (file-lines) ( path -- seq ) utf8 file-lines ;
@@ -14,7 +14,7 @@ IN: advent.io
     (read-file-contents) split-fields seq>numbers ;
 
 : fixture-basename ( day -- basename )
-    number>string "day" swap append ".fixture" append ;
+    "day%02d.fixture" sprintf ;
 : fixture ( year day -- path )
     "advent" find-vocab-root parent-directory
     "sample" append-path
