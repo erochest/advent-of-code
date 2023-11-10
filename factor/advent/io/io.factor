@@ -24,7 +24,7 @@ IN: advent.io
     "sample" advent-subdirectory
     prepend-path prepend-path ;
 : data-basename ( day -- basename )
-    "day%02.data" sprintf ;
+    "day%02d.data" sprintf ;
 : data-file ( year day -- path )
     [ number>string ] [ data-basename ] bi*
     "data" advent-subdirectory
