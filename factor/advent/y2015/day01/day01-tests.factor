@@ -19,10 +19,9 @@ IN: advent.y2015.day01.tests
 { { 0 1 2 3 4 } } [ 0 [ 1 + ] <generator> 5 take>array ]
 unit-test
 
-! generate lazy sequence of codes
-! { { 20151125 31916031 18749137 16080970 21629792 17289845
-!     24592653 8057251 16929656 30943339 } }
-! [ generate-codes 10 take>array ] unit-test
+{ { 20151125 31916031 18749137 16080970 21629792 17289845
+    24592653 8057251 16929656 30943339 } }
+[ aoc-generator 10 take>array ] unit-test
 
 ! generate lazy sequence of coordinates
 ! zip them together
