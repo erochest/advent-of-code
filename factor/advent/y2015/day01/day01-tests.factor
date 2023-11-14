@@ -7,16 +7,16 @@ IN: advent.y2015.day01.tests
 { 31916031 } [ 20151125 252533 33554393 next-code ] unit-test
 
 { t 4 } [
-    0 [ 1 + ] <generator> 
-    skip skip skip skip 
-    [ generator? ] [ current>> ] bi 
+    0 [ 1 + ] <fgenerator> 
+    4 [ [ skip ] keep ] times
+    [ fgenerator? ] [ current>> ] bi 
 ] unit-test
 
 { 0 1 2 } [ 
-    0 [ 1 + ] <generator> step step step drop
+    0 [ 1 + ] <fgenerator> 3 [ next-and ] times drop
 ] unit-test
 
-{ { 0 1 2 3 4 } } [ 0 [ 1 + ] <generator> 5 take>array ]
+{ { 0 1 2 3 4 } } [ 0 [ 1 + ] <fgenerator> 5 take>array ]
 unit-test
 
 { { 20151125 31916031 18749137 16080970 21629792 17289845
