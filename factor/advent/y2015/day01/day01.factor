@@ -41,3 +41,5 @@ TUPLE: generator current nextf ;
     ] times
     drop >array ;
 
+TUPLE: coords row col ;
+: <coords> ( r c -- coords ) coords boa ;

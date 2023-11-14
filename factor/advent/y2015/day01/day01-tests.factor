@@ -23,6 +23,8 @@ unit-test
     24592653 8057251 16929656 30943339 } }
 [ aoc-generator 10 take>array ] unit-test
 
+{ T{ coords f 1 1 } } [ 1 1 <coords> ] unit-test
+
 ! generate lazy sequence of coordinates
 ! zip them together
 ! find the code at 
