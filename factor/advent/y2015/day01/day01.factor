@@ -12,9 +12,9 @@ SYMBOL: multiplier
 SYMBOL: divisor
 33554393 divisor set-global
 
-TUPLE: generator current nextf ;
+TUPLE: fgenerator current nextf ;
 
-: <generator> ( n f -- generator ) generator boa ;
+: <fgenerator> ( n f -- generator ) fgenerator boa ;
 
 : next-code ( prev mult div -- next ) [ * ] dip /mod nip ;
 
@@ -22,21 +22,34 @@ TUPLE: generator current nextf ;
     first-code get-global
     multiplier get-global 
     divisor get-global [ next-code ] curry curry
-    <generator> ;
+    <fgenerator> ;
 
-: skip ( gen -- gen' )
+! skip the next value and move ahead.
+GENERIC: skip ( gen -- )
+
+! return the current value without moving ahead.
+GENERIC: peek ( gen -- v )
+
+! return the current value and move ahead.
+GENERIC: next ( gen -- v )
+
+: next-and ( gen -- v gen ) [ next ] keep ;
+
+M: fgenerator skip ( gen -- )
     dup
     [ current>> ] [ nextf>> ] bi call( n -- n )
-    >>current ;
+    >>current
+    drop ;
 
+M: fgenerator peek ( gen -- v ) current>> ;
 
-: step ( gen -- current gen' ) [ current>> ] [ skip ] bi ;
+M: fgenerator next ( gen -- current ) [ current>> ] [ skip ] bi ;
 
 : take>array ( generator n -- array )
     dup <vector>
     -rot
     [
-        step
+        next-and
         [ suffix ] dip
     ] times
     drop >array ;
