@@ -18,7 +18,7 @@ TUPLE: fgenerator current nextf ;
 
 : next-code ( prev mult div -- next ) [ * ] dip /mod nip ;
 
-: aoc-generator ( -- generator )
+: code-generator ( -- generator )
     first-code get-global
     multiplier get-global 
     divisor get-global [ next-code ] curry curry
@@ -61,3 +61,7 @@ TUPLE: coords col row ;
     [ col>> 1 + ] [ row>> 1 - ] bi
     [ 1 swap ] when-zero
     <coords> ;
+
+: coord-generator ( -- generator )
+    1 1 <coords>
+    [ next-coord ] <fgenerator> ;
