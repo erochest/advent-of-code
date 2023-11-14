@@ -65,3 +65,16 @@ TUPLE: coords col row ;
 : coord-generator ( -- generator )
     1 1 <coords>
     [ next-coord ] <fgenerator> ;
+
+TUPLE: zip-generator gen1 gen2 ;
+
+: zip ( gen1 gen2 -- zip-gen ) zip-generator boa ;
+
+M: zip-generator skip ( zip-gen -- )
+    [ gen1>> skip ] [ gen2>> skip ] bi ;
+
+M: zip-generator peek ( zip-gen -- v )
+    [ gen1>> peek ] [ gen2>> peek ] bi 2array ;
+
+M: zip-generator next ( zip-gen -- v )
+    [ peek ] [ skip ] bi ;

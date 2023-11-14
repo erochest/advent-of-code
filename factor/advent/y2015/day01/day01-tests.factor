@@ -35,7 +35,20 @@ unit-test
 { { T{ coords f 1 1 } T{ coords f 1 2 } T{ coords f 2 1 } T{ coords f 1 3 } T{ coords f 2 2 } } }
 [ coord-generator 5 take>array ] unit-test
 
-! generate lazy sequence of coordinates
-! zip them together
-! find the code at 
+{ {
+    { 20151125 T{ coords f 1 1 } }
+    { 31916031 T{ coords f 1 2 } }
+    { 18749137 T{ coords f 2 1 } }
+    { 16080970 T{ coords f 1 3 } }
+    { 21629792 T{ coords f 2 2 } }
+    { 17289845 T{ coords f 3 1 } }
+    { 24592653 T{ coords f 1 4 } }
+    {  8057251 T{ coords f 2 3 } }
+    { 16929656 T{ coords f 3 2 } }
+    { 30943339 T{ coords f 4 1 } }
+} } [
+    code-generator coord-generator zip 10 take>array
+] unit-test
+
+! find the code at (filter)
 ! To continue, please consult the code grid in the manual.  Enter the code at row 2978, column 3083.
