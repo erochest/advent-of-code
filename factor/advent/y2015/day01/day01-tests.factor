@@ -25,6 +25,13 @@ unit-test
 
 { T{ coords f 1 1 } } [ 1 1 <coords> ] unit-test
 
+{ T{ coords f 1 2 } } [ 1 1 <coords> next-coord ] unit-test
+{ T{ coords f 2 1 } } [ 1 2 <coords> next-coord ] unit-test
+{ T{ coords f 1 3 } } [ 2 1 <coords> next-coord ] unit-test
+{ T{ coords f 2 2 } } [ 1 3 <coords> next-coord ] unit-test
+{ T{ coords f 3 1 } } [ 2 2 <coords> next-coord ] unit-test
+{ T{ coords f 1 4 } } [ 3 1 <coords> next-coord ] unit-test
+
 ! generate lazy sequence of coordinates
 ! zip them together
 ! find the code at 
