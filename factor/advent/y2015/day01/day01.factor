@@ -54,5 +54,10 @@ M: fgenerator next ( gen -- current ) [ current>> ] [ skip ] bi ;
     ] times
     drop >array ;
 
-TUPLE: coords row col ;
-: <coords> ( r c -- coords ) coords boa ;
+TUPLE: coords col row ;
+: <coords> ( c r -- coords ) coords boa ;
+
+: next-coord ( coord -- coord )
+    [ col>> 1 + ] [ row>> 1 - ] bi
+    [ 1 swap ] when-zero
+    <coords> ;
