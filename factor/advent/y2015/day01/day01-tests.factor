@@ -21,7 +21,7 @@ unit-test
 
 { { 20151125 31916031 18749137 16080970 21629792 17289845
     24592653 8057251 16929656 30943339 } }
-[ aoc-generator 10 take>array ] unit-test
+[ code-generator 10 take>array ] unit-test
 
 { T{ coords f 1 1 } } [ 1 1 <coords> ] unit-test
 
@@ -31,6 +31,9 @@ unit-test
 { T{ coords f 2 2 } } [ 1 3 <coords> next-coord ] unit-test
 { T{ coords f 3 1 } } [ 2 2 <coords> next-coord ] unit-test
 { T{ coords f 1 4 } } [ 3 1 <coords> next-coord ] unit-test
+
+{ { T{ coords f 1 1 } T{ coords f 1 2 } T{ coords f 2 1 } T{ coords f 1 3 } T{ coords f 2 2 } } }
+[ coord-generator 5 take>array ] unit-test
 
 ! generate lazy sequence of coordinates
 ! zip them together
