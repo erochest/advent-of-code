@@ -1,7 +1,7 @@
 ! Copyright (C) 2023 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: accessors advent.io advent.y2015.day01 kernel math 
-       tools.test ;
+USING: accessors advent.io advent.y2015.day01 kernel math
+sequences tools.test ;
 IN: advent.y2015.day01.tests
 
 { 31916031 } [ 20151125 252533 33554393 next-code ] unit-test
@@ -49,6 +49,8 @@ unit-test
 } } [
     code-generator coord-generator zip 10 take>array
 ] unit-test
+
+{ 1534922 } [ 5 6 <coords> code-at ] unit-test
 
 ! find the code at (filter)
 ! To continue, please consult the code grid in the manual.  Enter the code at row 2978, column 3083.
