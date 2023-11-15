@@ -78,3 +78,10 @@ M: zip-generator peek ( zip-gen -- v )
 
 M: zip-generator next ( zip-gen -- v )
     [ peek ] [ skip ] bi ;
+
+: code-at ( coord -- code )
+    code-generator coord-generator zip
+    [ 2dup gen2>> current>> = ] [
+        dup skip
+    ] until
+    nip gen1>> current>> ;
