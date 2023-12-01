@@ -21,11 +21,20 @@ IN: advent.io
     "day%02d.fixture" sprintf ;
 : fixture ( year day -- path )
     [ number>string ] [ fixture-basename ] bi*
+    swap
+    "sample" advent-subdirectory
+    prepend-path prepend-path ;
+: fixture-a-basename ( day -- basename )
+    "day%02da.fixture" sprintf ;
+: fixture-a ( year day -- path )
+    [ number>string ] [ fixture-a-basename ] bi*
+    swap
     "sample" advent-subdirectory
     prepend-path prepend-path ;
 : data-basename ( day -- basename )
     "day%02d.data" sprintf ;
 : data-file ( year day -- path )
     [ number>string ] [ data-basename ] bi*
+    swap
     "data" advent-subdirectory
     prepend-path prepend-path ;
