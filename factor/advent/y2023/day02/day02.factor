@@ -1,7 +1,8 @@
 ! Copyright (C) 2023 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: accessors advent.io arrays assocs hashtables kernel math
-       math.parser namespaces sequences splitting strings
+USING: accessors advent.io arrays assocs assocs.extras
+       hashtables io kernel math math.order math.parser
+       namespaces prettyprint sequences splitting strings
        unicode ;
 IN: advent.y2023.day02
 
@@ -47,12 +48,8 @@ TUPLE: game { id integer } { grabs array } ;
 : possible-given? ( given-grab-hash grab-list -- ? )
     [ (possible-given?) ] all? nip ;
 
-! mth game-ary
-! mth mth grab-ary
-! mth f
 : sum-possible-ids ( max-target-hash path -- n )
-    (file-lines)
-    [ >game ] map
+    (file-lines) [ >game ] map
     [ grabs>> [ dupd possible-given? ] all? ] filter
     [ id>> ] map-sum
     nip
@@ -60,3 +57,28 @@ TUPLE: game { id integer } { grabs array } ;
 
 : debug-possible-ids ( path -- arg )
     (file-lines) [ dup >game 2array ] map ;
+
+: merge-count ( counts grab -- counts )
+    [ color>> ] [ count>> ] bi 
+    ! copied/changed from the definition of of+
+    [ [ 0 or ] ] dip [ max ] curry compose change-of
+    ;
+
+: collect-max-counts ( grab-list count-array -- counts )
+    [ merge-count ] reduce ;
+
+: collect-game-max-counts ( grabs -- counts )
+    H{ } clone
+    [ swap collect-max-counts ] reduce ;
+
+: power-cubes ( grab-counts -- power ) values product ;
+
+! it would be good to factor the IO out of these.
+: sum-power-cubes ( path -- sum )
+    (file-lines)
+    [
+        >game
+        grabs>>
+        collect-game-max-counts
+        power-cubes
+    ] map-sum ;

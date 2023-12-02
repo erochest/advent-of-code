@@ -1,6 +1,6 @@
 ! Copyright (C) 2023 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: advent.io tools.test advent.y2023.day02 ;
+USING: accessors advent.io arrays tools.test advent.y2023.day02 ;
 IN: advent.y2023.day02.tests
 
 { T{ color-grab f 7 "green" } }
@@ -53,8 +53,46 @@ unit-test
     possible-given?
 ] unit-test
 
+{ H{ { "red" 3 } } }
+[
+    H{ }
+    T{ color-grab f 3 "red" } 
+    merge-count
+] unit-test
+
+{ H{ { "red" 3 } { "green" 13 } } }
+[ H{ { "red" 3 } } T{ color-grab f 13 "green" } merge-count ]
+unit-test
+
+{ H{ { "green" 13 } } }
+[ H{ { "green" 13 } } 4 "green" <color-grab> merge-count ]
+unit-test
+
+{ H{ { "green" 13 } { "red" 3 } { "pink" 4 } } }
+[
+    13 "green" <color-grab>
+    3 "red" <color-grab>
+    4 "pink" <color-grab> 
+    3array
+    H{ }
+    collect-max-counts
+] unit-test
+
+{ H{ { "green" 13 } { "blue" 6 } { "red" 20 } } }
+[
+    "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red"
+    >game grabs>>
+    collect-game-max-counts
+] unit-test
+
+{ 48 } [ H{ { "green" 2 } { "blue" 6 } { "red" 4 } } power-cubes ] unit-test
+
 { 8 } [
     H{ { "red" 12 } { "green" 13 } { "blue" 14 } }
     2023 2 fixture
     sum-possible-ids
 ] unit-test
+
+{ 2286 } [ 2023 2 fixture sum-power-cubes ] unit-test
+{ 56322 } [ 2023 2 data-file sum-power-cubes ] unit-test
+
