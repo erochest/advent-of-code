@@ -48,11 +48,17 @@ TUPLE: game { id integer } { grabs array } ;
 : possible-given? ( given-grab-hash grab-list -- ? )
     [ (possible-given?) ] all? nip ;
 
-: sum-possible-ids ( max-target-hash path -- n )
-    (file-lines) [ >game ] map
+: (read-games) ( path -- game-array ) (file-lines) [ >game ] map ;
+
+: (sum-possible-ids) ( max-target-hash game-array -- n )
     [ grabs>> [ dupd possible-given? ] all? ] filter
     [ id>> ] map-sum
-    nip
+    nip ;
+
+: sum-possible-ids ( path -- n )
+    max-grab-target get-global swap
+    (read-games)
+    (sum-possible-ids)
     ;
 
 : debug-possible-ids ( path -- arg )
@@ -73,12 +79,10 @@ TUPLE: game { id integer } { grabs array } ;
 
 : power-cubes ( grab-counts -- power ) values product ;
 
-! it would be good to factor the IO out of these.
-: sum-power-cubes ( path -- sum )
-    (file-lines)
+: (sum-power-cubes) ( game-array -- sum )
     [
-        >game
         grabs>>
         collect-game-max-counts
         power-cubes
     ] map-sum ;
+: sum-power-cubes ( path -- sum ) (read-games) (sum-power-cubes) ;

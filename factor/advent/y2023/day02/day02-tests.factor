@@ -87,11 +87,7 @@ unit-test
 
 { 48 } [ H{ { "green" 2 } { "blue" 6 } { "red" 4 } } power-cubes ] unit-test
 
-{ 8 } [
-    H{ { "red" 12 } { "green" 13 } { "blue" 14 } }
-    2023 2 fixture
-    sum-possible-ids
-] unit-test
+{ 8 } [ 2023 2 fixture sum-possible-ids ] unit-test
 
 { 2286 } [ 2023 2 fixture sum-power-cubes ] unit-test
 { 56322 } [ 2023 2 data-file sum-power-cubes ] unit-test
