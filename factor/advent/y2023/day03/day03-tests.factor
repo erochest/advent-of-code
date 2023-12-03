@@ -1,6 +1,6 @@
 ! Copyright (C) 2023 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: tools.test advent.io advent.y2023.day03 ;
+USING: tools.test advent.io advent.y2023.day03 kernel sorting ;
 IN: advent.y2023.day03.tests
 
 {
@@ -18,4 +18,37 @@ IN: advent.y2023.day03.tests
     }
 } [ 2023 3 fixture (file-lines) find-numbers ] unit-test
 
-{ 4361 } [ 2023 3 fixture sum-part-numbers ] unit-test
+{
+    {
+        { 1 1 } { 2 1 } { 3 1 } { 4 1 }
+        { 1 2 } { 4 2 }
+        { 1 3 } { 2 3 } { 3 3 } { 4 3 }
+    }
+}
+[ 35 { { 2 2 } { 3 2 } } <number-region> get-surrounding ]
+unit-test
+
+{ V{ { 1 4 } } }
+[
+    V{ } clone
+    dup 1 4 append-point!
+] unit-test
+
+{ V{ { 1 2 } { 2 2 } { 3 2 } { 4 2 } } }
+[
+    V{ } clone
+    2 over { 1 0 } { 4 4 } (rectangle-seq)
+] unit-test
+
+{
+    {
+        { 0 0 } { 0 1 } { 0 2 } { 0 3 }
+        { 1 0 } { 1 1 } { 1 2 } { 1 3 }
+        { 2 0 } { 2 1 } { 2 2 } { 2 3 }
+        { 3 0 } { 3 1 } { 3 2 } { 3 3 }
+        { 4 0 } { 4 1 } { 4 2 } { 4 3 }
+    }
+}
+[ { 0 0 } { 4 3 } rectangle-seq sort ] unit-test
+
+! { 4361 } [ 2023 3 fixture sum-part-numbers ] unit-test
