@@ -1,8 +1,8 @@
 ! Copyright (C) 2023 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: accessors advent.io arrays hash-sets kernel locals math
-       math.order math.parser namespaces ranges regexp
-       sequences sequences.deep sets strings ;
+USING: accessors advent.io arrays assocs hash-sets kernel
+       locals math math.order math.parser namespaces ranges
+       regexp sequences sequences.deep sets strings ;
 IN: advent.y2023.day03
 
 SYMBOLS: number-re fixture-data puzzle-data ;
@@ -75,12 +75,20 @@ TUPLE: number-region { number integer } { points array } ;
 : part-indicator? ( c -- ? )
     [ ".0123456789" in? not ] [ f ] if* ;
 
+: gear-symbol? ( c -- ? ) 42 = ;
+
 : get-char-at ( grid point -- c )
     [ second swap ?nth ] [ first swap ?nth ] bi ;
 
 : part-number? ( grid region -- ? )
     get-surrounding
     [ dupd get-char-at part-indicator? ] any?
+    nip
+    ;
+
+: get-gears ( grid region -- array )
+    get-surrounding
+    [ dupd get-char-at gear-symbol? ] filter
     nip
     ;
 
@@ -91,3 +99,24 @@ TUPLE: number-region { number integer } { points array } ;
 
 : sum-part-numbers ( path -- n )
     (file-lines) (sum-part-numbers) ;
+
+: index-gear-point ( hashmap gear-pair -- hashmap )
+    [ first ] [ second ] bi pick push-at ;
+
+: (sum-gear-ratios) ( grid -- n )
+    dup find-numbers
+    [
+        dupd 
+        [ get-gears ] keep
+        number>> swap
+        2array
+    ] map
+    H{ } clone [ index-gear-point ] reduce
+    values
+    [ length 2 = ] filter
+    [ product ] map-sum
+    nip
+    ;
+
+: sum-gear-ratios ( path -- n )
+    (file-lines) (sum-gear-ratios) ;
