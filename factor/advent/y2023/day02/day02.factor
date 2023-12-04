@@ -16,8 +16,6 @@ TUPLE: color-grab { count integer } { color string } ;
 TUPLE: game { id integer } { grabs array } ;
 : <game> ( id grabs -- game ) game boa ;
 
-: trim-ws ( string -- string ) [ blank? ] trim ;
-
 : >color-grab ( string -- f/color-grab )
     " " split1
     [ [ string>number ] dip <color-grab> ] [ drop f ] if*
