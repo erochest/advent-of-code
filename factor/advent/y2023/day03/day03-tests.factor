@@ -69,5 +69,21 @@ unit-test
     part-number?
 ] unit-test
 
+{ { t f f } } [ "*.#" >array [ gear-symbol? ] map ] unit-test
+
+{ { { 3 1 } } } [
+    2023 3 fixture (file-lines)
+    T{ number-region f  35 { { 2 2 } { 3 2 } } }
+    get-gears
+] unit-test
+
+{ H{ { { 1 1 } V{ 35 } } } }
+[
+    H{ } clone { 35 { 1 1 } } index-gear-point
+] unit-test
+
 { 4361 } [ 2023 3 fixture sum-part-numbers ] unit-test
 { 536202 } [ 2023 3 data-file sum-part-numbers ] unit-test
+
+{ 467835 } [ 2023 3 fixture sum-gear-ratios ] unit-test
+{ 78272573 } [ 2023 3 data-file sum-gear-ratios ] unit-test
