@@ -1,6 +1,6 @@
 ! Copyright (C) 2022 Eric Rochester.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: formatting io.encodings.utf8 io.files kernel math.parser 
+USING: ascii formatting io.encodings.utf8 io.files kernel math.parser 
        sequences splitting vocabs.loader io.pathnames ;
 IN: advent.io
 
@@ -38,3 +38,6 @@ IN: advent.io
     swap
     "data" advent-subdirectory
     prepend-path prepend-path ;
+
+! TODO: move this into a package with a better name.
+: trim-ws ( string -- string ) [ blank? ] trim ;
