@@ -72,17 +72,22 @@ TUPLE: number-region { number integer } { points array } ;
     swap diff
     ;
 
-! ---
+: part-indicator? ( c -- ? )
+    [ ".0123456789" in? not ] [ f ] if* ;
 
-: get-surrounding-coords ( grid region -- array )
-    2drop { } clone ;
+: get-char-at ( grid point -- c )
+    [ second swap ?nth ] [ first swap ?nth ] bi ;
 
-: get-number-coords ( grid -- array ) drop { } clone ;
+: part-number? ( grid region -- ? )
+    get-surrounding
+    [ dupd get-char-at part-indicator? ] any?
+    nip
+    ;
 
-: get-part-numbers ( grid coord -- array ) 2drop { } clone ;
+: (sum-part-numbers) ( grid -- n ) 
+    dup find-numbers
+    swap [ swap part-number? ] curry filter
+    [ number>> ] map-sum ;
 
-: (sum-part-numbers) ( grid -- n ) ;
-    ! dup length [
-    ! ] each-integer
-
-: sum-part-numbers ( path -- n ) ;
+: sum-part-numbers ( path -- n )
+    (file-lines) (sum-part-numbers) ;
