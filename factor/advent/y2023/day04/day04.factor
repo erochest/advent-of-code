@@ -11,9 +11,6 @@ TUPLE: card
        { card-numbers array } ;
 : <card> ( n winning card-numbers -- card ) card boa ;
 
-: split-words ( string -- array ) 
-    " " split [ empty? not ] filter ;
-
 : >card ( string -- card )
     ":" split1
     [ split-words second string>number ]

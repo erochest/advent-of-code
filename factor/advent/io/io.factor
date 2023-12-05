@@ -1,7 +1,8 @@
 ! Copyright (C) 2022 Eric Rochester.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: ascii formatting io.encodings.utf8 io.files kernel math.parser 
-       sequences splitting vocabs.loader io.pathnames ;
+USING: ascii formatting io.encodings.utf8 io.files kernel
+       math.parser sequences splitting vocabs.loader
+       io.pathnames ;
 IN: advent.io
 
 : (file-lines) ( path -- seq ) utf8 file-lines ;
@@ -41,3 +42,9 @@ IN: advent.io
 
 ! TODO: move this into a package with a better name.
 : trim-ws ( string -- string ) [ blank? ] trim ;
+
+: split-words ( string -- array ) 
+    " " split [ empty? not ] filter ;
+
+: split-numbers ( string -- array )
+    split-words [ string>number ] map ;
