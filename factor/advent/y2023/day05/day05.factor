@@ -1,8 +1,8 @@
 ! Copyright (C) 2023 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
 USING: accessors advent.io arrays assocs formatting grouping
-       hashtables io kernel math math.order math.parser
-       namespaces prettyprint ranges sequences splitting ;
+       io kernel math math.order math.parser namespaces
+       prettyprint ranges sequences sets splitting ;
 FROM: advent.io => split-words ;
 IN: advent.y2023.day05
 
@@ -17,6 +17,32 @@ SYMBOL: path
     "humidity"
     "location"
 } path set-global
+
+TUPLE: mapping-range
+    { dest integer }
+    { src integer }
+    { extent integer }
+    { range range } ;
+: <mapping-range> ( dest src extent -- mapping-range )
+    2dup dupd + [a..b)
+    mapping-range boa ;
+M: mapping-range in? ( elt mapping -- ? ) range>> in? ;
+M: mapping-range at* ( key assoc -- value/f ? )
+    2dup in? [
+        ! x - s + d
+        [ dest>> ] [ src>> ] bi - +
+        t
+    ] [
+        2drop f f
+    ] if ;
+
+TUPLE: mapping { mapping-ranges array } ;
+: <mapping> ( ranges -- mapping ) mapping boa ;
+M: mapping at* ( key assoc -- value/f ? )
+    dupd mapping-ranges>> assoc-stack [
+        nip
+    ] when*
+    t ;
 
 ! parses "seeds: 1 2 3 4"
 : parse-seeds ( line -- seeds )
@@ -40,24 +66,14 @@ SYMBOL: path
     "-" split 
     1 swap remove-nth ;
 
-! parses lines from an input file into an array of seeds
-! and a hashtable mapping from { SRC DEST } pairs to
-! mappings from source values to destination values.
-: (parse-input) ( lines -- seeds mappings )
-    "parsing" print nl
-    [ empty? ] split-when
-    [ first first parse-seeds ]
+: parse-mapping ( lines -- label-pair mapping-array )
+    [ first parse-mapping-label "processing" print dup . flush ]
     [
-        rest-slice [
-            [ first parse-mapping-label ]
-            [
-                rest-slice
-                H{ } clone
-                [ split-numbers add-range-mapping ] reduce
-            ] bi
-            2array
-        ] map >hashtable
-    ] bi ;
+        rest-slice
+        [ split-numbers first3 <mapping-range> ] map
+        <mapping>
+    ] bi
+    ;
 
 : mapping-at-pair ( mappings from-to from-value -- to-value )
     [
@@ -97,15 +113,6 @@ SYMBOL: path
     ] map
     1000000 [ min ] reduce
     [ 2drop ] dip
-    ;
-
-: parse-mapping ( lines -- label-pair mapping-array )
-    [ first parse-mapping-label "parsed " print dup . ]
-    [
-        rest-slice
-        H{ } clone
-        [ split-numbers add-range-mapping ] reduce
-    ] bi
     ;
 
 : get-next-values ( seeds paragraph -- values )
