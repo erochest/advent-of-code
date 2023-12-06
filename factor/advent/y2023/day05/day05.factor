@@ -2,9 +2,21 @@
 ! See https://factorcode.org/license.txt for BSD license.
 USING: accessors advent.io arrays assocs formatting grouping
        hashtables io kernel math math.order math.parser
-       prettyprint ranges sequences splitting ;
+       namespaces prettyprint ranges sequences splitting ;
 FROM: advent.io => split-words ;
 IN: advent.y2023.day05
+
+SYMBOL: path
+{
+    "seed"
+    "soil"
+    "fertilizer"
+    "water"
+    "light"
+    "temperature"
+    "humidity"
+    "location"
+} path set-global
 
 ! parses "seeds: 1 2 3 4"
 : parse-seeds ( line -- seeds )
@@ -87,17 +99,25 @@ IN: advent.y2023.day05
     [ 2drop ] dip
     ;
 
+: parse-mapping ( lines -- label-pair mapping-array )
+    [ first parse-mapping-label "parsed " print dup . ]
+    [
+        rest-slice
+        H{ } clone
+        [ split-numbers add-range-mapping ] reduce
+    ] bi
+    ;
+
+: get-next-values ( seeds paragraph -- values )
+    parse-mapping nip swap
+    [ dupd ?of drop ] map
+    nip ;
+
 ! entry-point for first part
 : get-min-location ( data-path -- n )
-    (file-lines) (parse-input)
-    {
-        "seed"
-        "soil"
-        "fertilizer"
-        "water"
-        "light"
-        "temperature"
-        "humidity"
-        "location"
-    }
-    (get-min-deep-value) ;
+    (file-lines)
+    [ empty? ] split-when
+    [ rest-slice ] [ first first parse-seeds ] bi
+    [ get-next-values ] reduce
+    1000000 [ min ] reduce ;
+
