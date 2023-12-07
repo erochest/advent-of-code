@@ -1,12 +1,13 @@
+use std::{collections::HashSet, fmt, fs, path::PathBuf, result, str::FromStr};
 
 use clap::Parser;
 use clap_verbosity_flag::Verbosity;
-use env_logger;
 use human_panic::setup_panic;
+use itertools::Itertools;
 
 mod error;
 
-use error::Result;
+use error::{Error, Result};
 
 fn main() -> Result<()> {
     setup_panic!();
@@ -15,9 +16,128 @@ fn main() -> Result<()> {
         .filter_level(args.verbose.log_level_filter())
         .init();
 
-    println!("{:?}", args);
+    let input = fs::read_to_string(args.input)?;
+    let mut seeds: Option<HashSet<i128>> = None;
+
+    for (key, paragraph) in &input.lines().group_by(|line| line.is_empty()) {
+        if !key {
+            let paragraph: Vec<_> = paragraph.collect();
+            if let Some(ref current) = seeds {
+                let mut mappings = Mappings::new();
+                println!("{}", paragraph[0]);
+                print!("current: ");
+                dump_set(current);
+
+                for line in &paragraph[1..] {
+                    let range = line.parse::<MappingRange>()?;
+                    mappings.mappings.push(range);
+                }
+
+                let mut next: HashSet<i128> = HashSet::new();
+                for seed in current {
+                    next.insert(mappings.get(*seed));
+                }
+
+                seeds = Some(next)
+            } else {
+                let line = paragraph.iter().filter(|p| !p.is_empty()).next().unwrap();
+                println!("{:?}", line);
+                println!("{:?}", line.split(' '));
+                println!("{:?}", line.split(' ').skip(1));
+                let parsed: result::Result<HashSet<i128>, _> =
+                    line.split(' ').skip(1).map(|n| n.parse()).collect();
+                let parsed = parsed?;
+                seeds = Some(parsed);
+            }
+        }
+    }
+
+    if let Some(seeds) = seeds {
+        if let Some(location) = seeds.iter().min() {
+            println!("location: {}", location);
+        } else {
+            println!("no minimum");
+        }
+    } else {
+        println!("no locations");
+    }
 
     Ok(())
+}
+
+fn dump_set<D: fmt::Debug>(set: &HashSet<D>) {
+    print!("{{");
+    for item in set {
+        print!("{:?}, ", item);
+    }
+    print!("}}");
+    println!();
+}
+
+struct Mappings {
+    mappings: Vec<MappingRange>,
+}
+
+impl Mappings {
+    fn new() -> Self {
+        Mappings { mappings: vec![] }
+    }
+
+    fn get(&self, x: i128) -> i128 {
+        self.mappings.iter().find_map(|m| m.get(x)).unwrap_or(x)
+    }
+}
+
+struct MappingRange {
+    destination: i128,
+    source: i128,
+    extent: i128,
+}
+
+impl MappingRange {
+    fn new(destination: i128, source: i128, extent: i128) -> Self {
+        MappingRange {
+            destination,
+            source,
+            extent,
+        }
+    }
+
+    fn contains(&self, x: i128) -> bool {
+        x >= self.source && x < (self.source + self.extent)
+    }
+
+    fn get(&self, x: i128) -> Option<i128> {
+        if self.contains(x) {
+            Some(self.destination - self.source + x)
+        } else {
+            None
+        }
+    }
+}
+
+impl FromStr for MappingRange {
+    type Err = Error;
+
+    fn from_str(s: &str) -> result::Result<Self, Self::Err> {
+        let values = s
+            .split(' ')
+            .map(|n| {
+                n.parse::<i128>()
+                    .map_err(|e| Error::RangeParseError(e.to_string()))
+            })
+            .take(3)
+            .collect::<result::Result<Vec<_>, _>>()?;
+
+        if values.len() < 3 {
+            return Err(Error::RangeParseError(format!(
+                "Invalid mapping range: {:?}",
+                s
+            )));
+        }
+
+        Ok(MappingRange::new(values[0], values[1], values[2]))
+    }
 }
 
 #[derive(Debug, Parser)]
@@ -25,4 +145,8 @@ fn main() -> Result<()> {
 struct Cli {
     #[command(flatten)]
     verbose: Verbosity,
+
+    /// The input file to process.
+    #[arg(short, long)]
+    input: PathBuf,
 }
