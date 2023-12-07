@@ -17,8 +17,20 @@ fn main() -> Result<()> {
         .init();
 
     let input = fs::read_to_string(args.input)?;
-    let mut seeds: Option<HashSet<i128>> = None;
 
+    let location = get_minimum_location(input)?;
+
+    if let Some(location) = location {
+        println!("location: {}", location);
+    } else {
+        println!("no minimum");
+    }
+
+    Ok(())
+}
+
+fn get_minimum_location(input: String) -> Result<Option<i128>> {
+    let mut seeds: Option<HashSet<i128>> = None;
     for (key, paragraph) in &input.lines().group_by(|line| line.is_empty()) {
         if !key {
             let paragraph: Vec<_> = paragraph.collect();
@@ -40,7 +52,7 @@ fn main() -> Result<()> {
 
                 seeds = Some(next)
             } else {
-                let line = paragraph.iter().filter(|p| !p.is_empty()).next().unwrap();
+                let line = paragraph.iter().find(|p| !p.is_empty()).unwrap();
                 println!("{:?}", line);
                 println!("{:?}", line.split(' '));
                 println!("{:?}", line.split(' ').skip(1));
@@ -51,18 +63,7 @@ fn main() -> Result<()> {
             }
         }
     }
-
-    if let Some(seeds) = seeds {
-        if let Some(location) = seeds.iter().min() {
-            println!("location: {}", location);
-        } else {
-            println!("no minimum");
-        }
-    } else {
-        println!("no locations");
-    }
-
-    Ok(())
+    Ok(seeds.and_then(|s| s.into_iter().min()))
 }
 
 fn dump_set<D: fmt::Debug>(set: &HashSet<D>) {
