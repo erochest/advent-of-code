@@ -12,6 +12,7 @@ clap-verbosity-flag = "*"
 confy = "*"
 env_logger = "*"
 human-panic = "*"
+itertools = "0.12.0"
 log = "*"
 
 [dev-dependencies]
