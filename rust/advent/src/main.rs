@@ -53,9 +53,6 @@ fn get_minimum_location(input: String) -> Result<Option<i128>> {
                 seeds = Some(next)
             } else {
                 let line = paragraph.iter().find(|p| !p.is_empty()).unwrap();
-                println!("{:?}", line);
-                println!("{:?}", line.split(' '));
-                println!("{:?}", line.split(' ').skip(1));
                 let parsed: result::Result<HashSet<i128>, _> =
                     line.split(' ').skip(1).map(|n| n.parse()).collect();
                 let parsed = parsed?;
