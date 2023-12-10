@@ -1,4 +1,4 @@
-use std::{collections::HashSet, fmt, fs, path::PathBuf, result, str::FromStr};
+use std::{collections::HashSet, convert::TryFrom, fmt, fs, path::PathBuf, result, str::FromStr};
 
 use clap::Parser;
 use clap_verbosity_flag::Verbosity;
@@ -35,32 +35,48 @@ fn get_minimum_location(input: String) -> Result<Option<i128>> {
         if !key {
             let paragraph: Vec<_> = paragraph.collect();
             if let Some(ref current) = seeds {
-                let mut mappings = Mappings::new();
-                println!("{}", paragraph[0]);
-                print!("current: ");
-                dump_set(current);
+                // println!("{}", paragraph[0]);
+                // print!("current: ");
+                // dump_set(current);
 
-                for line in &paragraph[1..] {
-                    let range = line.parse::<MappingRange>()?;
-                    mappings.mappings.push(range);
-                }
-
-                let mut next: HashSet<i128> = HashSet::new();
-                for seed in current {
-                    next.insert(mappings.get(*seed));
-                }
-
+                let mappings = Mappings::try_from(paragraph)?;
+                let next = next_values(current, &mappings);
                 seeds = Some(next)
             } else {
-                let line = paragraph.iter().find(|p| !p.is_empty()).unwrap();
-                let parsed: result::Result<HashSet<i128>, _> =
-                    line.split(' ').skip(1).map(|n| n.parse()).collect();
-                let parsed = parsed?;
+                let line = find_first_line(&paragraph);
+                let parsed = parse_seeds_line(&line)?;
                 seeds = Some(parsed);
             }
         }
     }
     Ok(seeds.and_then(|s| s.into_iter().min()))
+}
+
+fn split_paragraphs(input: &str) -> impl Iterator<Item = Vec<&str>> {
+    input
+        .lines()
+        .group_by(|line| line.is_empty())
+        .filter(|(key, _)| !key)
+        .map(|(_, lines)| lines.collect::<Vec<_>>())
+}
+
+fn next_values(current: &HashSet<i128>, mappings: &Mappings) -> HashSet<i128> {
+    let mut next: HashSet<i128> = HashSet::new();
+    for seed in current {
+        next.insert(mappings.get(*seed));
+    }
+    next
+}
+
+fn parse_seeds_line(line: &str) -> Result<HashSet<i128>> {
+    let parsed: result::Result<HashSet<i128>, _> =
+        line.split(' ').skip(1).map(|n| n.parse()).collect();
+    let parsed = parsed?;
+    Ok(parsed)
+}
+
+fn find_first_line(lines: &[&str]) -> String {
+    lines.iter().find(|p| !p.is_empty()).unwrap().to_string()
 }
 
 fn dump_set<D: fmt::Debug>(set: &HashSet<D>) {
@@ -83,6 +99,19 @@ impl Mappings {
 
     fn get(&self, x: i128) -> i128 {
         self.mappings.iter().find_map(|m| m.get(x)).unwrap_or(x)
+    }
+}
+
+impl TryFrom<Vec<&str>> for Mappings {
+    type Error = Error;
+
+    fn try_from(value: Vec<&str>) -> result::Result<Self, Self::Error> {
+        let mut mappings = Mappings::new();
+        for line in &value[1..] {
+            let range = line.parse::<MappingRange>()?;
+            mappings.mappings.push(range);
+        }
+        Ok(mappings)
     }
 }
 
