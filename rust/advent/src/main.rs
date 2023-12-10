@@ -60,6 +60,14 @@ fn split_paragraphs(input: &str) -> impl Iterator<Item = Vec<&str>> {
         .map(|(_, lines)| lines.collect::<Vec<_>>())
 }
 
+// TODO: fix `filter` call above
+// TODO: move things into lib modules
+// TODO: disjoint range application
+// TODO: embedded range application
+// TODO: reverse embeddded range application
+// TODO: overlapping high range application
+// TODO: overlapping low range application
+
 fn next_values(current: &HashSet<i128>, mappings: &Mappings) -> HashSet<i128> {
     let mut next: HashSet<i128> = HashSet::new();
     for seed in current {
