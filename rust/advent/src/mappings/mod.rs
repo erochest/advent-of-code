@@ -119,31 +119,25 @@ impl MappingRange {
     /// - an optional range that was defined and processed by this mapping.
     fn apply(&self, input: InputRange) -> (Vec<InputRange>, Option<InputRange>) {
         let end = self.source + self.extent;
+        let offset = self.destination - self.source;
         if input.start < self.source && input.end > end {
             // reverse embedded (the mapping is embedded in the input range)
-            let offset = self.destination - self.source;
-            let embedded = InputRange::new(self.source, self.extent);
-            let output = embedded.shift_by(offset);
+            let output = InputRange::new_shifted(self.source, self.extent, offset);
             let disjoint_low = InputRange::new(input.start, self.source - input.start);
             let disjoint_high = InputRange::new(end, input.end - end);
             (vec![disjoint_low, disjoint_high], Some(output))
         } else if input.start < self.source && input.end >= self.source && input.end <= end {
             // overlapping low
-            let offset = self.destination - self.source;
-            let embedded = InputRange::new(self.source, input.end - self.source);
-            let output = embedded.shift_by(offset);
+            let output = InputRange::new_shifted(self.source, input.end - self.source, offset);
             let disjoint = InputRange::new(input.start, self.source - input.start);
             (vec![disjoint], Some(output))
         } else if input.start >= self.source && input.start < end && input.end > end {
             // overlapping high
-            let offset = self.destination - self.source;
-            let embedded = InputRange::new(input.start, end - input.start);
-            let output = embedded.shift_by(offset);
+            let output = InputRange::new_shifted(input.start, end - input.start, offset);
             let disjoint = InputRange::new(end, input.end - end);
             (vec![disjoint], Some(output))
         } else if input.start >= self.source && input.end <= end {
             // embedded
-            let offset = self.destination - self.source;
             let output = input.shift_by(offset);
             (vec![], Some(output))
         } else {
@@ -187,6 +181,10 @@ impl InputRange {
     fn new(start: i128, extent: i128) -> Self {
         let end = start + extent;
         InputRange { start, end, extent }
+    }
+
+    fn new_shifted(start: i128, extent: i128, offset: i128) -> Self {
+        Self::new(start + offset, extent)
     }
 
     fn shift_by(&self, offset: i128) -> Self {
