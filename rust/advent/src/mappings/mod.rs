@@ -109,6 +109,17 @@ impl MappingRange {
             None
         }
     }
+
+    fn apply(&self, input: InputRange) -> (Vec<InputRange>, Option<InputRange>) {
+        let end = self.source + self.extent;
+        if input.start >= self.source && input.end <= end {
+            let offset = self.destination - self.source;
+            let output = input.shift_by(offset);
+            (vec![output], None)
+        } else {
+            (vec![], Some(input))
+        }
+    }
 }
 
 impl FromStr for MappingRange {
@@ -134,4 +145,24 @@ impl FromStr for MappingRange {
         Ok(MappingRange::new(values[0], values[1], values[2]))
     }
 }
+
+struct InputRange {
+    start: i128,
+    end: i128,
+    extent: i128,
+}
+
+impl InputRange {
+    fn new(start: i128, extent: i128) -> Self {
+        let end = start + extent;
+        InputRange { start, end, extent }
+    }
+
+    fn shift_by(&self, offset: i128) -> Self {
+        Self::new(self.start + offset, self.extent)
+    }
+}
+
+#[cfg(test)]
+mod tests;
 
