@@ -71,5 +71,25 @@ fn overlapping_low_application_is_split() {
     assert_eq!(output.extent, 10);
 }
 
-// reverse_embedded_application_is_split_three_ways: i < x && j > y
+#[test]
+fn reverse_embedded_application_is_split_three_ways() {
+    let range_fn = MappingRange::new(50, 30, 20);
+    let input = InputRange::new(20, 50);
+
+    let (unmatched, output) = range_fn.apply(input);
+
+    assert_eq!(unmatched.len(), 2);
+    assert_eq!(unmatched[0].start, 20);
+    assert_eq!(unmatched[0].end, 30);
+    assert_eq!(unmatched[0].extent, 10);
+    assert_eq!(unmatched[1].start, 50);
+    assert_eq!(unmatched[1].end, 70);
+    assert_eq!(unmatched[1].extent, 20);
+
+    assert!(output.is_some());
+    let output = output.unwrap();
+    assert_eq!(output.start, 50);
+    assert_eq!(output.end, 70);
+    assert_eq!(output.extent, 20);
+}
 

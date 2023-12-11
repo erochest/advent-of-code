@@ -118,25 +118,36 @@ impl MappingRange {
     ///   for this mapping and
     /// - an optional range that was defined and processed by this mapping.
     fn apply(&self, input: InputRange) -> (Vec<InputRange>, Option<InputRange>) {
-        // i < x & j >= x & j <= y
         let end = self.source + self.extent;
-        if input.start < self.source && input.end >= self.source && input.end <= end {
+        if input.start < self.source && input.end > end {
+            // reverse embedded (the mapping is embedded in the input range)
+            let offset = self.destination - self.source;
+            let embedded = InputRange::new(self.source, self.extent);
+            let output = embedded.shift_by(offset);
+            let disjoint_low = InputRange::new(input.start, self.source - input.start);
+            let disjoint_high = InputRange::new(end, input.end - end);
+            (vec![disjoint_low, disjoint_high], Some(output))
+        } else if input.start < self.source && input.end >= self.source && input.end <= end {
+            // overlapping low
             let offset = self.destination - self.source;
             let embedded = InputRange::new(self.source, input.end - self.source);
             let output = embedded.shift_by(offset);
             let disjoint = InputRange::new(input.start, self.source - input.start);
             (vec![disjoint], Some(output))
         } else if input.start >= self.source && input.start < end && input.end > end {
+            // overlapping high
             let offset = self.destination - self.source;
             let embedded = InputRange::new(input.start, end - input.start);
             let output = embedded.shift_by(offset);
             let disjoint = InputRange::new(end, input.end - end);
             (vec![disjoint], Some(output))
         } else if input.start >= self.source && input.end <= end {
+            // embedded
             let offset = self.destination - self.source;
             let output = input.shift_by(offset);
             (vec![], Some(output))
         } else {
+            // disjoint
             (vec![input], None)
         }
     }
