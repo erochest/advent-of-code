@@ -31,36 +31,34 @@ fn main() -> Result<()> {
 
 fn get_minimum_location(input: String) -> Result<Option<i128>> {
     let mut seeds: Option<HashSet<i128>> = None;
-    for (key, paragraph) in &input.lines().group_by(|line| line.is_empty()) {
-        if !key {
-            let paragraph: Vec<_> = paragraph.collect();
-            if let Some(ref current) = seeds {
-                // println!("{}", paragraph[0]);
-                // print!("current: ");
-                // dump_set(current);
-
-                let mappings = Mappings::try_from(paragraph)?;
-                let next = next_values(current, &mappings);
-                seeds = Some(next)
-            } else {
-                let line = find_first_line(&paragraph);
-                let parsed = parse_seeds_line(&line)?;
-                seeds = Some(parsed);
-            }
+    let paragraphs = split_paragraphs(&input);
+    for paragraph in paragraphs {
+        if let Some(ref current) = seeds {
+            let mappings = Mappings::try_from(paragraph)?;
+            let next = next_values(current, &mappings);
+            seeds = Some(next)
+        } else {
+            let line = find_first_line(&paragraph);
+            let parsed = parse_seeds_line(&line)?;
+            seeds = Some(parsed);
         }
     }
     Ok(seeds.and_then(|s| s.into_iter().min()))
 }
 
-fn split_paragraphs(input: &str) -> impl Iterator<Item = Vec<&str>> {
-    input
-        .lines()
-        .group_by(|line| line.is_empty())
-        .filter(|(key, _)| !key)
-        .map(|(_, lines)| lines.collect::<Vec<_>>())
+fn split_paragraphs(input: &str) -> Vec<Vec<&str>> {
+    let mut accum = Vec::new();
+    let groups = input.lines().group_by(|line| line.is_empty());
+
+    for (key, lines) in &groups {
+        if !key {
+            accum.push(lines.collect::<Vec<_>>());
+        }
+    }
+
+    accum
 }
 
-// TODO: fix `filter` call above
 // TODO: move things into lib modules
 // TODO: disjoint range application
 // TODO: embedded range application
