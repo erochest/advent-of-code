@@ -110,14 +110,28 @@ impl MappingRange {
         }
     }
 
+    /// This applies an input range to this mapping range, going with the
+    /// function perspective.
+    ///
+    /// It returns a tuple with two items:
+    /// - a vector containing any parts of the input that were not defined
+    ///   for this mapping and
+    /// - an optional range that was defined and processed by this mapping.
     fn apply(&self, input: InputRange) -> (Vec<InputRange>, Option<InputRange>) {
+        // i >= x && i < y && j > y
         let end = self.source + self.extent;
-        if input.start >= self.source && input.end <= end {
+        if input.start >= self.source && input.start < end && input.end > end {
+            let offset = self.destination - self.source;
+            let embedded = InputRange::new(input.start, end - input.start);
+            let output = embedded.shift_by(offset);
+            let disjoint = InputRange::new(end, input.end - end);
+            (vec![disjoint], Some(output))
+        } else if input.start >= self.source && input.end <= end {
             let offset = self.destination - self.source;
             let output = input.shift_by(offset);
-            (vec![output], None)
+            (vec![], Some(output))
         } else {
-            (vec![], Some(input))
+            (vec![input], None)
         }
     }
 }
