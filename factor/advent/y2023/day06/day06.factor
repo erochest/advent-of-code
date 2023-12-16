@@ -1,7 +1,7 @@
 ! Copyright (C) 2023 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: advent.io arrays assocs kernel math ranges sequences
-       splitting ;
+USING: advent.io arrays assocs kernel math math.parser ranges
+       sequences splitting unicode ;
 IN: advent.y2023.day06
 
 
@@ -22,3 +22,17 @@ IN: advent.y2023.day06
 
 : get-winning-count-product ( assoc-array -- product )
     [ first2 swap count-winning-presses ] map product ;
+
+: fix-kerning ( string -- n )
+    [ blank? ] trim
+    " " split
+    [ empty? not ] filter
+    "" join
+    string>number ;
+
+: parse-kerned ( lines -- time distance )
+    [ ":" split1 nip fix-kerning ] map
+    first2 ;
+
+: get-kerned-count-product ( time distance -- product )
+    swap count-winning-presses ;
