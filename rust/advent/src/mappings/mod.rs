@@ -1,15 +1,20 @@
 use std::collections::HashSet;
 use std::convert::TryFrom;
+use std::fmt::Display;
+use std::io::stderr;
+use std::io::Write;
+use std::mem;
 use std::result;
 use std::str::FromStr;
 
 use itertools::Itertools;
+use log::{debug, info, warn};
 
 use crate::error::{Error, Result};
 
-pub fn get_minimum_location(input: String) -> Result<Option<i128>> {
+pub fn get_minimum_location(input: &str) -> Result<Option<i128>> {
     let mut seeds: Option<HashSet<i128>> = None;
-    let paragraphs = split_paragraphs(&input);
+    let paragraphs = split_paragraphs(input);
     for paragraph in paragraphs {
         if let Some(ref current) = seeds {
             let mappings = Mappings::try_from(paragraph)?;
@@ -24,7 +29,32 @@ pub fn get_minimum_location(input: String) -> Result<Option<i128>> {
     Ok(seeds.and_then(|s| s.into_iter().min()))
 }
 
+pub fn get_minimum_location_range(input: &str) -> Result<Option<i128>> {
+    info!("get_minimum_location_range");
+    let mut seeds: Option<Vec<InputRange>> = None;
+    let paragraphs = split_paragraphs(input);
+    for paragraph in paragraphs {
+        if let Some(ref current) = seeds {
+            let mappings = Mappings::try_from(paragraph)?;
+            let next = next_ranges(current, &mappings);
+            info!(
+                "next values from '{}' {}",
+                mappings.name,
+                DisplayList(&next)
+            );
+            seeds = Some(next)
+        } else {
+            let line = find_first_line(&paragraph);
+            let parsed = parse_seeds_ranges(&line)?;
+            info!("seeds: {}", DisplayList(&parsed));
+            seeds = Some(parsed);
+        }
+    }
+    Ok(seeds.and_then(|s| s.iter().map(|r| r.start).min()))
+}
+
 fn split_paragraphs(input: &str) -> Vec<Vec<&str>> {
+    info!("split_paragraphs");
     let mut accum = Vec::new();
     let groups = input.lines().group_by(|line| line.is_empty());
 
@@ -45,6 +75,38 @@ fn next_values(current: &HashSet<i128>, mappings: &Mappings) -> HashSet<i128> {
     next
 }
 
+fn next_ranges(current: &[InputRange], mappings: &Mappings) -> Vec<InputRange> {
+    info!("next_ranges: {}", mappings.name);
+    let mut result = vec![];
+    let mut to_process = vec![];
+    let mut accum = vec![];
+
+    to_process.extend(current.iter().cloned());
+    for mapping in mappings.mappings.iter() {
+        // eprintln!("\tto process {}", DisplayList(&to_process));
+        accum.clear();
+        for range in to_process.iter() {
+            // eprintln!("\t\t{} apply {}", mapping, range);
+            // stderr().flush().expect("in the disco");
+
+            let (unmatched, matched) = mapping.apply(range);
+            // eprintln!("\t\t\tunmatched {}", DisplayList(&unmatched));
+            // eprintln!("\t\t\tmatched   {}", DisplayOption(&matched));
+            // stderr().flush().expect("in the afterparty");
+
+            accum.extend(unmatched);
+            if let Some(matched) = matched {
+                result.push(matched);
+            }
+        }
+
+        mem::swap(&mut accum, &mut to_process);
+    }
+    result.extend(to_process);
+
+    result
+}
+
 fn find_first_line(lines: &[&str]) -> String {
     lines.iter().find(|p| !p.is_empty()).unwrap().to_string()
 }
@@ -56,13 +118,30 @@ fn parse_seeds_line(line: &str) -> Result<HashSet<i128>> {
     Ok(parsed)
 }
 
+fn parse_seeds_ranges(line: &str) -> Result<Vec<InputRange>> {
+    info!("parse_seeds_ranges");
+    let mut accum = vec![];
+    let numbers: result::Result<Vec<i128>, _> =
+        line.split(' ').skip(1).map(|n| n.parse()).collect();
+
+    for (start, extent) in numbers?.into_iter().tuples() {
+        accum.push(InputRange::new(start, extent));
+    }
+
+    Ok(accum)
+}
+
 struct Mappings {
+    name: String,
     mappings: Vec<MappingRange>,
 }
 
 impl Mappings {
-    fn new() -> Self {
-        Mappings { mappings: vec![] }
+    fn new(name: String) -> Self {
+        Mappings {
+            name,
+            mappings: vec![],
+        }
     }
 
     fn get(&self, x: i128) -> i128 {
@@ -74,7 +153,8 @@ impl TryFrom<Vec<&str>> for Mappings {
     type Error = Error;
 
     fn try_from(value: Vec<&str>) -> result::Result<Self, Self::Error> {
-        let mut mappings = Mappings::new();
+        let name = value[0].to_string();
+        let mut mappings = Mappings::new(name);
         for line in &value[1..] {
             let range = line.parse::<MappingRange>()?;
             mappings.mappings.push(range);
@@ -83,6 +163,13 @@ impl TryFrom<Vec<&str>> for Mappings {
     }
 }
 
+impl Display for Mappings {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "<Mapping {}>", self.name)
+    }
+}
+
+#[derive(Debug)]
 struct MappingRange {
     destination: i128,
     source: i128,
@@ -117,7 +204,8 @@ impl MappingRange {
     /// - a vector containing any parts of the input that were not defined
     ///   for this mapping and
     /// - an optional range that was defined and processed by this mapping.
-    fn apply(&self, input: InputRange) -> (Vec<InputRange>, Option<InputRange>) {
+    fn apply(&self, input: &InputRange) -> (Vec<InputRange>, Option<InputRange>) {
+        // debug!("{:?} apply {:?}", self, input);
         let end = self.source + self.extent;
         let offset = self.destination - self.source;
         if input.start < self.source && input.end > end {
@@ -142,7 +230,7 @@ impl MappingRange {
             (vec![], Some(output))
         } else {
             // disjoint
-            (vec![input], None)
+            (vec![input.clone()], None)
         }
     }
 }
@@ -171,6 +259,21 @@ impl FromStr for MappingRange {
     }
 }
 
+impl Display for MappingRange {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "<MappingRange ({}..{}] -> ({}..{}] / {}>",
+            self.source,
+            self.source + self.extent,
+            self.destination,
+            self.destination + self.extent,
+            self.extent
+        )
+    }
+}
+
+#[derive(Clone, Debug)]
 struct InputRange {
     start: i128,
     end: i128,
@@ -189,6 +292,47 @@ impl InputRange {
 
     fn shift_by(&self, offset: i128) -> Self {
         Self::new(self.start + offset, self.extent)
+    }
+}
+
+impl Display for InputRange {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "<InputRange ({}..{}] / {}>",
+            self.start, self.end, self.extent
+        )
+    }
+}
+
+#[derive(Debug)]
+struct DisplayList<'a, I>(&'a Vec<I>);
+
+impl<'a, D: 'a + Display> Display for DisplayList<'a, D> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "[")?;
+        for item in self.0.iter() {
+            item.fmt(f)?;
+            write!(f, ", ")?;
+        }
+        write!(f, "]")?;
+        Ok(())
+    }
+}
+
+#[derive(Debug)]
+struct DisplayOption<'a, I>(&'a Option<I>);
+
+impl<'a, D: 'a + Display> Display for DisplayOption<'a, D> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if let Some(ref item) = self.0 {
+            write!(f, "Some(")?;
+            item.fmt(f)?;
+            write!(f, ")")?;
+        } else {
+            write!(f, "None")?;
+        }
+        Ok(())
     }
 }
 

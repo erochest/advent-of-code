@@ -12,7 +12,7 @@ mod mappings;
 
 use error::Result;
 
-use crate::mappings::get_minimum_location;
+use crate::mappings::{get_minimum_location, get_minimum_location_range};
 
 fn main() -> Result<()> {
     setup_panic!();
@@ -23,8 +23,14 @@ fn main() -> Result<()> {
 
     let input = fs::read_to_string(args.input)?;
 
-    let location = get_minimum_location(input)?;
+    let location = get_minimum_location(&input)?;
+    if let Some(location) = location {
+        println!("location: {}", location);
+    } else {
+        println!("no minimum");
+    }
 
+    let location = get_minimum_location_range(&input)?;
     if let Some(location) = location {
         println!("location: {}", location);
     } else {
@@ -33,12 +39,6 @@ fn main() -> Result<()> {
 
     Ok(())
 }
-
-// TODO: disjoint range application
-// TODO: embedded range application
-// TODO: reverse embeddded range application
-// TODO: overlapping high range application
-// TODO: overlapping low range application
 
 fn _dump_set<D: fmt::Debug>(set: &HashSet<D>) {
     print!("{{");
