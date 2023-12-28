@@ -12,18 +12,6 @@ f jokers-wild set
 : with-jokers ( quot -- )
     t jokers-wild rot with-variable ; inline
 
-SYMBOLS: debug-logging ;
-f debug-logging set
-
-: with-logging ( path quot -- )
-    utf8 swap
-    t debug-logging rot
-    [ with-variable ] 3curry
-    with-file-writer ; inline
-
-: when-logging ( quot -- )
-    debug-logging get swap when ; inline
-
 SYMBOLS: T J Q K A ;
 : string>card ( string -- card-n )
     {
