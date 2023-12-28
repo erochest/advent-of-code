@@ -1,9 +1,21 @@
 ! Copyright (C) 2022 Eric Rochester.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: ascii formatting io.encodings.utf8 io.files kernel
-       math.parser sequences splitting vocabs.loader
+       math.parser namespaces sequences splitting vocabs.loader
        io.pathnames ;
 IN: advent.io
+
+SYMBOLS: debug-logging ;
+f debug-logging set
+
+: with-logging ( path quot -- )
+    utf8 swap
+    t debug-logging rot
+    [ with-variable ] 3curry
+    with-file-writer ; inline
+
+: when-logging ( quot -- )
+    debug-logging get swap when ; inline
 
 : (file-lines) ( path -- seq ) utf8 file-lines ;
 : seq>numbers ( seq -- seq ) [ string>number ] map ;
