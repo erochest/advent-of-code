@@ -259,16 +259,13 @@ impl FromStr for MappingRange {
             .split(' ')
             .map(|n| {
                 n.parse::<i128>()
-                    .map_err(|e| Error::RangeParseError(e.to_string()))
+                    .map_err(|e| Error::RangeParse(e.to_string()))
             })
             .take(3)
             .collect::<result::Result<Vec<_>, _>>()?;
 
         if values.len() < 3 {
-            return Err(Error::RangeParseError(format!(
-                "Invalid mapping range: {:?}",
-                s
-            )));
+            return Err(Error::RangeParse(format!("Invalid mapping range: {:?}", s)));
         }
 
         Ok(MappingRange::new(values[0], values[1], values[2]))

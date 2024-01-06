@@ -9,10 +9,12 @@ use human_panic::setup_panic;
 
 mod error;
 mod mappings;
+mod wasteland;
 
 use error::Result;
 
 use crate::mappings::day05;
+use crate::wasteland::day08;
 
 fn main() -> Result<()> {
     setup_panic!();
@@ -26,6 +28,7 @@ fn main() -> Result<()> {
     if args.day == 5 {
         day05(&input)?;
     } else if args.day == 8 {
+        day08(&input)?;
     }
 
     Ok(())
