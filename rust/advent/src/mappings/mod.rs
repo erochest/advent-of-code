@@ -1,16 +1,32 @@
 use std::collections::HashSet;
 use std::convert::TryFrom;
 use std::fmt::Display;
-use std::io::stderr;
-use std::io::Write;
 use std::mem;
 use std::result;
 use std::str::FromStr;
 
 use itertools::Itertools;
-use log::{debug, info, warn};
+use log::info;
 
 use crate::error::{Error, Result};
+
+pub fn day05(input: &str) -> Result<()> {
+    let location = get_minimum_location(input)?;
+    if let Some(location) = location {
+        println!("location: {}", location);
+    } else {
+        println!("no minimum");
+    }
+
+    let location = get_minimum_location_range(input)?;
+    if let Some(location) = location {
+        println!("location: {}", location);
+    } else {
+        println!("no minimum");
+    }
+
+    Ok(())
+}
 
 pub fn get_minimum_location(input: &str) -> Result<Option<i128>> {
     let mut seeds: Option<HashSet<i128>> = None;
