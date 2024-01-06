@@ -3,24 +3,57 @@ use std::collections::HashMap;
 use crate::error::{Error, Result};
 
 pub fn day08(input: &str) -> Result<()> {
-    unimplemented!()
+    let map_network = parse_input(input)?;
+
+    let steps = map_network.steps_to_end("AAA");
+    println!("{}", steps);
+
+    Ok(())
 }
 
 #[derive(Debug, Default)]
 struct MapNetwork {
-    path: String,
+    path: Vec<u8>,
     network: HashMap<String, Fork>,
 }
 
 impl MapNetwork {
     fn new(path: &str, network: HashMap<String, Fork>) -> Self {
-        let path = path.to_string();
+        let path = path.as_bytes().to_vec();
         MapNetwork { path, network }
     }
 
     fn get(&self, node: &str) -> Option<&Fork> {
         self.network.get(node)
     }
+
+    fn steps_to_end<'a>(&'a self, start_node: &str) -> usize {
+        let mut steps = 0;
+        let mut current = start_node;
+        let path_len = self.path.len();
+
+        while !is_end(current) {
+            let index: usize = steps % path_len;
+            let turn = self.path.get(index).unwrap();
+            let fork = self.network.get(current).unwrap();
+            current = if turn == &76u8 {
+                // L
+                &fork.left
+            } else if turn == &82u8 {
+                // R
+                &fork.right
+            } else {
+                panic!("Invalid turn")
+            };
+            steps += 1;
+        }
+
+        steps
+    }
+}
+
+fn is_end(node_name: &str) -> bool {
+    node_name.chars().last() == Some('Z')
 }
 
 #[derive(Debug, Default, PartialEq, Eq, Clone)]
