@@ -12,7 +12,7 @@ mod mappings;
 
 use error::Result;
 
-use crate::mappings::{get_minimum_location, get_minimum_location_range};
+use crate::mappings::day05;
 
 fn main() -> Result<()> {
     setup_panic!();
@@ -23,18 +23,9 @@ fn main() -> Result<()> {
 
     let input = fs::read_to_string(args.input)?;
 
-    let location = get_minimum_location(&input)?;
-    if let Some(location) = location {
-        println!("location: {}", location);
-    } else {
-        println!("no minimum");
-    }
-
-    let location = get_minimum_location_range(&input)?;
-    if let Some(location) = location {
-        println!("location: {}", location);
-    } else {
-        println!("no minimum");
+    if args.day == 5 {
+        day05(&input)?;
+    } else if args.day == 8 {
     }
 
     Ok(())
@@ -54,6 +45,10 @@ fn _dump_set<D: fmt::Debug>(set: &HashSet<D>) {
 struct Cli {
     #[command(flatten)]
     verbose: Verbosity,
+
+    /// The day to pull.
+    #[arg(short, long)]
+    day: usize,
 
     /// The input file to process.
     #[arg(short, long)]
