@@ -14,6 +14,9 @@ f debug-logging set
     [ with-variable ] 3curry
     with-file-writer ; inline
 
+: with-output-logging ( quot -- )
+    t debug-logging rot with-variable ; inline
+
 : when-logging ( quot -- )
     debug-logging get swap when ; inline
 
