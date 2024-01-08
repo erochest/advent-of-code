@@ -18,6 +18,17 @@ AAA = (BBB, BBB)
 BBB = (AAA, ZZZ)
 ZZZ = (ZZZ, ZZZ)";
 
+static INPUT3: &str = "LR
+
+11A = (11B, XXX)
+11B = (XXX, 11Z)
+11Z = (11B, XXX)
+22A = (22B, XXX)
+22B = (22C, 22C)
+22C = (22Z, 22Z)
+22Z = (22B, 22B)
+XXX = (XXX, XXX)";
+
 #[test]
 fn parse_input_path() {
     let result = parse_input(INPUT1);
@@ -50,6 +61,15 @@ fn path_to_end_loop() {
     assert!(result.is_ok());
     let mapping = result.unwrap();
     let steps = mapping.steps_to_end("AAA");
+    assert_eq!(6, steps);
+}
+
+#[test]
+fn ghost_steps_to_end() {
+    let result = parse_input(INPUT3);
+    assert!(result.is_ok());
+    let mapping = result.unwrap();
+    let steps = mapping.ghost_steps_to_end();
     assert_eq!(6, steps);
 }
 
