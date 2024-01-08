@@ -8,6 +8,9 @@ pub fn day08(input: &str) -> Result<()> {
     let steps = map_network.steps_to_end("AAA");
     println!("{}", steps);
 
+    let steps = map_network.ghost_steps_to_end();
+    println!("{}", steps);
+
     Ok(())
 }
 
@@ -27,7 +30,20 @@ impl MapNetwork {
         self.network.get(node)
     }
 
-    fn steps_to_end<'a>(&'a self, start_node: &str) -> usize {
+    fn make_turn(&self, current: &str, turn: u8) -> &String {
+        let fork = self.network.get(current).unwrap();
+        if turn == 76u8 {
+            // L
+            &fork.left
+        } else if turn == 82u8 {
+            // R
+            &fork.right
+        } else {
+            panic!("Wrong turn")
+        }
+    }
+
+    fn steps_to_end(&self, start_node: &str) -> usize {
         let mut steps = 0;
         let mut current = start_node;
         let path_len = self.path.len();
@@ -35,16 +51,28 @@ impl MapNetwork {
         while !is_end(current) {
             let index: usize = steps % path_len;
             let turn = self.path.get(index).unwrap();
-            let fork = self.network.get(current).unwrap();
-            current = if turn == &76u8 {
-                // L
-                &fork.left
-            } else if turn == &82u8 {
-                // R
-                &fork.right
-            } else {
-                panic!("Invalid turn")
-            };
+            current = self.make_turn(current, *turn);
+            steps += 1;
+        }
+
+        steps
+    }
+
+    fn ghost_steps_to_end(&self) -> usize {
+        let mut steps = 0;
+        let mut current = self
+            .network
+            .keys()
+            .filter(|k| is_start(k))
+            .collect::<Vec<_>>();
+        let path_len = self.path.len();
+
+        while !current.iter().all(|c| is_end(c)) {
+            let index: usize = steps % path_len;
+            let turn = self.path.get(index).unwrap();
+            for item in current.iter_mut() {
+                *item = self.make_turn(item, *turn);
+            }
             steps += 1;
         }
 
@@ -52,8 +80,12 @@ impl MapNetwork {
     }
 }
 
+fn is_start(node_name: &str) -> bool {
+    node_name.ends_with('A')
+}
+
 fn is_end(node_name: &str) -> bool {
-    node_name.chars().last() == Some('Z')
+    node_name.ends_with('Z')
 }
 
 #[derive(Debug, Default, PartialEq, Eq, Clone)]
@@ -106,5 +138,5 @@ fn parse_input(input: &str) -> Result<MapNetwork> {
 }
 
 #[cfg(test)]
-mod test;
+mod tests;
 
