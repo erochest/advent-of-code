@@ -1,8 +1,8 @@
 ! Copyright (C) 2023 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
 USING: accessors advent.io arrays assocs combinators hashtables
-       io kernel locals math prettyprint sequences splitting
-       strings unicode ;
+       io kernel locals math math.functions prettyprint
+       sequences splitting strings unicode ;
 FROM: splitting => split-words ;
 IN: advent.y2023.day08
 
@@ -51,99 +51,27 @@ SYMBOLS: R L ;
         { R [ right ] }
     } case ;
 
-:: follow-path-to-end ( network -- step-sequence )
-    { "AAA" }
-    [ dup last "ZZZ" = ] [
-        network network>>
-        network path>> rot
-        [ next-node ] reduce
-        nip
-    ] until
-    rest ;
-
-TUPLE: working-state { current array }  { steps integer } ;
-: <working-state> ( current -- working-state )
-    1 working-state boa ;
-
 : start? ( node-name -- ? ) last 65 = ;
 : end? ( node-name -- ? ) last 90 = ;
 
-: all-at-end? ( working-state -- working-state ? )
-    dup current>> [ end? ] all? ;
-
-<PRIVATE
-
-: trace ( name -- )
-    [ write .s ] curry when-logging ;
-
-: initial-positions ( map-network -- working-state )
+: initial-positions ( map-network -- node-array )
     "initial-positions" trace
     network>> keys
-    [ start? ] filter
-    <working-state> ;
+    [ start? ] filter ;
 
-: (arrange-reduce-stack)
-    ( working-state map-network -- network direction-list working-state )
-    "(arrange-reduce-stack)" trace
-    [ network>> ] [ path>> ] bi rot ;
+: (follow-path-to-end) ( map-network start -- step-sequence )
+    1array
+    [ dup last end? ] [
+        [ dup [ network>> ] [ path>> ] bi ] dip
+        [ next-node ] reduce
+        nip
+    ] until
+    nip rest ;
 
-: (get-next-direction)
-    ( working-state map-network -- map-network working-state direction )
-    [ path>> over steps>> over length mod swap nth ] keep -rot ;
+: follow-path-to-end ( map-network -- step-sequence )
+    "AAA" (follow-path-to-end) ;
 
-: (get-next-direction-shuffleless)
-    ( map-network working-state -- direction )
-    [ path>> dup length ] [ steps>> swap mod ] bi*
-    swap nth ;
-
-: left-state ( network working-state -- network working-state )
-    [
-        [ dupd [ network>> ] dip of first ] map
-    ] change-current
-    [ 1 + ] change-steps ;
-
-: right-state ( network working-state -- network working-state )
-    [
-        [ dupd [ network>> ] dip of second ] map
-    ] change-current
-    [ 1 + ] change-steps ;
-
-: (extend-path-state)
-    ( network working-state direction -- network working-state )
-    [ "(extend-path-state)" write .s ] when-logging
-    {
-        { L [ left-state ] }
-        { R [ right-state ] }
-    } case ;
-
-: (clean-up) ( network working-state -- working-state )
-    "(clean-up)" trace
-    nip ;
-
-: (compute-path-length) ( working-state -- path-length )
-    "(compute-path-length)" trace
-    steps>> 1 - ;
-
-PRIVATE>
-
-: follow-path-to-ghost-end-stack ( network -- step-count )
+: follow-path-to-ghost-end ( map-network -- step-count )
     dup initial-positions
-    [ all-at-end? ] [
-        over 2dup (get-next-direction-shuffleless)
-        (extend-path-state)
-        (clean-up)
-        ! dup steps>> 1000000 mod [ dup steps>> . flush 0 ] when-zero drop
-        ! [ "step " write dup . nl ] when-logging
-    ] until
-    nip (compute-path-length) ;
-
-:: follow-path-to-ghost-end-locals ( network -- step-count )
-    network initial-positions
-    [ all-at-end? ] [
-        network (get-next-direction)
-        (extend-path-state)
-        (clean-up)
-        ! dup steps>> 1000000 mod [ dup steps>> . flush 0 ] when-zero drop
-        ! [ "step " write dup . nl ] when-logging
-    ] until
-    (compute-path-length) ;
+    [ dupd (follow-path-to-end) length ] map nip
+    1 [ lcm ] reduce ;

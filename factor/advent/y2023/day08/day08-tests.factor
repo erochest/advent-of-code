@@ -78,9 +78,11 @@ XXX = (XXX, XXX)" input-3 set-global
 ] unit-test
 
 { 6 } [
-    input-3 get-global
-    parse-input
-    ! [ follow-path-to-ghost-end ] with-output-logging
+    input-3 get-global parse-input
     follow-path-to-ghost-end
 ] unit-test
 
+{ 8906539031197 } [
+    2023 8 data-file utf8 file-contents parse-input
+    follow-path-to-ghost-end
+] unit-test
