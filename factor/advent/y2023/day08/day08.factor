@@ -38,18 +38,17 @@ SYMBOLS: R L ;
     ] bi
     <map-network> ;
 
-: left ( network path -- network path' )
-    2dup last of first suffix ;
+: left ( network current -- next ) of first ;
+: right ( network current -- next ) of second ;
 
-: right ( network path -- network path' )
-    2dup last of second suffix ;
-
-: next-node ( network path direction -- network path )
+: next-node ( network current direction -- next )
     [ "next-node " write .s ] when-logging
     {
         { L [ left ] }
         { R [ right ] }
     } case ;
+
+: dupdd ( x y z -- x x y z ) [ dup ] 2dip ;
 
 : start? ( node-name -- ? ) last 65 = ;
 : end? ( node-name -- ? ) last 90 = ;
@@ -59,19 +58,21 @@ SYMBOLS: R L ;
     network>> keys
     [ start? ] filter ;
 
-: (follow-path-to-end) ( map-network start -- step-sequence )
-    1array
-    [ dup last end? ] [
-        [ dup [ network>> ] [ path>> ] bi ] dip
-        [ next-node ] reduce
-        nip
+! mn c sc'
+: (follow-path-to-end) ( map-network start -- step-count )
+    0
+    [ over end? ] [
+        [ dup [ network>> ] [ path>> ] bi ] 2dip
+        [ [ dupdd next-node ] reduce nip ] dip
+        1 +
     ] until
-    nip rest ;
+    rot path>> length *
+    nip ;
 
-: follow-path-to-end ( map-network -- step-sequence )
+: follow-path-to-end ( map-network -- step-count )
     "AAA" (follow-path-to-end) ;
 
 : follow-path-to-ghost-end ( map-network -- step-count )
     dup initial-positions
-    [ dupd (follow-path-to-end) length ] map nip
+    [ dupd (follow-path-to-end) ] map nip
     1 [ lcm ] reduce ;
