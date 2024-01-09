@@ -58,7 +58,6 @@ SYMBOLS: R L ;
     network>> keys
     [ start? ] filter ;
 
-! mn c sc'
 : (follow-path-to-end) ( map-network start -- step-count )
     0
     [ over end? ] [
