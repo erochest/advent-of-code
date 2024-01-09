@@ -36,14 +36,12 @@ XXX = (XXX, XXX)" input-3 set-global
     input-1 get-global
     parse-input
     follow-path-to-end
-    length
 ] unit-test
 
 { 6 } [
     input-2 get-global
     parse-input
     follow-path-to-end
-    length
 ] unit-test
 
 { { R L } } [
@@ -60,7 +58,7 @@ XXX = (XXX, XXX)" input-3 set-global
     input-3 get-global parse-input network>> "22B" of
 ] unit-test
 
-{ { "CCC" "ZZZ" } } [
+{ 2 } [
     input-1 get-global parse-input follow-path-to-end
 ] unit-test
 
@@ -74,7 +72,7 @@ XXX = (XXX, XXX)" input-3 set-global
 
 { 13939 } [
     2023 8 data-file utf8 file-contents
-    parse-input follow-path-to-end length
+    parse-input follow-path-to-end
 ] unit-test
 
 { 6 } [
