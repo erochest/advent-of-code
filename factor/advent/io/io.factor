@@ -21,7 +21,7 @@ f debug-logging set
     debug-logging get swap when ; inline
 
 : trace ( name -- )
-    [ write .s ] curry when-logging ;
+    [ write nl .s nl ] curry when-logging ;
 
 : (file-lines) ( path -- seq ) utf8 file-lines ;
 : seq>numbers ( seq -- seq ) [ string>number ] map ;
