@@ -1,21 +1,22 @@
 ! Copyright (C) 2024 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: advent.io arrays assocs combinators hashtables io kernel
+USING: advent.io arrays assocs assocs.extras combinators hashtables io kernel
        math math.order namespaces sequences sequences.deep sets
        vectors ;
 IN: advent.y2023.day10
 
+: swapw ( x y z -- z y x ) rot swapd ;
+: at-pos ( grid pos -- c/f ) first2 [ swap ?nth ] bi@ ;
+: 2dupd ( x y z -- x y x y z ) [ 2dup ] dip ;
+
 <PRIVATE
 
 : start? ( c -- ? ) 83 = ;
-: swapw ( x y z -- z y x ) rot swapd ;
 : make-pos ( x c y -- x pos c ) swap [ dupd 2array ] dip ;
 : float-start ( hold x c y -- hold x )
     make-pos
     start? [ swapw ] when
     drop ;
-
-PRIVATE>
 
 : find-start ( grid -- position )
     f swap
@@ -23,11 +24,6 @@ PRIVATE>
         swap [ float-start ] each-index
         drop
     ] each-index ;
-
-: at-pos ( grid pos -- c/f )
-    first2 [ swap ?nth ] bi@ ;
-
-! <PRIVATE
 
 SYMBOLS: N S E W ;
 { 124 76 74 } S set-global
@@ -42,9 +38,7 @@ SYMBOLS: N S E W ;
 : east ( pos -- pos ) [ 1 + ] change-pos ;
 : west ( pos -- pos ) [ 1 - ] change-pos ;
 
-! returns a hashmap from a position to characters it must
-! contain to be valid next-steps.
-: get-next-steps ( pos -- hashtable )
+: get-around ( pos -- ht )
     dup north N get-global 2array
     swap dup south S get-global 2array
     swap dup east E get-global 2array
@@ -57,85 +51,57 @@ SYMBOLS: N S E W ;
     [ [ first ] bi@ [ > ] [ 0 >= ] bi and ]
     [ [ second ] bi@ [ > ] [ 0 >= ] bi and ] 2bi
     and ;
-: current-distance ( distances pos -- d/f ) of ;
-: filter-in-bounds ( next-steps bounds -- next-steps )
+: filter-in-bounds ( around bounds -- around )
     [ nip swap in-bounds? ] curry assoc-filter ;
-: filter-connector ( next-steps grid -- next-steps )
+: filter-connector ( around grid -- around )
     [ rot at-pos swap in? ] curry assoc-filter ;
-: calculate-next-distance
-    ( next-distance value -- value' )
-    {
-        { [ dup not ] [ drop dup ] }
-        { [ 2dup < ] [ drop dup ] }
-        [ ]
-    } cond
-    nip ;
-: update-distances
-    ( next-pos-seq distances next-distance -- distances )
-    [
-        2over swap
-        [ dupd calculate-next-distance ] change-at
-        2drop
-    ] curry reduce ;
-
-! updates the distances and returns the next positions to
-! process.
-: get-links ( distances grid pos -- next-positions )
-    ! TODO: this should start by looking at what's in the current
-    ! position and only returning surrounding squares that are 
-    ! connected to the current value. 'S' would look everywhere.
-    dup get-next-steps
-    pick get-bounds
+: get-next-after-start ( grid pos -- x y )
+    get-around
+    over get-bounds
     filter-in-bounds
-    rot filter-connector
-    keys 2over current-distance nipd 1 +
-    swapd [ dup ] 2dip
-    update-distances
-    drop ;
+    swap filter-connector
+    keys
+    first2 ;
+: (get-next-steps) ( grid pos c -- x/f y/f )
+    {
+        { 124 [ nip [ north ] [ south ] bi ] } ! |
+        { 45 [ nip [ west ] [ east ] bi ] } ! -
+        { 76 [ nip [ north ] [ east ] bi ] } ! L
+        { 74 [ nip [ north ] [ west ] bi ] } ! J
+        { 55 [ nip [ south ] [ west ] bi ] } ! 7
+        { 70 [ nip [ east ] [ south ] bi ] } ! F
+        [ start? [ get-next-after-start ] [ 2drop f f ] if ]
+    } case ;
+! returns only the two next steps from the current position.
+: get-next-steps ( grid pos -- x y ) 2dup at-pos (get-next-steps) ;
 
-! PRIVATE>
+PRIVATE>
 
-: 2dupd ( x y z -- x y x y z ) [ 2dup ] dip ;
+: walk ( grid start next -- distances )
+    H{ } clone -rot
+    [ 1 swap reach set-at ] keep
+    [ 0 swap pick set-at ] dip
+    [ dup ] [
+        pick swap get-next-steps
+        pick [ dupd key? [ drop f ] when ] curry bi@ or
+        dup [
+            [
+                [ dup assoc-size ] dip
+                pick set-at
+            ] keep
+        ] when
+    ] while
+    drop nip ;
 
-: yn-prompt ( msg -- ? )
-    write " " write readln first 121 = ;
-: continue? ( -- ? ) "continue?" yn-prompt ;
+: merge-walks ( walk1 walk2 -- distances )
+    [ min ] assoc-merge ;
 
-: pop-current-pos ( pos-queue x y -- pos-queue' x y pos )
-    [ dup pop ] 2dip rot ;
-
-: append-next-pos ( pos-queue x y new-poses -- pos-queue' x y )
-    -rot [ append ] 2dip ;
-
-: (get-links)
-    ( pos-queue distances grid -- pos-queue distances grid )
-    pop-current-pos
-    2dupd get-links
-    append-next-pos ;
-
-! 2,0->0
-! 2,1->1
-! 3,0->1
-! 1,1->2
-! 4,0->2
-! 4,1->3
-! 1,2->3
-! 0,2->4
-! 3,1->4
-! 0,3->5
-! 3,2->5
-! 1,3->6
-! 3,3->6
-! 2,3->7
-! 3,4->7
-! 3,3->8
 : find-farthest-distance ( grid -- distance )
-    dup find-start
-    [ 0 swap associate ] [ 1vector ] bi
-    swapw
-    [ pick empty? continue? not or ] [
-        (get-links)
-    ] until
-    drop nip
+    dup find-start 
+    2dup get-next-after-start
+    [ 2dupd walk ] dip
+    swap
+    [ walk ] dip
+    merge-walks
     values
     0 [ max ] reduce ;
