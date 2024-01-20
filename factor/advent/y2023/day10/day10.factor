@@ -124,7 +124,7 @@ SYMBOLS: XOVER ;
 "S|F7" >array XOVER set-global
 
 : (enclosed?) ( bounds path-mapping point -- ? )
-    pick second cast-right
+    cast-left
     [ over key? ] filter
     [ over at ] map
     [ XOVER get-global in? ] count
