@@ -2,8 +2,8 @@
 ! See https://factorcode.org/license.txt for BSD license.
 USING: advent.io arrays assocs assocs.extras combinators
        hash-sets hashtables io kernel math math.functions
-       math.order namespaces ranges sequences sequences.deep
-       sets vectors ;
+       math.order namespaces prettyprint ranges sequences
+       sequences.deep sets strings vectors ;
 IN: advent.y2023.day10
 
 : swapw ( x y z -- z y x ) rot swapd ;
@@ -121,22 +121,14 @@ PRIVATE>
     [ swap 2array ] curry map ;
 
 SYMBOLS: XOVER ;
-"S|FJL7" >array XOVER set-global
+"S|F7" >array XOVER set-global
 
 : (enclosed?) ( bounds path-mapping point -- ? )
-    pick second [ 2 / round ] keep
-    2over [ second ] dip
-    <= [ 2drop cast-left ] [ nip cast-right ] if
-    ! to figure this out, I need to 
-    ! - check that it's on the path or not;
+    pick second cast-right
     [ over key? ] filter
-    ! - if it is, get it's value on the grid; and
     [ over at ] map
-    ! - only count if it's in "S|FJL7".
     [ XOVER get-global in? ] count
-    ! - odd or even
     odd?
-    ! - clean up
     2nip ;
 
 : enclosed? ( bounds path-set point -- ? )
