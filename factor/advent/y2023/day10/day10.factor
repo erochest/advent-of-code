@@ -1,8 +1,9 @@
 ! Copyright (C) 2024 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: advent.io arrays assocs assocs.extras combinators hashtables io kernel
-       math math.order namespaces sequences sequences.deep sets
-       vectors ;
+USING: advent.io arrays assocs assocs.extras combinators
+       hash-sets hashtables io kernel math math.functions
+       math.order namespaces ranges sequences sequences.deep
+       sets vectors ;
 IN: advent.y2023.day10
 
 : swapw ( x y z -- z y x ) rot swapd ;
@@ -96,12 +97,58 @@ PRIVATE>
 : merge-walks ( walk1 walk2 -- distances )
     [ min ] assoc-merge ;
 
-: find-farthest-distance ( grid -- distance )
+: find-pipes ( grid -- hash )
     dup find-start 
     2dup get-next-after-start
     [ 2dupd walk ] dip
     swap
     [ walk ] dip
-    merge-walks
-    values
+    merge-walks ;
+
+: find-farthest-distance ( grid -- distance )
+    find-pipes values
     0 [ max ] reduce ;
+
+: all-points ( bounds -- seq )
+    first2 [ [0..b) ] bi@ cartesian-product flatten1 ;
+
+: cast-left ( point -- seq )
+    [ second 0 [a..b] ] [ first ] bi
+    [ swap 2array ] curry map ;
+
+: cast-right ( point width -- seq )
+    [ [ second ] dip [a..b] ] [ drop first ] 2bi
+    [ swap 2array ] curry map ;
+
+SYMBOLS: XOVER ;
+"S|FJL7" >array XOVER set-global
+
+: (enclosed?) ( bounds path-mapping point -- ? )
+    pick second [ 2 / round ] keep
+    2over [ second ] dip
+    <= [ 2drop cast-left ] [ nip cast-right ] if
+    ! to figure this out, I need to 
+    ! - check that it's on the path or not;
+    [ over key? ] filter
+    ! - if it is, get it's value on the grid; and
+    [ over at ] map
+    ! - only count if it's in "S|FJL7".
+    [ XOVER get-global in? ] count
+    ! - odd or even
+    odd?
+    ! - clean up
+    2nip ;
+
+: enclosed? ( bounds path-set point -- ? )
+    2dup swap key? [ 3drop f ] [ (enclosed?) ] if ;
+
+: count-enclosed ( grid -- count )
+    [ get-bounds ]
+        [
+            dup find-pipes
+            [ drop 2dup at-pos ] assoc-map
+            nip
+        ]
+        [ get-bounds all-points ] tri
+    [ 2dupd enclosed? ] count
+    2nip ;
