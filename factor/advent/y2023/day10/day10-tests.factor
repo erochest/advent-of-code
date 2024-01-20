@@ -1,8 +1,8 @@
 ! Copyright (C) 2024 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
 USING: advent.io advent.y2023.day10 advent.y2023.day10.private
-       arrays assocs hashtables kernel math namespaces sequences
-       sorting splitting tools.test ;
+       arrays assocs hashtables kernel math namespaces
+       prettyprint sequences sorting splitting tools.test ;
 IN: advent.y2023.day10.tests
 
 SYMBOLS: INPUT0 INPUT1 INPUT2 INPUT3 INPUT4 INPUT5 ;
