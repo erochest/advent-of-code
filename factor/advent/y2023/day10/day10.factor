@@ -1,14 +1,15 @@
 ! Copyright (C) 2024 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
 USING: advent.io arrays assocs assocs.extras combinators
-       hash-sets hashtables io kernel math math.functions
-       math.order namespaces prettyprint ranges sequences
-       sequences.deep sets strings vectors ;
+       grouping hash-sets hashtables io kernel math
+       math.functions math.order namespaces prettyprint ranges
+       sequences sequences.deep sets strings vectors ;
 IN: advent.y2023.day10
 
 : swapw ( x y z -- z y x ) rot swapd ;
 : at-pos ( grid pos -- c/f ) first2 [ swap ?nth ] bi@ ;
 : 2dupd ( x y z -- x y x y z ) [ 2dup ] dip ;
+: 2vector ( x y -- v ) 2array >vector ;
 
 <PRIVATE
 
@@ -74,32 +75,38 @@ SYMBOLS: N S E W ;
         [ start? [ get-next-after-start ] [ 2drop f f ] if ]
     } case ;
 ! returns only the two next steps from the current position.
-: get-next-steps ( grid pos -- x y ) 2dup at-pos (get-next-steps) ;
+: get-next-steps ( grid pos -- x y )
+    2dup at-pos (get-next-steps) ;
 
 PRIVATE>
 
-: walk ( grid start next -- distances )
-    H{ } clone -rot
-    [ 1 swap reach set-at ] keep
-    [ 0 swap pick set-at ] dip
+: walk-seq ( grid start next -- pos-seq )
+    [ 2vector ] keep
     [ dup ] [
         pick swap get-next-steps
-        pick [ dupd key? [ drop f ] when ] curry bi@ or
+        pick [ dupd in? [ drop f ] when ] curry bi@ or
         dup [
-            [
-                [ dup assoc-size ] dip
-                pick set-at
-            ] keep
+            [ over push ] keep
         ] when
     ] while
     drop nip ;
 
+: walk ( grid start next -- distances )
+    walk-seq
+    <enumerated>
+    [ first2 swap 2array ] map
+    >hashtable ;
+
 : merge-walks ( walk1 walk2 -- distances )
     [ min ] assoc-merge ;
 
-: find-pipes ( grid -- hash )
+
+: grid-next-steps ( grid -- start next1 next2 )
     dup find-start 
-    2dup get-next-after-start
+    tuck get-next-after-start ;
+
+: find-pipes ( grid -- hash )
+    dup grid-next-steps
     [ 2dupd walk ] dip
     swap
     [ walk ] dip
@@ -134,13 +141,27 @@ SYMBOLS: XOVER ;
 : enclosed? ( bounds path-set point -- ? )
     2dup swap key? [ 3drop f ] [ (enclosed?) ] if ;
 
+: determinate ( p1 p2 -- n )
+    [ [ first ] [ second ] bi* * ]
+    [ [ second ] [ first ] bi* * ] 2bi
+    - ;
+
+! Shoelace formula
+! https://en.wikipedia.org/wiki/Shoelace_formula
+! from reddit tip
+: pipe-area ( path -- area )
+    2 circular-clump
+    [ first2 determinate ] map-sum
+    2 / abs ;
+
+! Pick's theorem
+! https://en.wikipedia.org/wiki/Pick%27s_theorem
+! from reddit tip
+: interior-points ( area exterior -- interior )
+    2 / - 1 + ;
+
 : count-enclosed ( grid -- count )
-    [ get-bounds ]
-        [
-            dup find-pipes
-            [ drop 2dup at-pos ] assoc-map
-            nip
-        ]
-        [ get-bounds all-points ] tri
-    [ 2dupd enclosed? ] count
-    2nip ;
+    dup grid-next-steps drop
+    walk-seq
+    [ pipe-area ] keep
+    length interior-points ;

@@ -118,7 +118,6 @@ f f { 2 2 } test-get-next-steps-on-input0 ! .
 { 8 } [ INPUT4 get-global count-enclosed ] unit-test
 { 10 } [ INPUT5 get-global count-enclosed ] unit-test
 
-{ t } [
+{ 305 } [
     2023 10 data-file (file-lines) count-enclosed
-    323 <
 ] unit-test
