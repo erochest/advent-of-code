@@ -4,6 +4,9 @@ USING: accessors advent.io advent.y2023.day08 assocs hashtables
 io.encodings.utf8 io.files namespaces sequences tools.test ;
 IN: advent.y2023.day08.tests
 
+! TODO: put these inputs into files
+! TODO: use that function here.
+! TODO: test
 SYMBOLS: input-1 input-2 input-3 ;
 "RL
 

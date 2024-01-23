@@ -5,6 +5,8 @@ USING: ascii formatting io.encodings.utf8 io io.files kernel
        vocabs.loader io.pathnames ;
 IN: advent.io
 
+! LOGGING
+
 SYMBOLS: debug-logging ;
 f debug-logging set
 
@@ -23,6 +25,8 @@ f debug-logging set
 : trace ( name -- )
     [ write nl .s nl ] curry when-logging ;
 
+! FILE READING AND PARSING
+
 : (file-lines) ( path -- seq ) utf8 file-lines ;
 : seq>numbers ( seq -- seq ) [ string>number ] map ;
 : read-lines>numbers ( path -- seq ) (file-lines) seq>numbers ;
@@ -32,24 +36,31 @@ f debug-logging set
 : read>numbers ( path -- seq )
     (read-file-contents) split-fields seq>numbers ;
 
+! FILE LOCATIONS
+
 : advent-subdirectory ( subdir-name -- path )
     "advent" find-vocab-root parent-directory 
     prepend-path ;
 
+: in-fixture-dir ( basename year -- path )
+    "sample" advent-subdirectory
+    prepend-path prepend-path ;
 : fixture-basename ( day -- basename )
     "day%02d.fixture" sprintf ;
 : fixture ( year day -- path )
     [ number>string ] [ fixture-basename ] bi*
-    swap
-    "sample" advent-subdirectory
-    prepend-path prepend-path ;
+    swap in-fixture-dir ;
 : fixture-a-basename ( day -- basename )
     "day%02da.fixture" sprintf ;
 : fixture-a ( year day -- path )
     [ number>string ] [ fixture-a-basename ] bi*
-    swap
-    "sample" advent-subdirectory
-    prepend-path prepend-path ;
+    swap in-fixture-dir ;
+: fixture+-basename ( day n -- basename )
+    "day%02d-%d.fixture" sprintf ;
+: fixture+ ( year day n -- path )
+    [ number>string ] 2dip fixture+-basename
+    swap in-fixture-dir ;
+
 : data-basename ( day -- basename )
     "day%02d.data" sprintf ;
 : data-file ( year day -- path )
@@ -57,6 +68,8 @@ f debug-logging set
     swap
     "data" advent-subdirectory
     prepend-path prepend-path ;
+
+! PARSING HELPERS
 
 ! TODO: move this into a package with a better name.
 : trim-ws ( string -- string ) [ blank? ] trim ;
