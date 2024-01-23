@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: ascii formatting io.encodings.utf8 io io.files kernel
        math.parser prettyprint namespaces sequences splitting
-       vocabs.loader io.pathnames ;
+       vocabs.loader io.pathnames ui.clipboards ;
 IN: advent.io
 
 ! LOGGING
@@ -79,3 +79,11 @@ f debug-logging set
 
 : split-numbers ( string -- array )
     split-words [ string>number ] map ;
+
+! CLIPBOARD
+: fixture-from-clipboard ( year day n -- path )
+    fixture+ dup
+    dup .
+    utf8 [
+        clipboard get clipboard-contents print
+    ] with-file-writer ;
