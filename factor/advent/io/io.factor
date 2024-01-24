@@ -69,6 +69,11 @@ f debug-logging set
     "data" advent-subdirectory
     prepend-path prepend-path ;
 
+! READING FILES
+
+: read-fixture+ ( year day n -- string )
+    fixture+ (read-file-contents) ;
+
 ! PARSING HELPERS
 
 ! TODO: move this into a package with a better name.
@@ -81,9 +86,10 @@ f debug-logging set
     split-words [ string>number ] map ;
 
 ! CLIPBOARD
-: fixture-from-clipboard ( year day n -- path )
-    fixture+ dup
-    dup .
+: clip-to-file ( path -- )
     utf8 [
         clipboard get clipboard-contents print
     ] with-file-writer ;
+
+: fixture-from-clipboard ( year day n -- path )
+    fixture+ dup clip-to-file ;

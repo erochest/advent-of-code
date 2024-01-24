@@ -4,36 +4,10 @@ USING: accessors advent.io advent.y2023.day08 assocs hashtables
 io.encodings.utf8 io.files namespaces sequences tools.test ;
 IN: advent.y2023.day08.tests
 
-! TODO: put these inputs into files
-! TODO: use that function here.
-! TODO: test
 SYMBOLS: input-1 input-2 input-3 ;
-"RL
-
-AAA = (BBB, CCC)
-BBB = (DDD, EEE)
-CCC = (ZZZ, GGG)
-DDD = (DDD, DDD)
-EEE = (EEE, EEE)
-GGG = (GGG, GGG)
-ZZZ = (ZZZ, ZZZ)" input-1 set-global
-
-"LLR
-
-AAA = (BBB, BBB)
-BBB = (AAA, ZZZ)
-ZZZ = (ZZZ, ZZZ)" input-2 set-global
-
-"LR
-
-11A = (11B, XXX)
-11B = (XXX, 11Z)
-11Z = (11B, XXX)
-22A = (22B, XXX)
-22B = (22C, 22C)
-22C = (22Z, 22Z)
-22Z = (22B, 22B)
-XXX = (XXX, XXX)" input-3 set-global
+2023 8 1 read-fixture+ input-1 set-global
+2023 8 2 read-fixture+ input-2 set-global
+2023 8 3 read-fixture+ input-3 set-global
 
 { 2 } [
     input-1 get-global
