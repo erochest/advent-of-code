@@ -22,3 +22,9 @@ unit-test
     { { 3 4 } { 4 3 } { 2 5 } { 1 3 } { 3 9 } { 3 3 } }
     find-site-distances 
 ] unit-test
+
+{ 31 }
+[
+    { { 3 4 } { 4 3 } { 2 5 } { 1 3 } { 3 9 } { 3 3 } }
+    find-similarity-scores
+] unit-test
