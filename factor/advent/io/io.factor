@@ -5,6 +5,8 @@ USING: ascii formatting io.encodings.utf8 io io.files kernel
        vocabs.loader io.pathnames ui.clipboards ;
 IN: advent.io
 
+! TODO: word to read a file and parse each line as a list of numbers
+
 ! LOGGING
 
 SYMBOLS: debug-logging ;

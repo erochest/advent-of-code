@@ -1,6 +1,7 @@
 ! Copyright (C) 2024 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: advent.io combinators grouping kernel math sequences ;
+USING: advent.io arrays combinators grouping kernel math
+       prettyprint ranges sequences ;
 IN: advent.y2024.day02
 
 : parse-input ( path -- seqs )
@@ -26,3 +27,26 @@ IN: advent.y2024.day02
 : count-safe? ( seqs -- n )
     [ pair-differences ] map
     [ safe? ] count ;
+
+: remove-level ( n seq -- seq ) remove-nth ;
+
+: (dampner-safe?) ( n seq -- ? )
+    remove-level pair-differences safe? ;
+: dampner-safe? ( seq -- ? )
+    dup pair-differences safe? 
+    [ nip ]
+    [
+        0 over length [a..b)
+        [ over clone (dampner-safe?) ] any? nip
+    ] if* ;
+
+: count-dampner-safe? ( seqs -- n )
+    [ dampner-safe? ] count ;
+
+: debug-dampner-safe? ( seqs -- )
+    [
+        dup pair-differences dup dampner-safe? 
+        3array
+        dup third
+        [ drop ] [ . ] if
+    ] each ;

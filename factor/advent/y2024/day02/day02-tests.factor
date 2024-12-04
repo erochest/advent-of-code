@@ -35,3 +35,20 @@ SYMBOLS: INPUT-FILENAME ;
 { 2 } [
     INPUT-FILENAME get-global parse-input count-safe?
 ] unit-test
+
+{ { 6 4 2 1 } } [ 0 { 7 6 4 2 1 } remove-level ] unit-test
+{ { 1 2 8 9 } } [ 2 { 1 2 7 8 9 } remove-level ] unit-test
+{ { 9 6 2 1 } } [ 1 { 9 7 6 2 1 } remove-level ] unit-test
+{ { 1 3 2 4 } } [ 4 { 1 3 2 4 5 } remove-level ] unit-test
+
+{ t } [ { 7 6 4 2 1 } dampner-safe? ] unit-test
+{ f } [ { 1 2 7 8 9 } dampner-safe? ] unit-test
+{ f } [ { 9 7 6 2 1 } dampner-safe? ] unit-test
+{ t } [ { 1 3 2 4 5 } dampner-safe? ] unit-test
+{ t } [ { 8 6 4 4 1 } dampner-safe? ] unit-test
+{ t } [ { 1 3 6 7 9 } dampner-safe? ] unit-test
+
+{ 4 } [
+    INPUT-FILENAME get-global parse-input count-dampner-safe?
+] unit-test
+
