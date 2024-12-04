@@ -5,8 +5,6 @@ USING: ascii formatting io.encodings.utf8 io io.files kernel
        vocabs.loader io.pathnames ui.clipboards ;
 IN: advent.io
 
-! TODO: word to read a file and parse each line as a list of numbers
-
 ! LOGGING
 
 SYMBOLS: debug-logging ;
@@ -32,6 +30,8 @@ f debug-logging set
 : (file-lines) ( path -- seq ) utf8 file-lines ;
 : seq>numbers ( seq -- seq ) [ string>number ] map ;
 : read-lines>numbers ( path -- seq ) (file-lines) seq>numbers ;
+: read-lines>number-seqs ( path -- seqs )
+    (file-lines) [ split-numbers ] map ;
 : (read-file-contents) ( path -- seq ) utf8 file-contents ;
 : split-fields ( seq -- seq )
     ",\n\r" split [ empty? not ] filter ;
