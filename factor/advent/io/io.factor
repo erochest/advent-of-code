@@ -1,8 +1,8 @@
 ! Copyright (C) 2022 Eric Rochester.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: ascii formatting io.encodings.utf8 io io.files kernel
-       math.parser prettyprint namespaces sequences splitting
-       vocabs.loader io.pathnames ui.clipboards ;
+       math math.parser prettyprint namespaces sequences
+       splitting vocabs.loader io.pathnames ui.clipboards ;
 IN: advent.io
 
 ! LOGGING
@@ -24,6 +24,19 @@ f debug-logging set
 
 : trace ( name -- )
     [ write nl .s nl ] curry when-logging ;
+
+! PARSING HELPERS
+
+! TODO: move this into a package with a better name.
+: trim-ws ( string -- string ) [ blank? ] trim ;
+
+: split-words ( string -- array ) 
+    " " split [ empty? not ] filter ;
+
+: starts-with? ( seq subseq -- ? ) subseq-index zero? ;
+
+: split-numbers ( string -- array )
+    split-words [ string>number ] map ;
 
 ! FILE READING AND PARSING
 
@@ -75,17 +88,6 @@ f debug-logging set
 
 : read-fixture+ ( year day n -- string )
     fixture+ (read-file-contents) ;
-
-! PARSING HELPERS
-
-! TODO: move this into a package with a better name.
-: trim-ws ( string -- string ) [ blank? ] trim ;
-
-: split-words ( string -- array ) 
-    " " split [ empty? not ] filter ;
-
-: split-numbers ( string -- array )
-    split-words [ string>number ] map ;
 
 ! CLIPBOARD
 : clip-to-file ( path -- )
