@@ -19,3 +19,15 @@ IN: advent.y2024.day03.tests
     "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
     scan-ops
 ] unit-test
+
+{ { t 8 } } [ { t 0 } "mul(2,4)" interpret-op ] unit-test
+{ { f 0 } } [ { f 0 } "mul(2,4)" interpret-op ] unit-test
+{ { t 0 } } [ { f 0 } "do()" interpret-op ] unit-test
+{ { t 0 } } [ { t 0 } "do()" interpret-op ] unit-test
+{ { f 0 } } [ { t 0 } "don't()" interpret-op ] unit-test
+{ { f 0 } } [ { f 0 } "don't()" interpret-op ] unit-test
+
+{ 48 } [
+    "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
+    interpret-ops
+] unit-test
