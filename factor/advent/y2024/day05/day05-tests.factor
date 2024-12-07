@@ -1,6 +1,7 @@
 ! Copyright (C) 2024 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: advent.io advent.y2024.day05 namespaces sequences tools.test ;
+USING: advent.io advent.y2024.day05 kernel namespaces sequences
+       tools.test ;
 IN: advent.y2024.day05.tests
 
 SYMBOLS: FIXTURE ;
@@ -58,3 +59,28 @@ unit-test
 ] unit-test
 
 { 143 } [ FIXTURE get-global (ordered-update-checksum) ] unit-test
+
+{ { 97 75 47 61 53 } }
+[
+    { 75 97 47 61 53 }
+    FIXTURE get-global parse-input drop
+    fix-order
+] unit-test
+
+{ { 61 29 13 } }
+[
+    { 61 13 29 }
+    FIXTURE get-global parse-input drop 
+    fix-order
+] unit-test
+
+{ { 97 75 47 29 13 } }
+[
+    { 97 13 75 29 47 }
+    FIXTURE get-global parse-input drop 
+    fix-order
+] unit-test
+
+{ 123 }
+[ FIXTURE get-global (fixed-update-checksum) ]
+unit-test
