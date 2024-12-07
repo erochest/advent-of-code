@@ -1,14 +1,16 @@
 ! Copyright (C) 2024 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
 USING: advent.io arrays io kernel math namespaces prettyprint
-       sequences ;
+       sequences sorting ;
 IN: advent.y2024.day04
 
-SYMBOLS: DIRECTIONS ;
+SYMBOLS: DIRECTIONS MS ;
+
+CHAR: M CHAR: S 2array MS set-global
 
 : (row-coordinates) ( row-string row-n -- seq )
     swap [ nip dupd 2array ] { } map-index-as nip ;
-: all-coordinates ( grid -- n )
+: all-coordinates ( grid -- coord-seq )
     [ (row-coordinates) ] map-index concat ;
 
 : char-at ( grid y-x -- char )
@@ -79,3 +81,31 @@ DIRECTIONS set-global
     length ;
 
 : find-words ( file -- n ) (file-lines) "XMAS" (find-words) ;
+
+: stroke-one ( g coord -- pair )
+    [ clone up-left char-at? ]
+    [ clone down-right char-at? ] 2bi
+    2array ;
+
+: stroke-two ( g coord -- coord )
+    [ clone up-right char-at? ]
+    [ clone down-left char-at? ] 2bi
+    2array ;
+
+: ms-stroke? ( pair -- ? ) sift sort MS get-global = ;
+
+: is-stroke-one? ( g coord -- ? ) stroke-one ms-stroke? ;
+: is-stroke-two? ( g coord -- ? ) stroke-two ms-stroke? ;
+
+: is-x-center? ( g coord -- ? )
+    [ is-stroke-one? ] [ is-stroke-two? ] 2bi and ;
+
+: (find-x-mas) ( grid -- n )
+    dup dup
+    all-coordinates
+    CHAR: A filter-char-positions
+    [ dupd is-x-center? ] filter
+    length
+    nip ;
+
+: find-x-mas ( file -- n ) (file-lines) (find-x-mas) ;

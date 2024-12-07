@@ -132,4 +132,10 @@ SYMBOLS: FIXTURE ;
     next-step
 ] unit-test
 
+{ t } [ FIXTURE get-global { 1 2 } is-stroke-one? ] unit-test
+{ f } [ FIXTURE get-global { 5 2 } is-stroke-one? ] unit-test
+{ t } [ FIXTURE get-global { 1 2 } is-stroke-two? ] unit-test
+{ f } [ FIXTURE get-global { 5 3 } is-stroke-two? ] unit-test
+
 { 18 } [ FIXTURE get-global "XMAS" (find-words) ] unit-test
+{ 9 } [ FIXTURE get-global (find-x-mas) ] unit-test
