@@ -1,16 +1,18 @@
 ! Copyright (C) 2024 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: advent.io advent.y2024.day06 kernel namespaces sequences
-       tools.test ;
+USING: advent.io advent.y2024.day06 arrays kernel namespaces
+       sequences tools.test ;
 IN: advent.y2024.day06.tests
 
 SYMBOLS: FIXTURE ;
 2024 6 0 fixture+ (file-lines) FIXTURE set-global
 
-{ t } [ { 0 0 } FIXTURE get-global on-map? ] unit-test
-{ t } [ { 3 3 } FIXTURE get-global on-map? ] unit-test
-{ f } [ { 0 -4 } FIXTURE get-global on-map? ] unit-test
-{ f } [ { 12 4 } FIXTURE get-global on-map? ] unit-test
+: fixture ( -- seq ) FIXTURE get-global ;
+
+{ t } [ { 0 0 } fixture on-map? ] unit-test
+{ t } [ { 3 3 } fixture on-map? ] unit-test
+{ f } [ { 0 -4 } fixture on-map? ] unit-test
+{ f } [ { 12 4 } fixture on-map? ] unit-test
 
 { { 5 4 } } [ { { 6 4 } 0 } make-move ] unit-test
 { { 6 5 } } [ { { 6 4 } 1 } make-move ] unit-test
@@ -24,9 +26,25 @@ SYMBOLS: FIXTURE ;
 { { { 5 4 } 0 } } [ { { 5 4 } 3 } change-direction ] unit-test
 
 { { { 5 4 } 0 } }
-[ { { 6 4 } 0 } FIXTURE get-global next-step ]
+[ { { 6 4 } 0 } fixture next-step ]
 unit-test
 
-{ { 6 4 } 0 } [ FIXTURE get-global find-guard ] unit-test
+{ { 6 4 } 0 } fixture { { 6 5 } 0 } 0 4array
+[ { { 6 4 } 0 } fixture { { 6 5 } 0 } (can-loop/flag) ]
+unit-test
+{ { 6 4 } 0 } fixture { { 6 4 } 0 } 1 4array
+[ { { 6 4 } 0 } fixture { { 6 4 } 0 } (can-loop/flag) ]
+unit-test
+{ { 6 4 } 0 } fixture { { 12 5 } 0 } 2 4array
+[ { { 6 4 } 0 } fixture { { 12 5 } 0 } (can-loop/flag) ]
+unit-test
 
-{ 42 } [ FIXTURE get-global (count-visited-spaces) ] unit-test
+{ f } [ { { 1 4 } 0 } fixture can-loop? ] unit-test
+{ f } [ { { 6 5 } 3 } fixture can-loop? ] unit-test
+{ t } [ { { 6 4 } 3 } fixture can-loop? ] unit-test
+{ t } [ { { 8 4 } 3 } fixture can-loop? ] unit-test
+
+{ { 6 4 } 0 } [ fixture find-guard ] unit-test
+
+{ 42 } [ fixture (count-visited-spaces) ] unit-test
+{ 6 } [ fixture (count-loops) ] unit-test
