@@ -13,6 +13,7 @@ pub enum Error {
     Parse(ParseIntError),
     RangeParse(String),
     MapNetworkParse(String),
+    InvalidInputSource(String),
 }
 
 use Error::*;
@@ -24,6 +25,7 @@ impl fmt::Display for Error {
             Parse(ref err) => err.fmt(f),
             RangeParse(ref value) => write!(f, "Error parsing: {:?}", value),
             MapNetworkParse(ref msg) => write!(f, "Error parsing map network: {}", msg),
+            InvalidInputSource(ref msg) => write!(f, "Invalid input source: {}", msg),
         }
     }
 }
