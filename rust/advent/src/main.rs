@@ -10,11 +10,9 @@ use human_panic::setup_panic;
 mod error;
 mod mappings;
 mod wasteland;
+mod y2024;
 
 use error::Result;
-
-use crate::mappings::day05;
-use crate::wasteland::day08;
 
 fn main() -> Result<()> {
     setup_panic!();
@@ -47,9 +45,11 @@ fn main() -> Result<()> {
     let input = fs::read_to_string(filename)?;
 
     if args.year == 2023 && args.day == 5 {
-        day05(&input)?;
+        mappings::day05(&input)?;
     } else if args.year == 2023 && args.day == 8 {
-        day08(&input)?;
+        wasteland::day08(&input)?;
+    } else if args.year == 2024 && args.day == 6 {
+        y2024::day06(&input)?;
     }
 
     Ok(())
