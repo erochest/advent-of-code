@@ -32,14 +32,14 @@ SYMBOLS: DIRECTIONS MOVEMENTS ;
     [ clone ] [ direction>move ] bi*
     map-move ;
 
-: change-direction ( pair -- pair' )
+: turn ( pair -- pair' )
     [ 1 + DIRECTIONS get-global length mod ] mod-x ;
 
 ! This also returns the last, out of bounds step.
 : next-step ( pair map -- pair' )
     over make-move
     2dup swap blocked?
-    [ 2drop change-direction [ make-move ] keep ]
+    [ 2drop turn [ make-move ] keep ]
     [ nip swap ] if
     second 2array ;
 
@@ -69,35 +69,72 @@ SYMBOLS: DIRECTIONS MOVEMENTS ;
 
 : log ( tag -- ) print .s nl ;
 
-: (can-loop/flag) ( pair map pair -- pair map pair n )
-    {
-        { [ dup first pick on-map? not ] [ 2 ] }
-        { [ dup reach = ] [ 1 ] }
-        [ 0 ]
-    } cond ;
+: initialize-state ( map -- loops visited map guard )
+    0
+    HS{ } clone
+    rot
+    dup find-guard 2array ;
 
-: (can-loop?) ( pair map -- ? )
-    over clone change-direction
-    (can-loop/flag)
-    [ dup zero? ] [
-        drop
-        (walk/next-step)
-        (can-loop/flag)
+: mark-seen ( visited m pos -- visited m pos )
+    pick dupd adjoin ;
+
+: forward ( current -- current next )
+    dup make-move over second 2array ;
+
+: (on-map?) ( map c next -- map c next ? )
+    dup first reach on-map? ;
+
+: on-block? ( map c next -- map c next ? )
+    dup first reach blocked? ;
+
+: (turn) ( current n -- next ) drop turn ;
+
+: seen? ( map current -- map current ? )
+    [ swap in? ] 2keep rot ;
+
+: true ( v m c -- ? ) 3drop t ;
+: false ( v m c n -- ? ) 4drop f ;
+
+: finalize-move ( current next -- next ) nip ;
+
+: (is-guard-in-loop?) ( visited map current -- ? )
+    seen? [ true ] [
+        mark-seen
+        forward
+        (on-map?) [
+            on-block? [ (turn) ] [ finalize-move ] if
+            (is-guard-in-loop?)
+        ] [ false ] if
+    ] if ;
+
+: is-guard-in-loop?
+    ( visited map current n -- visited map current n ? )
+    [
+        3dup [ clone ] 2dip
+        (is-guard-in-loop?)
+    ] dip
+    swap ;
+
+: inc-loop-count ( loops v m c n -- loops v m c n )
+    [ 1 + ] 4dip ;
+
+: clean-up ( loops v m c n -- loops ) 4drop ;
+
+! TODO: Also use more structs and methods to clean up
+! and minimize stack juggling.
+: (count-guard-loops) ( map -- n )
+    initialize-state
+    [
+        mark-seen
+        forward
+        (on-map?)
+    ] [
+        on-block? [ (turn) ] [
+            is-guard-in-loop? [ inc-loop-count ] when
+            finalize-move
+        ] if
     ] while
-    3nip
-    1 = ;
-
-: can-loop? ( pair map -- ? )
-    over make-move
-    over blocked?
-    [ 2drop f ] [ (can-loop?) ] if ;
-
-: count-true ( seq -- n ) [ ] count ;
-
-: (count-loops) ( map-matrix -- n )
-    dup walk-map uniq
-    [ over can-loop? ] count
-    nip ;
+    clean-up ;
 
 : count-loops ( path -- n )
-    (file-lines) (count-loops) ;
+    (file-lines) (count-guard-loops) ;
