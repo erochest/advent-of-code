@@ -27,20 +27,13 @@ SYMBOLS: FIXTURE ;
 
 { { 6 4 } 0 } [ fixture find-guard ] unit-test
 
-{ t } [
-    {
-        { { 6 4 } 0 } { { 5 4 } 0 } { { 4 4 } 0 }
-        { { 3 4 } 0 } { { 2 4 } 0 } { { 1 4 } 0 }
-        { { 1 5 } 1 } { { 1 6 } 1 } { { 1 7 } 1 }
-        { { 1 8 } 1 } { { 2 8 } 2 } { { 3 8 } 2 }
-        { { 4 8 } 2 } { { 5 8 } 2 } { { 6 8 } 2 }
-        { { 6 7 } 3 } { { 6 6 } 3 } { { 6 5 } 3 }
-    } >hash-set
-    FIXTURE get-global
-    { { 6 5 } 3 }
-    { { 6 4 } 3 }
-    is-guard-in-loop?
-    4nip
+{ { { 0,1 } { 0,2 } { 0,3 } { 1,1 } { 1,2 }
+    { 1,3 } { 2,1 } { 2,3 } { 3,2 } } }
+[
+    { "...." "...." "..^." "...." }
+    initialize-state
+    get-matrix-coordinates
+    nip
 ] unit-test
 
 { 42 } [ fixture (count-visited-spaces) ] unit-test

@@ -1,9 +1,11 @@
 ! Copyright (C) 2024 Eric Rochester.
 ! See https://factorcode.org/license.txt for BSD license.
-USING: advent.io advent.map arrays combinators hash-sets io 
-       kernel math namespaces prettyprint regexp sequences
-       sets ;
+USING: accessors advent.io advent.map arrays combinators
+       hash-sets io kernel math namespaces prettyprint ranges
+       regexp sequences sets ;
 IN: advent.y2024.day06
+
+! These consistently use coords of y, x :/
 
 SYMBOLS: DIRECTIONS MOVEMENTS ;
 { CHAR: ^ CHAR: > CHAR: v CHAR: < } DIRECTIONS set-global
@@ -69,72 +71,99 @@ SYMBOLS: DIRECTIONS MOVEMENTS ;
 
 : log ( tag -- ) print .s nl ;
 
-: initialize-state ( map -- loops visited map guard )
-    0
-    HS{ } clone
-    rot
-    dup find-guard 2array ;
+TUPLE: map-state grid x-bounds y-bounds start-pos ;
+! reader>>
+! writer<< ( value obj -- obj )
+! >>setter ( obj value -- obj )
+! change-changer ( obj quot -- obj )
+C: <map-state> map-state
 
-: mark-seen ( visited m pos -- visited m pos )
-    pick dupd adjoin ;
+: initialize-state ( map-grid -- map-state )
+    0 over ?nth length
+    over length
+    pick find-guard 2array
+    <map-state> ;
 
-: forward ( current -- current next )
+: surrounding ( pos -- seq )
+    { [ up ] [ down ] [ left ] [ right ] } cleave 4array ;
+
+: get-matrix-coordinates ( map-state -- map-state seq )
+    dup grid>> walk-map
+    [ first ] map
+    [ surrounding ] map concat
+    uniq
+    [ over grid>> on-map? ] filter ;
+
+: clear? ( map-state pos -- map-state ? )
+    over grid>> char-at? CHAR: . = ;
+
+: set-char ( c pair grid -- ) 
+    [ first2 swap ] dip
+    nth
+    set-nth ;
+
+: set-block ( map-state pos -- map-state map-grid )
+    over
+    grid>> clone tuck
+    CHAR: # -rot
+    set-char ;
+
+: seen? ( visited s current -- visited s current ? )
+    pick dupd in? ;
+
+: no-loop ( v s c -- f ) 3drop f ;
+: is-loop ( v s c -- t ) 3drop t ;
+
+: (on-map?) ( map-state current -- map-state current ? )
+    2dup first swap grid>> on-map? ;
+
+: mark-seen ( visited s current -- visited s current )
+    [ pick adjoin ] keep ;
+
+: (turn) ( current next -- turned ) drop turn ;
+
+: (next-step) ( current -- current next )
     dup make-move over second 2array ;
 
-: (on-map?) ( map c next -- map c next ? )
-    dup first reach on-map? ;
+: (blocked?) ( map-state c next -- map-state c next ? )
+    dup first reach grid>> blocked? ;
 
-: on-block? ( map c next -- map c next ? )
-    dup first reach blocked? ;
+: finish-step ( current next -- next ) nip ;
 
-: (turn) ( current n -- next ) drop turn ;
+: (walk-path-loop?) ( visited map-state current -- ? )
+    {
+        { [ seen? ] [ is-loop ] }
+        { [ (on-map?) not ] [ no-loop ] }
+        [
+            mark-seen
+            (next-step)
+            (blocked?) [
+                (turn)
+                (next-step)
+            ] when
+            finish-step
+            (walk-path-loop?)
+        ]
+    } cond ;
 
-: seen? ( map current -- map current ? )
-    [ swap in? ] 2keep rot ;
+: walk-path-loop? ( grid -- ? )
+    initialize-state
+    HS{ } clone swap
+    dup start-pos>>
+    dup .
+    (walk-path-loop?) ;
 
-: true ( v m c -- ? ) 3drop t ;
-: false ( v m c n -- ? ) 4drop f ;
-
-: finalize-move ( current next -- next ) nip ;
-
-: (is-guard-in-loop?) ( visited map current -- ? )
-    seen? [ true ] [
-        mark-seen
-        forward
-        (on-map?) [
-            on-block? [ (turn) ] [ finalize-move ] if
-            (is-guard-in-loop?)
-        ] [ false ] if
-    ] if ;
-
-: is-guard-in-loop?
-    ( visited map current n -- visited map current n ? )
-    [
-        3dup [ clone ] 2dip
-        (is-guard-in-loop?)
-    ] dip
-    swap ;
-
-: inc-loop-count ( loops v m c n -- loops v m c n )
-    [ 1 + ] 4dip ;
-
-: clean-up ( loops v m c n -- loops ) 4drop ;
-
-! TODO: Also use more structs and methods to clean up
-! and minimize stack juggling.
+! TODO: walk through once and only keep the matrix coordinates
+! that touch the path.
+! TODO: walk through the path and generate all the items around it;
+! TODO: dedup them; and
+! TODO: use that in place of `get-matrix-coordinates`.
 : (count-guard-loops) ( map -- n )
     initialize-state
-    [
-        mark-seen
-        forward
-        (on-map?)
-    ] [
-        on-block? [ (turn) ] [
-            is-guard-in-loop? [ inc-loop-count ] when
-            finalize-move
-        ] if
-    ] while
-    clean-up ;
+    get-matrix-coordinates
+    [ clear? ] filter
+    [ set-block walk-path-loop? ] count
+    nip ;
 
 : count-loops ( path -- n )
     (file-lines) (count-guard-loops) ;
