@@ -20,7 +20,7 @@ uses: std/io
 
 exports:
   bi@ sort-inputs
-  each2 map2 subtract-pairs
+  each2 map2 pair-distances
   parse-input ??? profit part1 ;
 
 // TODO: std
@@ -72,13 +72,13 @@ exports:
 : deep-push!   pick push! ;
 
 /// list-list-int -- list-int list-int
-: unpair
+: rotate-matrix
     { } { } rot
     [
         // xs ys pair
         [ first ] [ second ] bi
-        pick push!
-        pick push!
+        deep-push!
+        deep-push!
     ] each ;
 
 // TODO: std
@@ -111,15 +111,16 @@ exports:
         accumulate-place
     ] each ;
 
+// TODO: to an aoc/parsing library
 : parse-line    split-whitespace [ parse-int ] map ;   /// s -- ints
 : parse-lines   [ parse-line ] map ;                   /// s -- list-list-int
 
 : sort-inputs      2dup [ sort! ] bi@ ;   /// xs ys -- xs' ys'
-: subtract-pairs   [ - abs ] map2 ;       /// xs ys -- zs
+: pair-distances   [ - abs ] map2 ;       /// xs ys -- zs
 
-: parse-input   lines parse-lines unpair ;     /// string -- left-numbers right-numbers
-: ???           sort-inputs subtract-pairs ;   /// left-numbers right-numbers -- list
-: profit        sum ;                          /// list -- int
+: parse-input   lines parse-lines rotate-matrix ;   /// string -- left-numbers right-numbers
+: ???           sort-inputs pair-distances ;        /// left-numbers right-numbers -- list
+: profit        sum ;                               /// list -- int
 
 : part1         parse-input ??? profit ;       /// string -- checksum
 

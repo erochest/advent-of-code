@@ -2,12 +2,18 @@
 uses: std/io
 uses: std/strings
 
+// TODO: to aoc/io
+
+// TODO: string formatting
+// TODO: path library
+
 exports: sample-path data-path read-sample-data read-data ;
 
 : repeat-test    dup 0 > ;
 : repeat-iter     1 - ;
 : repeat-extend   dupd concat ;
 
+// TODO: std
 /// times string -- string
 /// repeats a string times times
 : repeat-string
