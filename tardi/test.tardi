@@ -1,0 +1,6 @@
+
+uses: std/io
+uses: std/vectors
+
+"hello world" println
+
