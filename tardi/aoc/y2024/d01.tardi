@@ -1,8 +1,9 @@
 
 uses: ./io
+uses: std/io
+uses: std/hashmaps
 uses: std/strings
 uses: std/vectors
-uses: std/io
 
 // TODO: error trapping
 // TODO: test framework
@@ -18,20 +19,18 @@ uses: std/io
 // TODO: char>codepoint
 // TODO: parse-int (>int)
 
-exports:
-  bi@ sort-inputs
-  each2 map2 pair-distances
-  parse-input ??? profit part1 ;
+exports: part1 part2 ;
 
 // TODO: std
 : tuck              dup swapd ;                              /// x y -- y x y
 : bi                [ keep ] dip apply ;                     /// x p q --
 : bi@               tuck [ apply ] 2dip apply ;              /// x y quot -- 
 : min               [ < ] 2keep ? ;                          /// x y -- xy
-: sum               0 swap [ + ] each ;                      /// xs -- s
+: sum               0 [ + ] vectors/reduce ;                 /// xs -- s
 : abs               dup 0 < [ -1 * ] when ;                  /// x -- x'
 : 1+                1 + ;                                    /// n -- n'
 : 2vector           { } tuck push-left! tuck push-left! ;    /// a b -- xs
+: unless            [ ] swap if ;                            /// ? quot --
 
 : find-min-length   [ length ] bi@ min ;                     /// xs ys -- n
 : float-lists       -rot ;                                   /// q xs ys n -- q n xs ys
@@ -124,3 +123,58 @@ exports:
 
 : part1         parse-input ??? profit ;       /// string -- checksum
 
+//////////////////////
+
+// TODO: std
+/// hm x --
+: inc
+    swap 2dup get
+    [ 1+ ] [ drop 1 ] if
+    swap set! ;
+
+// TODO: std
+/// list -- hashmap
+: frequencies
+    <hashmap>
+    [ dupd inc ] vectors/reduce ;
+
+/// hm n -- hm v
+: get-default
+    over get
+    [ drop 0 ] unless ;
+
+/// v n -- pair
+: >pair   swap 2vector ;
+
+/// list hashmap -- list-pairs
+: match-frequencies
+    swap
+    [
+        // frequencies x
+        [ get-default ] keep
+        >pair
+    ] map
+    nip ;
+
+/// list-pairs -- multiple-list
+: multiply-pairs
+    [ [ first ] [ second ] bi * ] map ;
+
+: ???     frequencies match-frequencies ;
+
+/// list-pairs -- int
+: profit  multiply-pairs sum ;
+
+: part2   parse-input ??? profit ;
+
+///////////////////////
+
+// 2024 1 read-sample-data
+2024 1 read-data
+dup
+
+"Part 1: " print
+part1 println
+
+"Part 2: " print
+part2 println
