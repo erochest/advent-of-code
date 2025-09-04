@@ -5,70 +5,12 @@ uses: std/hashmaps
 uses: std/strings
 uses: std/vectors
 
-// TODO: error trapping
-// TODO: test framework
-// TODO: see
-// TODO: .s
-// TODO: .
-// TODO: config to autoload imports for repl
-// TODO: export all (but no re-exports)
-// TODO: reload
-// TODO: -e cli argument
-// TODO: or and (and short-circuiting)
-// TODO: iterate over string characters
-// TODO: char>codepoint
-// TODO: parse-int (>int)
-
-exports: part1 part2 ;
-
-// TODO: std
-: tuck              dup swapd ;                              /// x y -- y x y
-: bi                [ keep ] dip apply ;                     /// x p q --
-: bi@               tuck [ apply ] 2dip apply ;              /// x y quot -- 
-: min               [ < ] 2keep ? ;                          /// x y -- xy
-: sum               0 [ + ] vectors/reduce ;                 /// xs -- s
-: abs               dup 0 < [ -1 * ] when ;                  /// x -- x'
-: 1+                1 + ;                                    /// n -- n'
-: 2vector           { } tuck push-left! tuck push-left! ;    /// a b -- xs
-: unless            [ ] swap if ;                            /// ? quot --
-
-: find-min-length   [ length ] bi@ min ;                     /// xs ys -- n
-: float-lists       -rot ;                                   /// q xs ys n -- q n xs ys
-: nth-both          overd nth [ dupd nth ] dip ;             /// n xs ys -- n x y
-: clean-apply       [ [ apply ] keep ] dip ;                 /// x y q n -- q n
-: arrange-apply     [ nth-both 2swap clean-apply ] 2keep ;   /// q n xs ys -- q n xs ys
-
-: each2-init        -rot 2dup find-min-length 0 swap ;       /// xs ys q -- q xs ys n l
-: each2-continue?   2dup < ;                                 /// n l -- n l ?
-: each2-apply       [ float-lists arrange-apply ] dip ;      /// q xs ys n l -- q n xs ys l
-: each2-restack     rotd ;                                   /// q n xs ys l -- q xs ys n l
-: each2-cleanup     5drop ;                                  /// q n xs ys l --
-
-// TODO: std
-/// xs ys quot --
-: each2
-    each2-init
-    [ each2-continue? ] [
-        // q xs ys n l
-        each2-apply
-        each2-restack
-        [ 1+ ] dip
-    ] while
-    each2-cleanup ;
-
-// TODO: std
-/// xs ys quot -- zs
-: map2
-    { } 2swap
-    [
-        reach apply
-        over push!
-    ] each2
-    nip ;
-
-// TODO: std
-/// xs y x -- xs' y
-: deep-push!   pick push! ;
+exports:
+    rotate-matrix
+    parse-line parse-lines
+    sort-inputs pair-distances
+    parse-input ??? profit
+    part1 part2 ;
 
 /// list-list-int -- list-int list-int
 : rotate-matrix
@@ -78,36 +20,6 @@ exports: part1 part2 ;
         [ first ] [ second ] bi
         deep-push!
         deep-push!
-    ] each ;
-
-// TODO: std
-/// n min max -- n/#f
-: check-bounds
-    pick < [
-        2drop #f
-    ] [
-        dupd < [
-            drop #f
-        ] when
-    ] if ;
-
-// TODO: std
-/// utf8 -- int
-: utf8>digit
-    48 -
-    0 9 check-bounds ;
-
-/// accum n -- accum'
-: accumulate-place   swap 10 * + ;
-
-// TODO: std
-/// s -- i
-: parse-int
-    0
-    swap >utf8
-    [
-        utf8>digit
-        accumulate-place
     ] each ;
 
 // TODO: to an aoc/parsing library
@@ -124,19 +36,6 @@ exports: part1 part2 ;
 : part1         parse-input ??? profit ;       /// string -- checksum
 
 //////////////////////
-
-// TODO: std
-/// hm x --
-: inc
-    swap 2dup get
-    [ 1+ ] [ drop 1 ] if
-    swap set! ;
-
-// TODO: std
-/// list -- hashmap
-: frequencies
-    <hashmap>
-    [ dupd inc ] vectors/reduce ;
 
 /// hm n -- hm v
 : get-default
@@ -170,11 +69,11 @@ exports: part1 part2 ;
 ///////////////////////
 
 // 2024 1 read-sample-data
-2024 1 read-data
-dup
+// 2024 1 read-data
+// dup
 
-"Part 1: " print
-part1 println
+// "Part 1: " print
+// part1 println
 
-"Part 2: " print
-part2 println
+// "Part 2: " print
+// part2 println
