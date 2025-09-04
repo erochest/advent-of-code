@@ -1,0 +1,76 @@
+
+uses: ./io
+uses: std/io
+uses: std/strings
+uses: std/vectors
+
+exports:
+  parse
+  part1 part2 ;
+
+
+/// string -- vector/vector/int
+: parse-level    parse-int ;
+: parse-report   split-whitespace [ parse-level ] map ;
+: parse          lines [ parse-report ] map ;
+
+: first2    [ first ] [ second ] bi ;   /// {xy} -- x y
+: 1vector   { } [ push! ] keep ;       /// x -- {x}
+
+: window/get-working     dup first ;                      // accum -- accum working
+: window/working-done?   dup length 2 == ;                // working -- working ?
+: window/save-working    over second push! ;              // accum working -- accum
+: window/reset-working   over 1vector 0 pick set-nth! ;   // item accum -- item accum
+: window/rotate
+    window/save-working
+    window/reset-working
+    window/get-working ;
+: window/push-working    swapd push! drop ;               // item accum working --
+: window/clean-up        first2 [ push! ] keep ;          // accum -- vector/vector
+
+/// vector -- vector/vector
+: window-pairs      
+  { { } { } } [
+      // accum item -- accum
+      over window/get-working
+      window/working-done? [
+          window/rotate
+      ] when
+      window/push-working
+  ] reduce
+  window/clean-up ;
+
+/// vector predicate -- t/f
+: find-deltas       window-pairs [ first2 - ] map ;
+
+: and               [ [ #t ] [ #f ] if ] [ #f ] if ;
+
+: positive?         0 > ;
+: negative?         0 < ;
+: all?              swap t [ pick apply and ] reduce ;
+
+: all-ascending?    [ positive? ] all? ;
+: all-descending?   [ negative? ] all? ;
+: all-in-range? ;
+: tri ;
+: or ;
+
+: safe?
+    [ all-ascending? ] [ all-descending? ] [ 1 3 all-in-range? ] tri
+    [ or ] dip and ;
+/// vector/vector/int -- vector'/vector/int
+: ???               [ safe? ] filter ;
+
+/// vector -- checksum
+: profit   length ;
+
+: part1   parse ??? profit ;      /// string -- checksum
+
+: part2 ;
+
+/////////////////////////
+
+2024 2 read-sample-data
+
+"Part 1: " print
+part1 println
