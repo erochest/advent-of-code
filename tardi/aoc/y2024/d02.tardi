@@ -5,7 +5,9 @@ uses: std/strings
 uses: std/vectors
 
 exports:
-  parse
+  parse ??? profit
+  safe? filter tri all-in-range? all-ascending? all-descending?
+  all? negative? positive? or and find-deltas window-pairs
   part1 part2 ;
 
 
@@ -17,54 +19,78 @@ exports:
 : first2    [ first ] [ second ] bi ;   /// {xy} -- x y
 : 1vector   { } [ push! ] keep ;       /// x -- {x}
 
-: window/get-working     dup first ;                      // accum -- accum working
-: window/working-done?   dup length 2 == ;                // working -- working ?
-: window/save-working    over second push! ;              // accum working -- accum
-: window/reset-working   over 1vector 0 pick set-nth! ;   // item accum -- item accum
-: window/rotate
-    window/save-working
-    window/reset-working
-    window/get-working ;
-: window/push-working    swapd push! drop ;               // item accum working --
-: window/clean-up        first2 [ push! ] keep ;          // accum -- vector/vector
+: #f?   #f == ;   /// x -- ?
+
+: window/setup    #f { } rot ;           /// v -- ? accum v
+: window/first?   swapd over #f? ;       /// prev accum x -- accum prev i ?
+: window/store    nip swap ;             /// accum prev current -- current accum 
+: window/pair     2vector over push! ;   /// accum prev current -- accum
 
 /// vector -- vector/vector
-: window-pairs      
-  { { } { } } [
-      // accum item -- accum
-      over window/get-working
-      window/working-done? [
-          window/rotate
-      ] when
-      window/push-working
-  ] reduce
-  window/clean-up ;
+: window-pairs
+    window/setup
+    [
+        window/first? [
+            window/store
+        ] [
+            [ window/pair ] keep
+            swap
+        ] if
+    ] each
+    nip ;
 
-/// vector predicate -- t/f
+/// vector/vector -- vector
 : find-deltas       window-pairs [ first2 - ] map ;
 
-: and               [ [ #t ] [ #f ] if ] [ #f ] if ;
-
+: and               [ [ #t ] [ #f ] if ] [ drop #f ] if ;
+: or                [ drop #t ] [ [ #t ] [ #f ] if ] if ;
 : positive?         0 > ;
 : negative?         0 < ;
-: all?              swap t [ pick apply and ] reduce ;
+: all?              swap #t [ pick apply and ] reduce nip ;
 
 : all-ascending?    [ positive? ] all? ;
 : all-descending?   [ negative? ] all? ;
-: all-in-range? ;
-: tri ;
-: or ;
+
+: and-over   [ reach >= and ] keep ;   /// min x accum item -- min x accum' item
+: and-under  pick < and ;              /// max accum item -- max accum'
+
+/// xs min max -- ?
+: all-in-range?
+    rot #t [
+        and-over
+        and-under
+    ] reduce
+    [ 2drop ] dip ;
+
+: tri1   [ apply ] 2dip ;       /// x q _ _ -- x'
+: tri2   -rot [ apply ] dip ;   /// q _ x   -- x'
+: tri3   swap apply ;           /// q x     -- x'
+
+// TODO: std
+/// x p q r --
+: tri
+    reach >r
+    tri1
+    r@ tri2
+    r> tri3 ;
+
+// TODO: std
+: filter?    [ pick apply ] keep swap ;      /// pred accum i -- pred accum i ?
+: push-if!   [ over push! ] [ drop ] if ;    /// xs x ?       -- xs'
+: (filter)   [ filter? push-if! ] reduce ;   /// p xs accum -- p accum
+: filter     swap { } (filter) nip ;         /// xs p -- xs'
 
 : safe?
     [ all-ascending? ] [ all-descending? ] [ 1 3 all-in-range? ] tri
     [ or ] dip and ;
+
 /// vector/vector/int -- vector'/vector/int
 : ???               [ safe? ] filter ;
 
 /// vector -- checksum
 : profit   length ;
 
-: part1   parse ??? profit ;      /// string -- checksum
+: part1    parse ??? profit ;      /// string -- checksum
 
 : part2 ;
 
