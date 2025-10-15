@@ -1,4 +1,6 @@
 
+// uses: std/io uses: std/strings uses: std/vectors uses: ./aoc/y2024/io uses: ./aoc/y2024/d02
+
 uses: ./io
 uses: std/io
 uses: std/strings
@@ -51,12 +53,16 @@ exports:
 : all-ascending?    [ positive? ] all? ;
 : all-descending?   [ negative? ] all? ;
 
+// TODO: std
+: abs   dup 0 < [ -1 * ] when ;   /// x -- x'
+
 : and-over   [ reach >= and ] keep ;   /// min x accum item -- min x accum' item
 : and-under  pick < and ;              /// max accum item -- max accum'
 
 /// xs min max -- ?
 : all-in-range?
     rot #t [
+        abs
         and-over
         and-under
     ] reduce
@@ -81,7 +87,9 @@ exports:
 : filter     swap { } (filter) nip ;         /// xs p -- xs'
 
 : safe?
-    [ all-ascending? ] [ all-descending? ] [ 1 3 all-in-range? ] tri
+    [ all-ascending? ]
+      [ all-descending? ]
+      [ find-deltas 1 3 all-in-range? ] tri
     [ or ] dip and ;
 
 /// vector/vector/int -- vector'/vector/int
@@ -98,5 +106,12 @@ exports:
 
 2024 2 read-sample-data
 
-"Part 1: " print
+"Sample Part 1: " print
+part1 println
+
+/////////////////////////
+
+2024 2 read-data
+
+"Data Part 1: " print
 part1 println
