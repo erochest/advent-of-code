@@ -1,0 +1,10 @@
+
+day := "02"
+
+default: test run
+
+test:
+    tardi ./aoc/y2024/d{{day}}-test.tardi --print-stack
+
+run:
+    tardi ./aoc/y2024/d{{day}}.tardi
