@@ -8,10 +8,11 @@ uses: std/vectors
 
 exports:
   parse ??? profit
-  safe? filter tri all-in-range? all-ascending? all-descending?
+  parse-report
+  first2 1vector #f? window-pairs
+  safe? filter tri all-in-range? all-positive? all-negative?
   all? negative? positive? or and find-deltas window-pairs
   part1 part2 ;
-
 
 /// string -- vector/vector/int
 : parse-level    parse-int ;
@@ -42,7 +43,7 @@ exports:
     nip ;
 
 /// vector/vector -- vector
-: find-deltas       window-pairs [ first2 - ] map ;
+: find-deltas       window-pairs [ first2 swap - ] map ;
 
 : and               [ [ #t ] [ #f ] if ] [ drop #f ] if ;
 : or                [ drop #t ] [ [ #t ] [ #f ] if ] if ;
@@ -50,8 +51,8 @@ exports:
 : negative?         0 < ;
 : all?              swap #t [ pick apply and ] reduce nip ;
 
-: all-ascending?    [ positive? ] all? ;
-: all-descending?   [ negative? ] all? ;
+: all-positive?   [ positive? ] all? ;
+: all-negative?   [ negative? ] all? ;
 
 // TODO: std
 : abs   dup 0 < [ -1 * ] when ;   /// x -- x'
@@ -86,10 +87,12 @@ exports:
 : (filter)   [ filter? push-if! ] reduce ;   /// p xs accum -- p accum
 : filter     swap { } (filter) nip ;         /// xs p -- xs'
 
+/// xs -- ?
 : safe?
-    [ all-ascending? ]
-      [ all-descending? ]
-      [ find-deltas 1 3 all-in-range? ] tri
+    find-deltas 
+    [ all-positive? ]
+      [ all-negative? ]
+      [ 1 4 all-in-range? ] tri
     [ or ] dip and ;
 
 /// vector/vector/int -- vector'/vector/int
@@ -102,16 +105,21 @@ exports:
 
 : part2 ;
 
-/////////////////////////
-
-2024 2 read-sample-data
-
-"Sample Part 1: " print
-part1 println
+// TODO: main function that's only called when run from command-line
 
 /////////////////////////
+
+// 2024 2 read-sample-data
+
+// "Sample Part 1: " print
+// part1 println
+
+/////////////////////////
+
+// TODO: kinda slow on full data. profiling
 
 2024 2 read-data
 
 "Data Part 1: " print
 part1 println
+
