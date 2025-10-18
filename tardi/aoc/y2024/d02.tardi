@@ -1,6 +1,4 @@
 
-// uses: std/io uses: std/strings uses: std/vectors uses: ./aoc/y2024/io uses: ./aoc/y2024/d02
-
 uses: ./io
 uses: std/io
 uses: std/math
@@ -22,57 +20,15 @@ exports:
 : parse-report   split-whitespace [ parse-level ] map ;
 : parse          lines [ parse-report ] map ;
 
-// TODO: std
-: first2    [ first ] [ second ] bi ;   /// {xy} -- x y
-// TODO: std
-: 1vector   { } [ push! ] keep ;       /// x -- {x}
-
-// TODO: std
-: #f?   #f == ;   /// x -- ?
-
-: window/setup    #f { } rot ;           /// v -- ? accum v
-: window/first?   swapd over #f? ;       /// prev accum x -- accum prev i ?
-: window/store    nip swap ;             /// accum prev current -- current accum 
-: window/pair     2vector over push! ;   /// accum prev current -- accum
-
-// TODO: std
-/// vector -- vector/vector
-: window-pairs
-    window/setup
-    [
-        window/first? [
-            window/store
-        ] [
-            [ window/pair ] keep
-            swap
-        ] if
-    ] each
-    nip ;
-
 /// vector/vector -- vector
 : find-deltas       window-pairs [ first2 swap - ] map ;
-
-// TODO: std
-: and               [ [ #t ] [ #f ] if ] [ drop #f ] if ;
-// TODO: std
-: or                [ drop #t ] [ [ #t ] [ #f ] if ] if ;
-// TODO: std
-: positive?         0 > ;
-// TODO: std
-: negative?         0 < ;
-// TODO: std
-: all?              swap #t [ pick apply and ] reduce nip ;
 
 : all-positive?   [ positive? ] all? ;
 : all-negative?   [ negative? ] all? ;
 
-// TODO: std
-: abs   dup 0 < [ -1 * ] when ;   /// x -- x'
-
 : and-over   [ reach >= and ] keep ;   /// min x accum item -- min x accum' item
 : and-under  pick < and ;              /// max accum item -- max accum'
 
-// TODO: std?
 /// xs min max -- ?
 : all-in-range?
     rot #t [
@@ -81,24 +37,6 @@ exports:
         and-under
     ] reduce
     [ 2drop ] dip ;
-
-: tri1   [ apply ] 2dip ;       /// x q _ _ -- x'
-: tri2   -rot [ apply ] dip ;   /// q _ x   -- x'
-: tri3   swap apply ;           /// q x     -- x'
-
-// TODO: std
-/// x p q r --
-: tri
-    reach >r
-    tri1
-    r@ tri2
-    r> tri3 ;
-
-// TODO: std
-: filter?    [ pick apply ] keep swap ;      /// pred accum i -- pred accum i ?
-: push-if!   [ over push! ] [ drop ] if ;    /// xs x ?       -- xs'
-: (filter)   [ filter? push-if! ] reduce ;   /// p xs accum -- p accum
-: filter     swap { } (filter) nip ;         /// xs p -- xs'
 
 /// xs -- ?
 : safe?
@@ -116,59 +54,7 @@ exports:
 
 : part1    parse ??? profit ;   /// string -- checksum
 
-// TODO: std
-: pickd   [ pick ] dip ;   /// w x y z -- w x y w z
-
-// BUG: { { } { } } the inner vectors are actually the same :(
 // TODO: neovim formatter for lining up these tables
-: partition/setup       swap { } { } 2vector ;              /// xs p -- p xs a
-: partition/test        [ pick apply ] keep swap ;          /// p x i -- p x i ?
-: partition/get-accum   [ second ] [ first ] if ;           /// a ? -- a'
-: partition/clean       nip first2 ;                        /// p a -- ts fs
-: partition/store       overd partition/get-accum push! ;   /// a i ? -- a'
-
-/// p xs a -- p a'
-: (partition)           [ partition/test partition/store ] reduce ;
-
-// TODO: std
-/// xs p -- trues falses
-: partition             partition/setup (partition) partition/clean ;
-
-// TODO: std
-: 2dropd   [ 2drop ] dip ;   /// x y z -- z
-
-// TODO: std
-: more?       2dup > ;                /// a max current -- a max current ?
-: store       [ pick push! ] keep ;   /// accum m current -- accum' m current
-
-/// from to -- vector
-: [..)
-    { } spin
-    [ more? ] [ store 1+ ] while
-    2drop ;
-
-: [0..)   0 swap [..) ;   /// n -- vector
-
-// TODO: std
-: 1-   1 - ;   /// n -- n'
-
-// TODO: std
-: 2bi    [ 2keep ] dip apply ;
-
-: in-bounds?   2dup 0 rot length 1- check-bounds #f? ! ;   /// v i -- v i ?
-
-// TODO: std?
-: preslice   0 spin subvector ;                  /// v i -- v'
-: postslice   swap [ length ] keep subvector ;   /// v i -- v'
-
-// TODO: std
-/// vector i -- vector'
-: remove-at
-    in-bounds?
-    [
-        [ preslice ] [ 1+ postslice ] 2bi
-        concat
-    ] [ drop ] if ;
 
 /// xs -- ?
 : dampener-safe?
