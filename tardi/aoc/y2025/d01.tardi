@@ -1,0 +1,29 @@
+
+uses: ../io
+uses: std/io
+uses: std/hashmaps
+uses: std/strings
+uses: std/vectors
+
+exports:
+  part1 part2 ;
+
+
+/// data/str -- xs
+: parse-input   ;
+
+/// xs -- ys
+: ???   ;
+
+/// ys -- checksum/int
+: profit   ;
+
+
+/// data/str -- checksum/int
+: part1   parse-input ??? profit ;
+
+/// -- checksum/int
+: run-sample-1   2025 01 read-sample-data part1 ;
+: run-data-1     2025-01 read-data        part1 ;
+
+
