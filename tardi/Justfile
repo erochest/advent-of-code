@@ -1,10 +1,20 @@
 
-day := "02"
+set dotenv-load := true
+
+year := datetime("%Y")
+day := datetime("%d")
 
 default: test run
 
-test:
-    tardi ./aoc/y2024/d{{day}}-test.tardi --print-stack
+test day=datetime("%d") year=datetime("%Y"):
+    tardi ./aoc/y{{year}}/d{{day}}-test.tardi --print-stack
 
-run:
-    tardi ./aoc/y2024/d{{day}}.tardi
+run day=datetime("%d") year=datetime("%Y"):
+    tardi ./aoc/y{{year}}/d{{day}}.tardi
+
+
+input day=datetime("%d") year=datetime("%Y"):
+    aoc download --input-only --input-file ../data/{{year}}/day{{day}}.data
+
+date day=datetime("%d") year=datetime("%Y"):
+    echo "today is {{day}} of {{year}}"
