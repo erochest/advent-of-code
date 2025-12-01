@@ -9,12 +9,12 @@ uses: std/vectors
 exports:
   mod
   left right
-  do-pair
+  turn-dial
   zero? count-zero
   accum-dial
   parse-input ??? part1 run-data-1
   left-zeros right-zeros
-  do-pair-zero accum-dial-zero
+  turn-dial-zero accum-dial-zero
   ???-??? moar-profit part2
   debug ;
 
@@ -50,24 +50,29 @@ exports:
 /// data/str -- xs
 : parse-input   lines [ parse-line ] map ;
 
+: left?   "L" == ;
+
 /// n line-pair -- n'
-: do-pair
+: turn-dial
     first2 swap
-    "L" ==
+    left?
     [ left ] [ right ] if ;
 
 // TODO: std/math
 /// n -- ?
 : zero?   0 == ;
 
-/// count n -- count' n
+/// count n -- count'
 : count-zero   zero? [ 1+ ] when ;
+
+: get-current-dial   [ dup last ] dip ;   /// dial-log x -- dial-log current x
+: log-dial           over push! ;         /// dial-log next -- dial-log'
 
 /// history pair -- history'
 : accum-dial
-    [ dup last ] dip
-    do-pair
-    over push! ;
+    get-current-dial
+    turn-dial
+    log-dial ;
 
 /// pairs -- dial-settings
 : ???   { 50 } [ accum-dial ] reduce ;
@@ -75,15 +80,23 @@ exports:
 /// ys -- checksum/int
 : profit   [ zero? ] filter vectors/length ;
 
+/// vector n -- vector to from
+: indexes-from-end
+    over vectors/length
+    swap dupd - ;
+
+: invalid-start-index   0 <= ;    /// i -- ?
+: cleanup-indexes       2drop ;   /// to from --
+
 // TODO: std/vectors
 /// xs n -- xs'
 : lastn
-    over vectors/length
-    swap dupd - dup
-    0 <= [ 2drop ] [
+    indexes-from-end
+    dup invalid-start-index [ cleanup-indexes ] [
         spin subvector
     ] if ;
 
+/// x -- x
 : print-col   "\t" print dup print ;
 
 /// lines -- zero-count
@@ -113,39 +126,57 @@ exports:
 
 ///////////////////////////
 
+: pad-zero-dial   [ dup zero? [ drop 100 ] when ] dip ;   /// n x -- n' x
+
+: (spin-left)   100 + ;   /// n -- n'
+
+/// dial -- dial' spin-count
+: spin-left
+    0
+    [ over 0 < ] [
+        [ (spin-left) ] dip 1+
+    ] while
+    [ 100 mod ] dip ;
+
+: on-zero-1+   over zero? [ 1+ ] when ;   /// dial spin-count -- dial spin-count'
+
 /// dial n -- dial' zero-count
 : left-zeros
-    [ dup zero? [ drop 100 ] when ] dip
-    - 0
-    [ over 0 < ] [
-        [ 100 + ] dip 1+
+    pad-zero-dial -
+    spin-left
+    on-zero-1+ ;
+
+: (spin-right)   100 - ;   /// n -- n'
+
+/// dial -- dial' spin-count
+: spin-right
+    0
+    [ over 100 > ] [
+        [ (spin-right) ] dip 1+
     ] while
-    [ 100 mod ] dip
-    over zero? [ 1+ ] when
-;
+    [ 100 mod ] dip ;
 
 /// dial n -- dial' zero-count
 : right-zeros
-    + 0
-    [ over 100 > ] [
-        [ 100 - ] dip 1+
-    ] while
-    [ 100 mod ] dip
-    over zero? [ 1+ ] when
-;
+    +
+    spin-right
+    on-zero-1+ ;
 
 /// dial line-pair -- dial-zero
-: do-pair-zero
+: turn-dial-zero
     first2 swap
-    "L" ==
-    [ left-zeros ] [ right-zeros ] if
+    left? [ left-zeros ] [ right-zeros ] if
     2vector ;
+
+/// dial-log-pairs x -- dial x
+: get-current-dial-from-pair
+    [ dup last first ] dip ;
 
 /// log pair -- log'
 : accum-dial-zero
-    [ dup last first ] dip
-    do-pair-zero
-    over push! ;
+    get-current-dial-from-pair
+    turn-dial-zero
+    log-dial ;
 
 /// lines -- zero-clicks
 : ???-???   { { 50 0 } } [ accum-dial-zero ] reduce ;

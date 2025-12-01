@@ -47,35 +47,35 @@ uses: ./d01
 0 assert==
 
 "left pair should move dial left"
-19 { "L" 19 } do-pair
+19 { "L" 19 } turn-dial
 0 assert==
 
 "left pair wraps"
-0 { "L" 1 } do-pair
+0 { "L" 1 } turn-dial
 99 assert==
 
 "left pair wraps"
-5 { "L" 10 } do-pair
+5 { "L" 10 } turn-dial
 95 assert==
 
 "right pair moves dial right"
-11 { "R" 8 } do-pair
+11 { "R" 8 } turn-dial
 19 assert==
 
 "right pair wraps"
-99 { "R" 1 } do-pair
+99 { "R" 1 } turn-dial
 0 assert==
 
 "right pair wraps"
-95 { "R" 5 } do-pair
+95 { "R" 5 } turn-dial
 0 assert==
 
 "right pair wraps"
-32 { "R" 658 } do-pair
+32 { "R" 658 } turn-dial
 90 assert==
 
 "left pair wraps"
-51 { "L" 679 } do-pair
+51 { "L" 679 } turn-dial
 72 assert==
 
 "count-zero does not count non-zeros"
