@@ -1,0 +1,43 @@
+uses: std/io
+uses: std/strings
+uses: std/vectors
+
+// TODO: std/testing
+// TODO: `tardi -m` to run a module
+// TODO: find and run test files
+
+// TODO: fail on symbol not found
+
+// TODO: spec-test structures
+
+// TODO: verbose flag to always print outcomes
+// TODO: terminal coloring -- green and red
+// TODO: set exit status
+/// ? msg --
+: test-output
+    over [
+        2drop
+    ] [
+        print
+        ": " print
+        .
+    ] if ;
+
+// TODO: how to abstract this out? maybe need assert!= and others
+// TODO: take expected stack and a lambda. print lambda on failing
+/// message expected actual ? --
+: verbose-assert==
+      [ [ >string ] bi@ ] dip   // >string
+      [ print ] 3dip            // message
+      ": " print
+      [ print ] 2dip            // expected
+      " == " " != " ? print     // ==/!=
+      println ;                 // actual
+/// message expected actual ? --
+: quiet-assert==
+    [ 3drop ] [ #f verbose-assert== ] if ;
+
+/// message expected actual --
+// : assert==   2dup == verbose-assert== ;
+: assert==   2dup == quiet-assert== ;
+
