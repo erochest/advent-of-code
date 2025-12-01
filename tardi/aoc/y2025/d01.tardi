@@ -13,7 +13,9 @@ exports:
   zero? count-zero
   accum-dial
   parse-input ??? part1 run-data-1
-  part2
+  left-zeros right-zeros
+  do-pair-zero accum-dial-zero
+  ???-??? moar-profit part2
   debug ;
 
 // `mod` not built in yet :facepalm:
@@ -71,7 +73,7 @@ exports:
 : ???   { 50 } [ accum-dial ] reduce ;
 
 /// ys -- checksum/int
-: profit   [ zero? ] filter length ;
+: profit   [ zero? ] filter vectors/length ;
 
 // TODO: std/vectors
 /// xs n -- xs'
@@ -105,6 +107,71 @@ exports:
 : run-sample-1   2025 01 read-sample-data part1 ;
 : run-data-1     2025 01 read-data        part1 ;
 
-run-data-1 .
+// run-data-1 .
 // 2025 01 read-data lines debug
 // 2025 01 read-sample-data lines debug
+
+///////////////////////////
+
+/// dial n -- dial' zero-count
+: left-zeros
+    [ dup zero? [ drop 100 ] when ] dip
+    - 0
+    [ over 0 < ] [
+        [ 100 + ] dip 1+
+    ] while
+    [ 100 mod ] dip
+    over zero? [ 1+ ] when
+;
+
+/// dial n -- dial' zero-count
+: right-zeros
+    + 0
+    [ over 100 > ] [
+        [ 100 - ] dip 1+
+    ] while
+    [ 100 mod ] dip
+    over zero? [ 1+ ] when
+;
+
+/// dial line-pair -- dial-zero
+: do-pair-zero
+    first2 swap
+    "L" ==
+    [ left-zeros ] [ right-zeros ] if
+    2vector ;
+
+/// log pair -- log'
+: accum-dial-zero
+    [ dup last first ] dip
+    do-pair-zero
+    over push! ;
+
+/// lines -- zero-clicks
+: ???-???   { { 50 0 } } [ accum-dial-zero ] reduce ;
+
+/// zero-clicks -- checksum
+: moar-profit   [ second ] map sum ;
+
+/// lines -- zero-count
+: debug-zero
+        { { 50 0 } } [
+        // log line -- log'
+        dup print
+        parse-line
+        print-col
+        accum-dial-zero
+        dup 10 lastn print-col
+        nl drop
+    ] reduce
+    moar-profit ;
+
+/// data/str -- checksum/int
+: part2   parse-input ???-??? moar-profit ;
+
+/// -- checksum/int
+: run-sample-2   2025 01 read-sample-data part2 ;
+: run-data-2     2025 01 read-data        part2 ;
+
+// 2025 01 read-sample-data lines debug-zero
+run-data-2

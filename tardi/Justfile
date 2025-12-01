@@ -10,7 +10,7 @@ test day=datetime("%d") year=datetime("%Y"):
     tardi ./aoc/y{{year}}/d{{day}}-test.tardi --print-stack
 
 run day=datetime("%d") year=datetime("%Y"):
-    tardi ./aoc/y{{year}}/d{{day}}.tardi
+    tardi ./aoc/y{{year}}/d{{day}}.tardi --print-stack
 
 
 download day=datetime("%d") year=datetime("%Y"):

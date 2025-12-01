@@ -100,3 +100,55 @@ uses: ./d01
 
 "part1 checksum > 736"
 run-data-1 736 assert>
+
+"left-zeros counts no zeros"
+50 10 left-zeros 2vector
+{ 40 0 } assert==
+
+"left-zeros counts when lands on zero"
+50 50 left-zeros 2vector
+{ 0 1 } assert==
+
+"left-zeros counts when passes zero"
+10 20 left-zeros 2vector
+{ 90 1 } assert==
+
+"left-zeros counts when passes zero multiple times"
+10 120 left-zeros 2vector
+{ 90 2 } assert==
+
+"left-zeros counts when passes zero multiple times and ends on zero"
+10 210 left-zeros 2vector
+{ 0 3 } assert==
+
+"left-zero counts"
+0 5 left-zeros 2vector
+{ 95 0 } assert==
+
+"right-zeros counts no zeros"
+50 10 right-zeros 2vector
+{ 60 0 } assert==
+
+"right-zeros counts when lands on zero"
+50 50 right-zeros 2vector
+{ 0 1 } assert==
+
+"right-zeros counts when passes zero"
+90 20 right-zeros 2vector
+{ 10 1 } assert==
+
+"right-zeros counts when passes zero multiple times"
+90 120 right-zeros 2vector
+{ 10 2 } assert==
+
+"right-zeros counts when passes zero multiple times and ends on zero"
+90 210 right-zeros 2vector
+{ 0 3 } assert==
+
+"???-??? counts how many times something goes past zero"
+2025 1 read-sample-data parse-input ???-??? [ second ] map
+{ 0 1 0 1 0 1 1 0 1 0 1 } assert==
+
+"part2 computes right checksum"
+2025 1 read-sample-data part2
+6 assert==
