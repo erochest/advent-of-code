@@ -2,28 +2,109 @@
 uses: ../io
 uses: std/io
 uses: std/hashmaps
+uses: std/math
 uses: std/strings
 uses: std/vectors
 
 exports:
-  part1 part2 ;
+  mod
+  left right
+  do-pair
+  zero? count-zero
+  accum-dial
+  parse-input ??? part1 run-data-1
+  part2
+  debug ;
 
+// `mod` not built in yet :facepalm:
+/// x y -- x%y
+: mod
+    [ 2dup >= ] [
+        [ - ] keep
+    ] while
+    drop ;
+
+/// value -- value'
+: full-spins   [ dup 100 > ] [ 100 - ] while ;
+
+/// dial n -- dial'
+: left
+    full-spins
+    [ 100 + ] dip - abs
+    100 mod ;
+
+/// dial n -- dial'
+: right
+    full-spins
+    +
+    100 mod ;
+
+/// line -- pair
+: parse-line
+    1 split-at
+    parse-int
+    2vector ;
 
 /// data/str -- xs
-: parse-input   ;
+: parse-input   lines [ parse-line ] map ;
 
-/// xs -- ys
-: ???   ;
+/// n line-pair -- n'
+: do-pair
+    first2 swap
+    "L" ==
+    [ left ] [ right ] if ;
+
+// TODO: std/math
+/// n -- ?
+: zero?   0 == ;
+
+/// count n -- count' n
+: count-zero   zero? [ 1+ ] when ;
+
+/// history pair -- history'
+: accum-dial
+    [ dup last ] dip
+    do-pair
+    over push! ;
+
+/// pairs -- dial-settings
+: ???   { 50 } [ accum-dial ] reduce ;
 
 /// ys -- checksum/int
-: profit   ;
+: profit   [ zero? ] filter length ;
 
+// TODO: std/vectors
+/// xs n -- xs'
+: lastn
+    over vectors/length
+    swap dupd - dup
+    0 <= [ 2drop ] [
+        spin subvector
+    ] if ;
+
+: print-col   "\t" print dup print ;
+
+/// lines -- zero-count
+: debug
+    { 50 } [
+        // log line -- log'
+        dup print
+        parse-line
+        print-col
+        accum-dial
+        dup 10 lastn print-col
+        last zero? print-col
+        nl drop
+    ] reduce
+    profit ;
 
 /// data/str -- checksum/int
 : part1   parse-input ??? profit ;
 
 /// -- checksum/int
 : run-sample-1   2025 01 read-sample-data part1 ;
-: run-data-1     2025-01 read-data        part1 ;
+: run-data-1     2025 01 read-data        part1 ;
 
-
+run-data-1 .
+// 2025 01 read-data lines debug
+// 2025 01 read-sample-data lines debug

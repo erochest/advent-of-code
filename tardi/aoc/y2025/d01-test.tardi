@@ -1,0 +1,102 @@
+uses: ../io
+uses: ../testing
+uses: std/io
+uses: std/strings
+uses: std/vectors
+uses: ./d01
+
+
+"mod should handle base case"
+10 100 mod
+10 assert==
+
+"mod should handle factors"
+200 100 mod
+0 assert==
+
+"mod should handle remainders"
+120 100 mod
+20 assert==
+
+"mod should handle remainders"
+220 100 mod
+20 assert==
+
+"left should move dial left"
+19 19 left
+0 assert==
+
+"left wraps"
+0 1 left
+99 assert==
+
+"left wraps"
+5 10 left
+95 assert==
+
+"right moves dial right"
+11 8 right
+19 assert==
+
+"right wraps"
+99 1 right
+0 assert==
+
+"right wraps"
+95 5 right
+0 assert==
+
+"left pair should move dial left"
+19 { "L" 19 } do-pair
+0 assert==
+
+"left pair wraps"
+0 { "L" 1 } do-pair
+99 assert==
+
+"left pair wraps"
+5 { "L" 10 } do-pair
+95 assert==
+
+"right pair moves dial right"
+11 { "R" 8 } do-pair
+19 assert==
+
+"right pair wraps"
+99 { "R" 1 } do-pair
+0 assert==
+
+"right pair wraps"
+95 { "R" 5 } do-pair
+0 assert==
+
+"right pair wraps"
+32 { "R" 658 } do-pair
+90 assert==
+
+"left pair wraps"
+51 { "L" 679 } do-pair
+72 assert==
+
+"count-zero does not count non-zeros"
+7 13 count-zero
+7 assert==
+
+"count-zero does count zeros"
+7 0 count-zero
+8 assert==
+
+"??? turns the dial"
+2025 1 read-sample-data parse-input ???
+{ 50 82 52 0 95 55 0 99 0 14 32 } assert==
+
+"accum-dial updates dial settings log"
+{ 4 7 } { "R" 3 } accum-dial
+{ 4 7 10 } assert==
+
+"part1 computes right checksum"
+2025 1 read-sample-data part1
+3 assert==
+
+"part1 checksum > 736"
+run-data-1 736 assert>

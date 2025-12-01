@@ -13,8 +13,12 @@ run day=datetime("%d") year=datetime("%Y"):
     tardi ./aoc/y{{year}}/d{{day}}.tardi
 
 
-input day=datetime("%d") year=datetime("%Y"):
+download day=datetime("%d") year=datetime("%Y"):
     aoc download --input-only --input-file ../data/{{year}}/day{{day}}.data
+
+
+submit part value day=datetime("%d") year=datetime("%Y"):
+    aoc submit --year={{year}} --day={{day}} {{part}} {{value}}
 
 date day=datetime("%d") year=datetime("%Y"):
     echo "today is {{day}} of {{year}}"

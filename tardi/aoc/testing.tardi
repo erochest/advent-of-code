@@ -25,6 +25,8 @@ uses: std/vectors
 
 // TODO: how to abstract this out? maybe need assert!= and others
 // TODO: take expected stack and a lambda. print lambda on failing
+// TODO: print FAIL or SUCCESS
+// TODO: print color
 /// message expected actual ? --
 : verbose-assert==
       [ [ >string ] bi@ ] dip   // >string
@@ -33,11 +35,23 @@ uses: std/vectors
       [ print ] 2dip            // expected
       " == " " != " ? print     // ==/!=
       println ;                 // actual
-/// message expected actual ? --
+
+: verbose-assert>
+      [ [ >string ] bi@ ] dip   // >string
+      [ print ] 3dip            // message
+      ": " print
+      [ print ] 2dip            // expected
+      " > " " <= " ? print      // pass/fail
+      println ;                 // actual
+
+/// message actual expected ? --
 : quiet-assert==
     [ 3drop ] [ #f verbose-assert== ] if ;
 
-/// message expected actual --
-// : assert==   2dup == verbose-assert== ;
-: assert==   2dup == quiet-assert== ;
+/// message actual expected --
+: assert==   2dup == verbose-assert== ;
+// : assert==   2dup == quiet-assert== ;
+
+/// message actual expected-boundary --
+: assert>   2dup > verbose-assert> ;
 
