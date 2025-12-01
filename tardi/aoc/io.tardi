@@ -1,0 +1,71 @@
+
+uses: std/io
+uses: std/strings
+
+// TODO: to aoc/io
+
+// TODO: string formatting
+// TODO: path library
+
+exports: sample-path data-path read-sample-data read-data ;
+
+: repeat-test    dup 0 > ;
+: repeat-iter     1 - ;
+: repeat-extend   dupd concat ;
+
+// TODO: std
+/// times string -- string
+/// repeats a string times times
+: repeat-string
+    "" rot
+    [ repeat-test ] [
+      [ repeat-extend ] dip
+      repeat-iter
+    ] while
+    drop nip ;
+
+/// string width -- string
+/// this pads a string with '0' to be width
+: pad0
+    over length -
+    dup 0 > [
+        "0" repeat-string
+        swap concat
+    ] [
+        drop
+    ] if ;
+
+: fixture-day-path
+    >string 2 pad0
+    "-0.fixture" concat
+    "/day" swap concat ;
+: year-path   >string 4 pad0 ;
+: sample-dir-path    "../sample/" swap ;
+
+/// year day -- filename
+/// the path to a sample file for a given day
+: sample-path 
+    fixture-day-path
+    [ year-path ] dip concat
+    sample-dir-path concat ;
+
+: data-day-path
+    >string 2 pad0
+    ".data" concat
+    "/day" swap concat ;
+: data-dir-path   "../data/" swap ;
+
+/// year day -- filename
+/// the path to the data file for a given day
+: data-path
+    data-day-path
+    [ year-path ] dip concat
+    data-dir-path concat ;
+
+/// year day -- string
+/// read the sample data for a day
+: read-sample-data   sample-path read-file drop ;
+
+/// year day -- string
+/// read the data for a day
+: read-data   data-path read-file drop ;
