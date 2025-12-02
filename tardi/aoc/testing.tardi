@@ -12,6 +12,7 @@ uses: std/vectors
 
 // TODO: verbose flag to always print outcomes
 // TODO: terminal coloring -- green and red
+// TODO: track pass/fail of tests and run
 // TODO: set exit status
 /// ? msg --
 : test-output

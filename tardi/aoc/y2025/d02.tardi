@@ -1,0 +1,77 @@
+
+uses: ../io
+uses: std/io
+uses: std/hashmaps
+uses: std/math
+uses: std/strings
+uses: std/vectors
+
+exports:
+  parse-ranges
+  [..]
+  flatten
+  duplicating?
+  part1
+  part2 ;
+
+// TODO: benchmark and optimize. this takes for-ev-er on the real data
+
+: strip-line-end     "\n" strip-end "\r" strip-end ;     /// str -- str
+: split-ranges       "," split-all ;                     /// str -- vector
+: parse-range-pair   "-" split-all [ parse-int ] map ;   /// str -- pair/int
+
+/// str -- vector/pair/int
+: parse-ranges
+    strip-line-end
+    split-ranges
+    [ parse-range-pair ] map ;
+
+// TODO: std/vectors
+: more?       2dup >= ;               /// a max current -- a max current ?
+: store       [ pick push! ] keep ;   /// accum m current -- accum' m current
+/// from to -- vector
+: [..]
+    { } spin
+    [ more? ] [ store 1+ ] while
+    2drop ;
+
+: bisect     dup strings/length 2 / split-at ;   /// str -- str str
+: duplicating?   >string bisect == ;                 /// n -- ?
+
+/// vector/vector -- vector
+: flatten   { } [ concat ] reduce ;
+
+/// str -- vector/int
+: parse-and-expand
+    "parsing ranges" println
+    parse-ranges
+    "expanding ranges" println
+    [ first2 [..] ] map
+    "flattening vectors" println
+    flatten ;
+
+/// data/str -- checksum/int
+: part1
+    parse-and-expand
+    "identifying duplicating IDs" println
+    [ duplicating? ] filter
+    "summing" println
+    sum ;
+
+/// -- checksum/int
+: run-sample-1   2025 02 read-sample-data part1 ;
+: run-data-1     2025 02 read-data        part1 ;
+
+///////////////////////////
+
+/// data/str -- checksum/int
+: part2 ;
+
+/// -- checksum/int
+: run-sample-2   2025 02 read-sample-data part2 ;
+: run-data-2     2025 02 read-data        part2 ;
+
+// run-sample-1 .
+// run-data-1 .
+// run-sample-2 .
+// run-data-2 .
