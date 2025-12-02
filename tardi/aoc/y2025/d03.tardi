@@ -1,0 +1,149 @@
+
+uses: ../io
+uses: std/io
+uses: std/hashmaps
+uses: std/math
+uses: std/strings
+uses: std/vectors
+
+exports:
+  parse-input
+  select-first
+  select-second
+  select-digits
+  find-max-joltage
+  part1
+  part2 ;
+
+
+: parse-line    >utf8 [ utf8>digit ] map ;   /// str -- vector/int
+: parse-input   lines [ parse-line ] map ;   /// str -- vector/vector/int
+
+/// vector/int -- vector/int'
+: but-last   [ 0 swap vectors/length 1- ] keep subvector ;
+
+/// accum n -- accum max n
+: extract-max   [ dup first ] dip ;
+
+/// { max max-index index } n -- { n index index }
+: set-max!
+  0 pick set-nth!
+  dup third
+  1 pick set-nth! ;
+/// { max max-index index } -- { max max-index index' }
+: inc-index!
+  dup third
+  1+
+  2 pick set-nth! ;
+
+/// vector/int -- highest-digit index
+: select-first
+  but-last
+  { 0 -1 0 } [
+    extract-max
+    [ >= ] keep swap [
+      drop
+    ] [
+      set-max!
+    ] if
+    inc-index!
+  ] reduce
+  first2 ;
+
+// TODO: std/math
+: math/max         [ > ] 2keep ? ;                          /// x y -- xy
+
+// TODO: std/vectors
+/// xs -- x
+: max
+    dup first [
+      math/max
+    ] reduce ;
+
+/// xs -- max
+: select-second   max ;
+
+/// digits -- x y
+: select-digits
+  dup select-first 1+
+  rot
+  [ vectors/length ] keep subvector
+  select-second ;
+
+: pair>joltage   [ 10 * ] dip + ;   /// x y -- xy
+
+/// digits -- n
+: find-max-joltage
+  select-digits
+  pair>joltage ;
+
+/// x -- x
+: debug
+  dup print "\t" print ;
+
+/// x y -- x y
+: 2debug
+  2dup 2vector debug drop ;
+
+// TODO: std/vectors
+/// xs i -- xs1 xs2
+: vectors/split-at
+  [ 0 -rot subvector ] 2keep
+  [ vectors/length ] keep
+  subvector
+  ;
+
+/// x y ns --
+: debug-slices
+  swap
+  [
+    [ index-of? ] keep
+    [ 0 -rot subvector debug drop ] 2keep
+    [ vectors/length ] keep
+    subvector
+  ] dip
+  swap
+  [ index-of? ] keep
+  vectors/split-at
+  [ debug drop ] bi@ ;
+
+/// data/str -- int
+: debug-part1
+  lines [
+    // debug
+    parse-line
+    // debug
+    [ select-digits ] keep
+    2dupd debug-slices
+    // 2debug
+    pair>joltage
+    debug
+    nl
+  ] map
+  sum ;
+
+/// data/str -- checksum/int
+: part1
+  parse-input
+  [ find-max-joltage ] map
+  sum ;
+
+/// -- checksum/int
+: run-sample-1   2025 03 read-sample-data part1 ;
+: run-data-1     2025 03 read-data        part1 ;
+
+///////////////////////////
+
+/// data/str -- checksum/int
+: part2 ;
+
+/// -- checksum/int
+: run-sample-2   2025 03 read-sample-data part2 ;
+: run-data-2     2025 03 read-data        part2 ;
+
+// run-sample-1 .
+// run-data-1 .
+// run-sample-2 .
+// run-data-2 .
+
+// 2025 03 read-data debug-part1 .
