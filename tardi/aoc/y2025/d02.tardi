@@ -12,6 +12,11 @@ exports:
   flatten
   duplicating?
   part1
+  ||
+  at-end?
+  chunk-on
+  safe-all?
+  repeating?
   part2 ;
 
 // TODO: benchmark and optimize. this takes for-ev-er on the real data
@@ -64,8 +69,74 @@ exports:
 
 ///////////////////////////
 
+/// lambda1 lambda2 -- ?
+: ||
+    [ apply ] dip swap
+    [
+        drop #t
+    ] [
+        apply
+    ] if ;
+
+/// str|#f -- ?
+: at-end?
+    [
+        dup #f ==
+        dup [ nip ] when
+    ] [ strings/empty? ] || ;
+
+// TODO: std/strings
+/// str n -- vector/str
+: chunk-on
+    { } -rot
+    [ over at-end? ! ] [
+        [
+            split-at
+            [ over push! ] dip
+        ] keep
+    ] while
+    2drop ;
+
+// TODO: std/vectors
+/// vector predicate -- ?
+: safe-all?
+    swap #t
+    [
+        -rot
+        [ [ apply ] keep ] dip
+        rot and
+    ] reduce
+    nip ;
+
+// TODO: std/vectors
+/// vector predicate -- ?
+: any?
+    swap #f
+    [
+        -rot
+        [ [ apply ] keep ] dip
+        rot or
+    ] reduce
+    nip ;
+
+/// n -- ?
+: repeating?
+    >string
+    dup strings/length 2 / 1 swap [..]
+    [ dupd chunk-on ] map nip
+    [
+        [ first ] keep
+        [ dupd == ] safe-all?
+        nip
+    ] any? ;
+
 /// data/str -- checksum/int
-: part2 ;
+: part2
+    parse-and-expand
+    "identifying repeating IDs" println
+    [ repeating? ] filter
+    "summing" println
+    sum ;
 
 /// -- checksum/int
 : run-sample-2   2025 02 read-sample-data part2 ;

@@ -51,3 +51,75 @@ parse-ranges
 "part1 sample should return 1227775554"
 2025 02 read-sample-data part1
 1227775554 assert==
+
+"|| returns true if first is true"
+[ #t ] [ #t ] || #t assert==
+
+"|| returns true if second is true"
+[ #f ] [ #t ] || #t assert==
+
+"|| returns false if neither is true"
+[ #f ] [ #f ] || #f assert==
+
+"at-end? recognizes #f"
+#f at-end? #t assert==
+
+"at-end? recognizes \"\""
+"" at-end? #t assert==
+
+"at-end? does not recognize non-empty strings "
+"not at end" at-end? #f assert==
+
+"chunk-on returns empty vector with empty string"
+"" 2 chunk-on
+{ } assert==
+
+"chunk-on returns singleton vector with chunk-sized string"
+"ab" 2 chunk-on
+{ "ab" } assert==
+
+"chunk-on chunks string into vector"
+"ababab" 2 chunk-on
+{ "ab" "ab" "ab" } assert==
+
+"chunk-on chunks string with non-even size"
+"abcabcabc" 3 chunk-on
+{ "abc" "abc" "abc" } assert==
+
+"chunk-on chunks string with trailing characters"
+"abcabcabcde" 3 chunk-on
+{ "abc" "abc" "abc" "de" } assert==
+
+"repeating? should find duplicates ranges"
+12341234 repeating? #t assert==
+
+"repeating? should find triplicates ranges"
+123123123 repeating? #t assert==
+
+"repeating? should find many repeats: 1212121212"
+1212121212 repeating? #t assert==
+
+"repeating? should find many repeats: 1111111"
+1111111 repeating? #t assert==
+
+"repeating? should not find numbers that do not repeat: 95"
+95 repeating? #f assert==
+
+"repeating? should not find numbers that do not repeat: 995"
+995 repeating? #f assert==
+
+"safe-all? combines simple tests"
+{ "a" "bx" "c" } [ strings/length 1 == ] safe-all?
+{ "a" "b" "c" } [ strings/length 1 == ] safe-all?
+2vector
+{ #f #t } assert==
+
+"safe-all? works with predicates that look at the rest of the stack"
+"a" { "a" "a" "a" } [ dupd == ] safe-all? nip
+"a" { "a" "b" "a" } [ dupd == ] safe-all? nip
+2vector
+{ #t #f } assert==
+
+"part2 sample should return 1227775554"
+2025 02 read-sample-data part2
+4174379265 assert==
