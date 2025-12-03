@@ -1,0 +1,59 @@
+uses: ../io
+uses: ../testing
+uses: std/io
+uses: std/strings
+uses: std/vectors
+uses: ./d04
+
+
+"dimensions provides the width and height of the matrix: 2x3"
+{ { 1 2 } { 3 4 } { 5 6 } } dimensions 2vector
+{ 2 3 } assert==
+
+"dimensions provides the width and height of the matrix: 3x4"
+{ { 1 2 3 } { 3 4 5 } { 5 6 7 } { 7 8 9 } } dimensions 2vector
+{ 3 4 } assert==
+
+"combine joins each of the second vector with each of the first"
+{ 1 2 3 } { 10 20 30 } combine
+{ { 1 10 } { 1 20 } { 1 30 } 
+  { 2 10 } { 2 20 } { 2 30 }
+  { 3 10 } { 3 20 } { 3 30 } } assert==
+
+"walk-matrix provides each function with coordinates"
+{ { 1 2 } { 3 4 } { 5 6 } } [ nip ] walk-matrix
+{ { 0 0 } { 0 1 } { 0 2 }
+  { 1 0 } { 1 1 } { 1 2 } } assert==
+
+"filter removes objects that don't match the predicate"
+{ "a" "b" "c" "de" } [ strings/length 1 == ] filter
+{ "a" "b" "c" } assert==
+
+"filter works with predicates that reach into the stack"
+"b" { "a" "b" "c" "de" } [ dupd != ] filter nip
+{ "a" "c" "de" } assert==
+
+"surrounding-coordinates returns all coordinates for a place"
+{ 10 10 } { 5 5 } surrounding-coordinates
+{ { 4 4 } { 4 5 } { 4 6 }
+  { 5 4 }         { 5 6 }
+  { 6 4 } { 6 5 } { 6 6 } } assert==
+
+"surrounding-coordinates removes coordinates off the grid"
+{ 10 10 } { 9 0 } surrounding-coordinates
+{ { 8 0 }
+  { 8 1 } { 9 1 } } assert==
+
+"part1 sample should return 13"
+2025 04 read-sample-data part1 // debug-part1
+13 assert==
+
+"part1 data should be more than 1548"
+2025 04 read-data part1
+1548 assert>
+
+// "part2 sample should return -1"
+// 2025 04 read-sample-data part2
+// -1 assert==
+
+clear
