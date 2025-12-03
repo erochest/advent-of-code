@@ -20,15 +20,11 @@ exports:
 : parse-line    >utf8 [ utf8>digit ] map ;   /// str -- vector/int
 : parse-input   lines [ parse-line ] map ;   /// str -- vector/vector/int
 
-/// vector/int n -- vector/int'
-: but-last
-  0 swap
-  pick vectors/length
-  swap -
-  rot subvector ;
+: from       0 swap ;
+: to         pick vectors/length swap - ;
+: but-last   from to rot subvector ;   /// vector/int n -- vector/int'
 
-/// accum n -- accum max n
-: extract-max   [ dup first ] dip ;
+: extract-max   [ dup first ] dip ;   /// accum n -- accum max n
 
 /// { max max-index index } n -- { n index index }
 : set-max!
@@ -41,14 +37,16 @@ exports:
   1+
   2 pick set-nth! ;
 
+: is-greater?   [ < ] keep swap ;
+
 /// vector/int -- max index
 : max-index
   { 0 -1 0 } [
     extract-max
-    [ >= ] keep swap [
-      drop
-    ] [
+    is-greater? [
       set-max!
+    ] [
+      drop
     ] if
     inc-index!
   ] reduce
@@ -63,33 +61,26 @@ exports:
 : math/max         [ > ] 2keep ? ;                          /// x y -- xy
 
 // TODO: std/vectors
-/// xs -- x
-: max
-    dup first [
-      math/max
-    ] reduce ;
+: max   dup first [ math/max ] reduce ;   /// xs -- x
 
 /// xs -- max
 : select-second   max ;
 
 : push-max!   [ over push! ] dip ;   /// xs x i -- xs' i
 
-/// ds c a i -- ds' c a
-: crop-digits
-  -rot
-  [
-    over vectors/length
-    rot subvector
-  ] 2dip ;
+: (crop-digits)   over vectors/length rot subvector ;   /// ds i -- ds'
+: crop-digits     -rot [ (crop-digits) ] 2dip ;         /// ds c a i -- ds' c a
 
 : select-iter      [ 1- ] dip ;   /// c x -- c' x
 : select-cleanup   2dropd ;       /// ds c x -- x
+
+: digits-to-search   pick pick 1- but-last ;   /// ds c a -- ds c a ds'
 
 /// digits count -- xs
 : select-digits
   { }
   [ over 0 > ] [
-    pick pick 1- but-last
+    digits-to-search
     max-index 1+
     push-max!
     crop-digits
@@ -97,32 +88,18 @@ exports:
   ] while
   select-cleanup ;
 
-// xs -- x
-: pair>joltage
-  0 [
-    [ 10 * ] dip +
-  ] reduce ;
+: pair>joltage   0 [ [ 10 * ] dip + ] reduce ;   // xs -- x
 
 /// digits count -- n
-: find-max-joltage
-  select-digits
-  pair>joltage ;
+: find-max-joltage   select-digits pair>joltage ;
 
-/// x -- x
-: debug
-  dup print "\t" print ;
-
-/// x y -- x y
-: 2debug
-  2dup 2vector debug drop ;
+: debug    dup print "\t" print ;      /// x -- x
+: 2debug   2dup 2vector debug drop ;   /// x y -- x y
 
 // TODO: std/vectors
-/// xs i -- xs1 xs2
-: vectors/split-at
-  [ 0 -rot subvector ] 2keep
-  [ vectors/length ] keep
-  subvector
-  ;
+: split-prefix       0 -rot subvector ;                    /// i xs -- pref
+: split-post         [ vectors/length ] keep subvector ;   /// i xs -- post
+: vectors/split-at   [ split-prefix ] 2keep split-post ;   /// i xs -- xs1 xs2
 
 /// x y ns --
 : debug-slices
