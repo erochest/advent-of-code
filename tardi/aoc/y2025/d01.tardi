@@ -58,7 +58,6 @@ exports:
     left?
     [ left ] [ right ] if ;
 
-// TODO: std/math
 /// n -- ?
 : zero?   0 == ;
 
@@ -88,7 +87,6 @@ exports:
 : invalid-start-index   0 <= ;    /// i -- ?
 : cleanup-indexes       2drop ;   /// to from --
 
-// TODO: std/vectors
 /// xs n -- xs'
 : lastn
     indexes-from-end

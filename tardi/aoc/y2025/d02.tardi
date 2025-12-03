@@ -31,7 +31,6 @@ exports:
     split-ranges
     [ parse-range-pair ] map ;
 
-// TODO: std/vectors
 : more?       2dup >= ;               /// a max current -- a max current ?
 : store       [ pick push! ] keep ;   /// accum m current -- accum' m current
 /// from to -- vector
@@ -85,7 +84,6 @@ exports:
         dup [ nip ] when
     ] [ strings/empty? ] || ;
 
-// TODO: std/strings
 /// str n -- vector/str
 : chunk-on
     { } -rot
@@ -97,7 +95,6 @@ exports:
     ] while
     2drop ;
 
-// TODO: std/vectors
 /// vector predicate -- ?
 : safe-all?
     swap #t
@@ -108,7 +105,6 @@ exports:
     ] reduce
     nip ;
 
-// TODO: std/vectors
 /// vector predicate -- ?
 : any?
     swap #f
