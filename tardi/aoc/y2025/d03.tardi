@@ -7,6 +7,7 @@ uses: std/strings
 uses: std/vectors
 
 exports:
+  but-last max-index
   parse-input
   select-first
   select-second
@@ -19,8 +20,12 @@ exports:
 : parse-line    >utf8 [ utf8>digit ] map ;   /// str -- vector/int
 : parse-input   lines [ parse-line ] map ;   /// str -- vector/vector/int
 
-/// vector/int -- vector/int'
-: but-last   [ 0 swap vectors/length 1- ] keep subvector ;
+/// vector/int n -- vector/int'
+: but-last
+  0 swap
+  pick vectors/length
+  swap -
+  rot subvector ;
 
 /// accum n -- accum max n
 : extract-max   [ dup first ] dip ;
@@ -36,9 +41,8 @@ exports:
   1+
   2 pick set-nth! ;
 
-/// vector/int -- highest-digit index
-: select-first
-  but-last
+/// vector/int -- max index
+: max-index
   { 0 -1 0 } [
     extract-max
     [ >= ] keep swap [
@@ -49,6 +53,11 @@ exports:
     inc-index!
   ] reduce
   first2 ;
+
+/// vector/int -- highest-digit index
+: select-first
+  1 but-last
+  max-index ;
 
 // TODO: std/math
 : math/max         [ > ] 2keep ? ;                          /// x y -- xy
@@ -63,16 +72,38 @@ exports:
 /// xs -- max
 : select-second   max ;
 
-/// digits -- x y
+: push-max!   [ over push! ] dip ;   /// xs x i -- xs' i
+
+/// ds c a i -- ds' c a
+: crop-digits
+  -rot
+  [
+    over vectors/length
+    rot subvector
+  ] 2dip ;
+
+: select-iter      [ 1- ] dip ;   /// c x -- c' x
+: select-cleanup   2dropd ;       /// ds c x -- x
+
+/// digits count -- xs
 : select-digits
-  dup select-first 1+
-  rot
-  [ vectors/length ] keep subvector
-  select-second ;
+  { }
+  [ over 0 > ] [
+    pick pick 1- but-last
+    max-index 1+
+    push-max!
+    crop-digits
+    select-iter
+  ] while
+  select-cleanup ;
 
-: pair>joltage   [ 10 * ] dip + ;   /// x y -- xy
+// xs -- x
+: pair>joltage
+  0 [
+    [ 10 * ] dip +
+  ] reduce ;
 
-/// digits -- n
+/// digits count -- n
 : find-max-joltage
   select-digits
   pair>joltage ;
@@ -125,7 +156,7 @@ exports:
 /// data/str -- checksum/int
 : part1
   parse-input
-  [ find-max-joltage ] map
+  [ 2 find-max-joltage ] map
   sum ;
 
 /// -- checksum/int
@@ -135,7 +166,10 @@ exports:
 ///////////////////////////
 
 /// data/str -- checksum/int
-: part2 ;
+: part2
+  parse-input
+  [ 12 find-max-joltage ] map
+  sum ;
 
 /// -- checksum/int
 : run-sample-2   2025 03 read-sample-data part2 ;

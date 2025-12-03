@@ -22,51 +22,51 @@ uses: ./d03
 9 assert==
 
 "select-digits should return the highest digits: 5 3"
-{ 1 2 3 4 5 3 2 1 } select-digits 2vector
+{ 1 2 3 4 5 3 2 1 } 2 select-digits
 { 5 3 } assert==
 
 "select-digits should return the highest digits: 5 9"
-{ 1 2 3 4 5 3 2 1 9 } select-digits 2vector
+{ 1 2 3 4 5 3 2 1 9 } 2 select-digits
 { 5 9 } assert==
 
 "select-digits should return the highest digits: 8 9"
-{ 1 2 3 4 5 3 2 1 8 9 } select-digits 2vector
+{ 1 2 3 4 5 3 2 1 8 9 } 2 select-digits
 { 8 9 } assert==
 
 "select-digits should return the highest digits: 8 8"
-{ 2 3 4 6 3 8 3 3 2 8 4 5 2 3 4 1 3 } select-digits 2vector
+{ 2 3 4 6 3 8 3 3 2 8 4 5 2 3 4 1 3 } 2 select-digits
 { 8 8 } assert==
 
 "find-max-joltage should return the highest digits as a single number: 53"
-{ 1 2 3 4 5 3 2 1 } find-max-joltage
+{ 1 2 3 4 5 3 2 1 } 2 find-max-joltage
 53 assert==
 
 "find-max-joltage should return the highest digits as a single number: 59"
-{ 1 2 3 4 5 3 2 1 9 } find-max-joltage
+{ 1 2 3 4 5 3 2 1 9 } 2 find-max-joltage
 59 assert==
 
 "find-max-joltage should return the highest digits as a single number: 99"
-{ 1 2 3 4 9 3 2 1 9 } find-max-joltage
+{ 1 2 3 4 9 3 2 1 9 } 2 find-max-joltage
 99 assert==
 
 "find-max-joltage should return the highest digits as a single number: 88"
-{ 2 3 4 6 3 8 3 3 2 8 4 5 2 3 4 1 3 } find-max-joltage
+{ 2 3 4 6 3 8 3 3 2 8 4 5 2 3 4 1 3 } 2 find-max-joltage
 88 assert==
 
 "find-max-joltage: 987654321111111"
-{ 9 8 7 6 5 4 3 2 1 1 1 1 1 1 1 } find-max-joltage
+{ 9 8 7 6 5 4 3 2 1 1 1 1 1 1 1 } 2 find-max-joltage
 98 assert==
 
 "find-max-joltage: 811111111111119"
-{ 8 1 1 1 1 1 1 1 1 1 1 1 1 1 9 } find-max-joltage
+{ 8 1 1 1 1 1 1 1 1 1 1 1 1 1 9 } 2 find-max-joltage
 89 assert==
 
 "find-max-joltage: 234234234234278"
-{ 2 3 4 2 3 4 2 3 4 2 3 4 2 7 8 } find-max-joltage
+{ 2 3 4 2 3 4 2 3 4 2 3 4 2 7 8 } 2 find-max-joltage
 78 assert==
 
 "find-max-joltage: 818181911112111"
-{ 8 1 8 1 8 1 9 1 1 1 1 2 1 1 1 } find-max-joltage
+{ 8 1 8 1 8 1 9 1 1 1 1 2 1 1 1 } 2 find-max-joltage
 92 assert==
 
 "part1 sample should return 357"
@@ -77,6 +77,6 @@ uses: ./d03
 2025 03 read-data part1
 17188 assert>
 
-// "part2 sample should return 1227775554"
-// 2025 03 read-sample-data part2
-// 4174379265 assert==
+"part2 sample should return 3121910778619"
+2025 03 read-sample-data part2
+3121910778619 assert==
