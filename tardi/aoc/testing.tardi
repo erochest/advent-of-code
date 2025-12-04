@@ -45,6 +45,14 @@ uses: std/vectors
       " > " " <= " ? print      // pass/fail
       println ;                 // actual
 
+: verbose-assert<
+      [ [ >string ] bi@ ] dip   // >string
+      [ print ] 3dip            // message
+      ": " print
+      [ print ] 2dip            // expected
+      " < " " >= " ? print      // pass/fail
+      println ;                 // actual
+
 /// message actual expected ? --
 : quiet-assert==
     [ 3drop ] [ #f verbose-assert== ] if ;
@@ -55,4 +63,7 @@ uses: std/vectors
 
 /// message actual expected-boundary --
 : assert>   2dup > verbose-assert> ;
+
+/// message actual expected-boundary --
+: assert<   2dup < verbose-assert< ;
 

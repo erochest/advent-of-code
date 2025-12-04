@@ -36,6 +36,9 @@ exports:
 /// x --
 : debug   print " " print .s ;
 
+/// x -- x
+: debug-col   [ print ] keep "\t" print ;
+
 // TODO: std/vectors
 /// vector/vector -- vector
 : flatten   { } [ concat ] reduce ;
@@ -131,19 +134,16 @@ exports:
 : debug-part1
   parse-input
   [
-    "walk-matrix" debug
     is-set?
-    "\tis-set?" debug
     [
+      debug-col
       dupd [ dimensions 2vector ] dip surrounding-coordinates
-      "\tsurrounding-coordinates" debug
+      debug-col
       [ dupd matrix-nth ] map
-      "\tmatrix-nth map" debug
+      debug-col
       sum nip
-      "\tsurrounding-sum" debug
-      [ 4 < "\tsum < 4" debug drop ] keep
+      debug-col nl
     ] [
-      "\tskipping" debug
       2drop 0
     ] if
   ] walk-matrix
@@ -164,6 +164,6 @@ exports:
 : run-data-2     2025 04 read-data        part2 ;
 
 // run-sample-1 .
-run-data-1 .
+// run-data-1 .
 // run-sample-2 .
 // run-data-2 .
