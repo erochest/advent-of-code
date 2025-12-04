@@ -1,0 +1,38 @@
+uses: ../io
+uses: ../testing
+uses: std/hashmaps
+uses: std/io
+uses: std/strings
+uses: std/vectors
+uses: ./d05
+
+">>fresh! adds an item to the fresh set"
+<parse-accum> 42 over >>fresh!
+fresh>> keys
+{ 42 } assert==
+
+">>in-stock! adds an item to the in-stock list"
+<parse-accum> 13 over >>in-stock!
+in-stock>>
+{ 13 } assert==
+
+">>state! sets the current state"
+<parse-accum> 3 over >>state!
+state>>
+3 assert==
+
+"parse-input returns a set of fresh ingredients"
+2025 05 read-sample-data parse-input drop keys dup sort!
+{ 3 4 5 10 11 12 13 14 15 16 17 18 19 20 } assert==
+
+"parse-input returns a set of fresh ingredients"
+2025 05 read-sample-data parse-input nip dup sort!
+{ 1 5 8 11 17 32 } assert==
+
+"part1 sample should return 3"
+2025 05 read-sample-data part1
+3 assert==
+
+// "part2 sample should return -1"
+// 2025 05 read-sample-data part2
+// -1 assert==

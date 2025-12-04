@@ -1,0 +1,103 @@
+
+uses: ../io
+uses: std/io
+uses: std/hashmaps
+uses: std/math
+uses: std/strings
+uses: std/vectors
+
+exports:
+  <parse-accum>
+  fresh>> in-stock>> state>>
+  >>fresh! >>in-stock! >>state!
+  parse-input
+  part1
+  part2 ;
+
+
+// TODO: std/vector
+/// a b -- xss
+: 3vector
+  <vector>
+  tuck push-left!
+  tuck push-left!
+  tuck push-left! ;
+
+/// -- parse-accum
+: <parse-accum>   <hashmap> <vector> 0 3vector ;
+
+: fresh>>      first ;    /// accum -- hashmap
+: in-stock>>   second ;   /// accum -- vector
+: state>>      third ;    /// accum -- int
+
+: >>fresh!      fresh>> 0 swap set! ;   /// int accum --
+: >>in-stock!   in-stock>> push! ;      /// int accum --
+: >>state!      2 swap set-nth! ;       /// int accum --
+
+: change-to-parsing-in-stock   1 over >>state! ;   /// accum -- accum'
+
+: add-all-fresh   [ over >>fresh! ] each ;   /// accum vector -- accum'
+
+: parse-range   "-" split [ parse-int ] bi@ ;   /// line -- from to
+
+/// accum line -- accum'
+: parse-fresh
+  dup strings/empty? [
+    drop change-to-parsing-in-stock
+  ] [
+    parse-range [..] add-all-fresh
+  ] if ;
+
+: parse-in-stock   parse-int over >>in-stock! ;   /// accum line -- accum'
+
+/// accum line -- accum'
+: parse-line   over state>> zero? [ parse-fresh ] [ parse-in-stock ] if ;
+
+/// str -- hashmap vector
+: parse-input
+    lines
+    <parse-accum> [ parse-line ] reduce
+    first2 ;
+
+: is-fresh?   hashmaps/get nip ;   /// ingredient fresh-set -- ?
+
+// TODO: there are some patterns here that could be factored
+// - rotd swap
+// - swap [ x ] dip swap (is there a dipd?)
+// TODO: std/vectors
+// the current filter there doesn't work with predicates that reach into the stack
+: clean-apply   swap [ swap [ apply ] keep ] dip ;   /// pred accum i -- ? pred accum
+: filter?       [ clean-apply ] keep rotd swap ;     /// pred accum i -- pred accum i ?
+: push-if!      [ over push! ] [ drop ] if ;         /// xs x ?       -- xs'
+: (filter)      [ filter? push-if! ] reduce ;        /// p xs accum -- p accum
+: filter        swap { } (filter) nip ;              /// xs p -- xs'
+
+// TODO: std/vectors
+// TODO: don't create a vector in between
+/// xs predicate -- int
+: count   filter vectors/length ;
+
+/// data/str -- checksum/int
+: part1
+  parse-input
+  [ over is-fresh? ] count
+  nip ;
+
+/// -- checksum/int
+: run-sample-1   2025 05 read-sample-data part1 ;
+: run-data-1     2025 05 read-data        part1 ;
+
+///////////////////////////
+
+/// data/str -- checksum/int
+: part2   ;
+
+/// -- checksum/int
+: run-sample-2   2025 05 read-sample-data part2 ;
+: run-data-2     2025 05 read-data        part2 ;
+
+// run-sample-1 .
+run-data-1 .
+// run-sample-2 .
+// run-data-2 .
+
