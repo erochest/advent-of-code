@@ -1,0 +1,7 @@
+[project]
+name = "advent_of_code"
+version = "0.1.0"
+description = "solutions for advent of code"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
