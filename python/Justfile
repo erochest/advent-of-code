@@ -6,8 +6,8 @@ day := datetime("%d")
 test:
     uv run python -m pytest
 
-run day=datetime("%e") year=datetime("%Y"):
-    uv run python -c 'from aoc.y2025.day04 import part1; from aoc.io import read_data_file; print(part1(read_data_file({{year}}, {{day}})))'
+run part="1" day=datetime("%d") year=datetime("%Y"):
+    uv run python -c 'from aoc.y2025.day{{day}} import part{{part}}; from aoc.io import read_data_file; print(part{{part}}(read_data_file({{year}}, {{trim_start_match(day, "0")}})))'
 
 download day=datetime("%d") year=datetime("%Y"):
     aoc download --input-only --input-file ../data/{{year}}/day{{day}}.data
