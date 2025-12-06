@@ -1,2 +1,20 @@
+set dotenv-load := true
+
+year := datetime("%Y")
+day := datetime("%d")
+
 test:
-  uv run python -m pytest
+    uv run python -m pytest
+
+run day=datetime("%e") year=datetime("%Y"):
+    uv run python -c 'from aoc.y2025.day04 import part1; from aoc.io import read_data_file; print(part1(read_data_file({{year}}, {{day}})))'
+
+download day=datetime("%d") year=datetime("%Y"):
+    aoc download --input-only --input-file ../data/{{year}}/day{{day}}.data
+
+
+submit part value day=datetime("%d") year=datetime("%Y"):
+    aoc submit --year={{year}} --day={{day}} {{part}} {{value}}
+
+date day=datetime("%d") year=datetime("%Y"):
+    echo "today is {{day}} of {{year}}"
