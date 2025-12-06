@@ -6,3 +6,8 @@ def test_part1_sample_data_returns_3():
     data = read_sample_file(2025, 5)
     checksum = part1(data)
     assert(checksum == 3)
+
+def test_part2_sample_data_returns_14():
+    data = read_sample_file(2025, 5)
+    checksum = part2(data)
+    assert(checksum == 14)

@@ -51,4 +51,14 @@ def part1(input: str) -> int:
 
 
 def part2(input: str) -> int:
-    raise NotImplementedError("part2")
+    (good_ingredients, in_stock) = parse_input(input)
+    start = min(r.start for r in good_ingredients)
+    end = max(r.end for r in good_ingredients)
+
+    count = 0
+
+    for i in range(start, end+1):
+        if any(i in rng for rng in good_ingredients):
+            count += 1
+
+    return count
