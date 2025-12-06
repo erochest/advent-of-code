@@ -190,7 +190,7 @@ fn will_loop(to_block: &Point, map: &Map) -> bool {
     // log::debug!("will_loop: {:?}", to_block);
 
     let mut map = map.clone();
-    let (x, y) = *to_block;
+    let (_x, _y) = *to_block;
     map[*to_block] = BLOCK;
 
     let start = find_guard(&map).expect("the map data should contain a guard");
@@ -225,7 +225,7 @@ pub fn day06<S: AsRef<str>>(input: S) -> Result<()> {
     let guard = Position::new(find_guard(&map).expect("guard not found"));
 
     let backbone = guard.walk_map(map.clone()).collect::<Vec<_>>();
-    let uniq: HashSet<Position> = HashSet::from_iter(backbone.iter().cloned());
+    let _uniq: HashSet<Position> = HashSet::from_iter(backbone.iter().cloned());
     let squares = backbone.iter().map(|p| p.pos).collect::<HashSet<_>>();
     println!("map bounds = {}, {}", map.x_bounds, map.y_bounds);
     println!("part 1: {}", squares.len());

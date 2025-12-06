@@ -2,28 +2,29 @@
 name = "advent"
 version = "0.1.0"
 authors = ["Eric Rochester <erochest@gmail.com>"]
-edition = "2021"
+edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = "0.4.39"
-clap = { version = "*", features = ["derive"] }
-clap-verbosity-flag = "*"
-confy = "*"
-env_logger = "*"
-human-panic = "*"
-itertools = "0.13.0"
-log = "*"
-rayon = "1.10.0"
+chrono = "0.4.42"
+clap = { version = "4.5.53", features = ["derive"] }
+clap-verbosity-flag = "3.0.4"
+confy = "2.0.0"
+env_logger = "0.11.8"
+human-panic = "2.0.4"
+itertools = "0.14.0"
+log = "0.4.29"
+rayon = "1.11.0"
+thiserror = "2.0.17"
 
 [dev-dependencies]
-assert_cmd = "*"
+assert_cmd = "2.1.1"
 # assert_fs = "*"
 # dir-diff = "*"
 # duct = "*"
 # predicates = "*"
-pretty_assertions = "*"
+pretty_assertions = "1.4.1"
 # rexpect = "*"
-spectral = "*"
+spectral = "0.6.0"
 # tempfile = "*"

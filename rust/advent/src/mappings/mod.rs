@@ -72,7 +72,7 @@ pub fn get_minimum_location_range(input: &str) -> Result<Option<i128>> {
 fn split_paragraphs(input: &str) -> Vec<Vec<&str>> {
     info!("split_paragraphs");
     let mut accum = Vec::new();
-    let groups = input.lines().group_by(|line| line.is_empty());
+    let groups = input.lines().chunk_by(|line| line.is_empty());
 
     for (key, lines) in &groups {
         if !key {
@@ -338,7 +338,7 @@ struct DisplayOption<'a, I>(&'a Option<I>);
 
 impl<'a, D: 'a + Display> Display for DisplayOption<'a, D> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if let Some(ref item) = self.0 {
+        if let Some(item) = self.0 {
             write!(f, "Some(")?;
             item.fmt(f)?;
             write!(f, ")")?;
@@ -351,4 +351,3 @@ impl<'a, D: 'a + Display> Display for DisplayOption<'a, D> {
 
 #[cfg(test)]
 mod tests;
-
