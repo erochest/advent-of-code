@@ -1,5 +1,5 @@
 from aoc.io import read_data_file, read_sample_file
-from aoc.y2025.day04 import part1, to_grid
+from aoc.y2025.day04 import part1, part2, to_grid
 
 
 def test_to_grid():
@@ -18,3 +18,9 @@ def test_part1_sample_returns_13():
     data = read_sample_file(2025, 4)
     checksum = part1(data)
     assert(checksum == 13)
+
+
+def test_part2_sample_returns_43():
+    data = read_sample_file(2025, 4)
+    checksum = part2(data)
+    assert(checksum == 43)

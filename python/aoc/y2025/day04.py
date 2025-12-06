@@ -33,16 +33,37 @@ def get_neighbors(center: point) -> list[point]:
     ]
 
 
-def part1(input: str) -> int:
-    grid = to_grid(input)
+def remove_accessible(input: grid) -> tuple[grid, int]:
+    """Returns the number of accessible squares"""
+    cleaned = input.copy()
+    changed_count = 0
 
-    checksum = 0
-    for (current, value) in grid.items():
+    for (current, value) in input.items():
         if value == 0:
             continue
         neighbors = get_neighbors(current)
-        count = sum(grid.get(p, 0) for p in neighbors)
+        count = sum(input.get(p, 0) for p in neighbors)
         if count < 4:
-            checksum += 1
+            cleaned[current] = 0
+            changed_count += 1
+
+    return (cleaned, changed_count)
+
+
+def part1(input: str) -> int:
+    grid = to_grid(input)
+    _, checksum = remove_accessible(grid)
+    return checksum
+
+
+def part2(input: str) -> int:
+    grid = to_grid(input)
+
+    checksum = 0
+    while True:
+        grid, changed_count = remove_accessible(grid)
+        if changed_count == 0:
+            break
+        checksum += changed_count
 
     return checksum
