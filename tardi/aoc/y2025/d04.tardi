@@ -39,20 +39,6 @@ exports:
 /// x -- x
 : debug-col   [ print ] keep "\t" print ;
 
-// TODO: std/vectors
-/// vector/vector -- vector
-: flatten   { } [ concat ] reduce ;
-
-// TODO: std/vectors
-/// ys x -- ys xys
-: combine-spread   over [ dupd 2vector ] map nip ;
-/// xs ys -- xys
-: combine
-  swap
-  [ combine-spread ] map
-  nip
-  flatten ;
-
 /// matrix lambda( matrix xy -- z ) -- zs
 : walk-matrix
   swap dup matrix-indexes combine
@@ -64,17 +50,6 @@ exports:
   2dropd ;
 
 : around   [ 1- ] [ 1+ ] bi [..] ;   /// n -- ns
-
-// TODO: there are some patterns here that could be factored
-// - rotd swap
-// - swap [ x ] dip swap (is there a dipd?)
-// TODO: std/vectors
-// the current filter there doesn't work with predicates that reach into the stack
-: clean-apply   swap [ swap [ apply ] keep ] dip ;   /// pred accum i -- ? pred accum
-: filter?       [ clean-apply ] keep rotd swap ;     /// pred accum i -- pred accum i ?
-: push-if!      [ over push! ] [ drop ] if ;         /// xs x ?       -- xs'
-: (filter)      [ filter? push-if! ] reduce ;        /// p xs accum -- p accum
-: filter        swap { } (filter) nip ;              /// xs p -- xs'
 
 : surrounding-all        [ first2 [ around ] bi@ combine ] keep ;   /// xy -- xys xy
 : surrounding-not-self   [ dupd != ] filter nip ;                   /// xy xys -- xys'

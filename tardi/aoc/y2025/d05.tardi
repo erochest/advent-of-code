@@ -15,14 +15,6 @@ exports:
   part2 ;
 
 
-// TODO: std/vector
-/// a b -- xss
-: 3vector
-  <vector>
-  tuck push-left!
-  tuck push-left!
-  tuck push-left! ;
-
 /// -- parse-accum
 : <parse-accum>   <hashmap> <vector> 0 3vector ;
 
@@ -60,22 +52,6 @@ exports:
     first2 ;
 
 : is-fresh?   hashmaps/get nip ;   /// ingredient fresh-set -- ?
-
-// TODO: there are some patterns here that could be factored
-// - rotd swap
-// - swap [ x ] dip swap (is there a dipd?)
-// TODO: std/vectors
-// the current filter there doesn't work with predicates that reach into the stack
-: clean-apply   swap [ swap [ apply ] keep ] dip ;   /// pred accum i -- ? pred accum
-: filter?       [ clean-apply ] keep rotd swap ;     /// pred accum i -- pred accum i ?
-: push-if!      [ over push! ] [ drop ] if ;         /// xs x ?       -- xs'
-: (filter)      [ filter? push-if! ] reduce ;        /// p xs accum -- p accum
-: filter        swap { } (filter) nip ;              /// xs p -- xs'
-
-// TODO: std/vectors
-// TODO: don't create a vector in between
-/// xs predicate -- int
-: count   filter vectors/length ;
 
 /// data/str -- checksum/int
 : part1
